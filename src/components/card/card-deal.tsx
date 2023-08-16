@@ -12,7 +12,6 @@ interface Props {
   contents?: string;
   value: string;
   apy: string;
-  cardType?: 'value' | 'percent';
 }
 
 export const CardDeal = ({ image, title, contents, value, apy, ...rest }: Props) => {
