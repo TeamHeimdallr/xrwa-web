@@ -43,3 +43,20 @@ export const BREAKPOINT = {
  * @description FORMAT NUMBER 를 진행할때 UNIT(K,M,B,T) 를 붙이는 기준
  */
 export const FORMAT_NUMBER_THRESHOLD = 10000000;
+
+/**
+ * @description XRPL NETWORK
+ */
+export const XRPL_JSON_RPC_TEST_NET = import.meta.env.VITE_XRPL_JSON_RPC_TEST_NET;
+export const XRPL_WSS_TEST_NET = import.meta.env.VITE_XRPL_WSS_TEST_NET;
+
+/**
+ * @description XUMM api key, secret
+ */
+export const XUMM_API_KEY = import.meta.env.VITE_XUMM_API_KEY;
+export const XUMM_API_SECRET = import.meta.env.VITE_XUMM_API_SECRET;
+
+/**
+ * @description wallet 관리 key
+ */
+export const XRPL_WALLET_KEY = 'xrpl-wallet';
