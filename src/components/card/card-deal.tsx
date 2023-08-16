@@ -1,4 +1,8 @@
+import { useRef } from 'react';
 import tw, { css, styled } from 'twin.macro';
+import { useHover } from 'usehooks-ts';
+
+import { COLOR } from '~/assets/colors';
 
 import { IconNext } from '../icons';
 import { CardSecondary } from './card-secondary';
@@ -7,17 +11,26 @@ interface Props {
   icon?: React.ReactNode;
   image?: string;
   title: string;
-  content: string;
+  value: string;
+  apy: string;
   cardType?: 'value' | 'percent';
 }
 
-export const CardDeal = ({ icon, image, content, cardType, ...rest }: Props) => {
+export const CardDeal = ({ icon, image, value, apy, ...rest }: Props) => {
+  const hoverRef = useRef<HTMLDivElement>(null);
+  const isHover = useHover(hoverRef);
   return (
-    <Wrapper {...rest}>
+    <Wrapper {...rest} ref={hoverRef}>
       <ContentWrapper>
         <ImgWrapper>
           <DealImg src={image} />
-          <IconNext color="white" />
+          <IconNext
+            color={isHover ? COLOR.BLUE : 'white'}
+            style={{
+              cursor: isHover ? 'pointer' : 'auto',
+            }}
+            onClick={() => isHover && console.log('hi')}
+          />
         </ImgWrapper>
         <DealTextWrapper>
           <DealTitle>Deal</DealTitle>
@@ -28,8 +41,8 @@ export const CardDeal = ({ icon, image, content, cardType, ...rest }: Props) => 
         </DealTextWrapper>
       </ContentWrapper>
       <CardWrapper>
-        <CardSecondary icon={icon} content={'1234567'} cardType="value" {...rest} />
-        <CardSecondary icon={icon} content={'5.3'} cardType="percent" {...rest} />
+        <CardSecondary icon={icon} content={value} cardType="value" {...rest} />
+        <CardSecondary icon={icon} content={apy} cardType="percent" {...rest} />
       </CardWrapper>
     </Wrapper>
   );

@@ -13,7 +13,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
 }
 
-export const TextField = ({ amount, ...rest }: Props) => {
+export const TextFieldTrade = ({ amount, ...rest }: Props) => {
   return (
     <Wrapper>
       <InputWrapper>

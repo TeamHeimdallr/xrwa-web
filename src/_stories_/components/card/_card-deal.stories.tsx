@@ -9,11 +9,8 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     title: { control: 'text' },
-    content: { control: 'text' },
-    cardType: {
-      control: { type: 'radio' },
-      options: ['value', 'percent'],
-    },
+    value: { control: 'text' },
+    apy: { control: 'text' },
   },
 } satisfies Meta<typeof CardDeal>;
 
@@ -25,7 +22,7 @@ export const _CardDeal: Story = {
     icon: <IconCheck />,
     title: 'Card Title',
     image: 'https://picsum.photos/200/300',
-    content: 'Card Content',
-    cardType: 'value',
+    value: '1,234,567',
+    apy: '5.3',
   },
 };
