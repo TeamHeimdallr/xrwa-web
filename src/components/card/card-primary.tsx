@@ -7,7 +7,7 @@ interface Props {
   icon?: React.ReactNode;
   title: string;
   content: string;
-  cardType?: 'value' | 'percent';
+  cardType?: 'value' | undefined;
 }
 
 export const CardPrimary = ({
@@ -26,7 +26,7 @@ export const CardPrimary = ({
         <Title>{title}</Title>
       </TitleWrapper>
       <ContentText>
-        {cardType == 'value' ? '$' + formatNumberWithCommas(content) : `${content}%`}
+        {cardType == 'value' ? '$' + formatNumberWithCommas(content) : `${content}`}
       </ContentText>
     </Wrapper>
   );
