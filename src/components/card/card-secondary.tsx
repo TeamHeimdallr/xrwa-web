@@ -15,7 +15,7 @@ export const CardSecondary = ({ icon, title, contents, cardType, ...rest }: Prop
     <Wrapper {...rest}>
       <TitleWrapper>
         <IconWrapper>{icon}</IconWrapper>
-        <Title>{title}</Title>
+        <Title>{cardType == 'value' ? 'Total Value Locked' : ' APY'}</Title>
       </TitleWrapper>
       <ContentText>
         {cardType === 'value' ? '$' + formatNumberWithComma(contents) : `${contents}%`}

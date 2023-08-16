@@ -15,7 +15,7 @@ export const CardTertiary = ({ icon, title, contents, cardType, ...rest }: Props
     <Wrapper {...rest}>
       <TitleWrapper>
         <IconWrapper>{icon}</IconWrapper>
-        <Title>{title}</Title>
+        <Title>{cardType == 'value' ? 'Total Value Locked' : ' APY'}</Title>
       </TitleWrapper>
       <ContentText>
         {cardType === 'value' ? '$' + formatNumberWithComma(contents) : `${contents}%`}

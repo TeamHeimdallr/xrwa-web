@@ -8,7 +8,6 @@ const meta = {
   component: CardSecondary,
   tags: ['autodocs'],
   argTypes: {
-    title: { control: 'text' },
     content: { control: 'text' },
     cardType: {
       control: { type: 'radio' },
