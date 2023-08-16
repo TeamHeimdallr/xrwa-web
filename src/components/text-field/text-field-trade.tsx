@@ -49,13 +49,13 @@ const InputWrapper = tw.div`
   `;
 
 const Input = tw.input`
-  w-full bg-transparent font-m-28
+  w-full bg-transparent text-28 leading-34 font-medium
   px-0 border-none caret-blue
   placeholder-gray2
 `;
 
 const DropdownWrapper = tw.div`
-  flex items-center gap-8 py-8 px-12 bg-gray1 rounded-24
+  flex items-center gap-8 py-8 px-12 bg-gray1 rounded-24 
 `;
 
 const CurrencyImg = tw.img`

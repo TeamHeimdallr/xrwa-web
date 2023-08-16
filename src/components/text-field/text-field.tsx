@@ -16,7 +16,8 @@ const Wrapper = tw.div`
 `;
 
 const Input = tw.input`
-  w-full bg-transparent font-r-16
+  w-full bg-transparent 
+  text-16 leading-22 font-regular
   px-0 border-none caret-blue
   placeholder-gray2
 `;
