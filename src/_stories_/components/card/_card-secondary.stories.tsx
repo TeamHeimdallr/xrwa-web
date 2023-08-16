@@ -1,0 +1,30 @@
+import type { Meta, StoryObj } from '@storybook/react';
+
+import { CardSecondary } from '~/components/card/card-secondary';
+import { IconCheck } from '~/components/icons';
+
+const meta = {
+  title: 'Components/CardSecondary',
+  component: CardSecondary,
+  tags: ['autodocs'],
+  argTypes: {
+    title: { control: 'text' },
+    content: { control: 'text' },
+    cardType: {
+      control: { type: 'radio' },
+      options: ['value', 'percent'],
+    },
+  },
+} satisfies Meta<typeof CardSecondary>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const _CardSecondary: Story = {
+  args: {
+    icon: <IconCheck />,
+    title: 'Card Title',
+    content: 'Card Content',
+    cardType: 'value',
+  },
+};
