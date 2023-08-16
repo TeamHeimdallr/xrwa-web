@@ -1,5 +1,4 @@
 import '~/styles/index.css';
-import '~/configs/polyfill-simple';
 
 import { createRoot } from 'react-dom/client';
 
