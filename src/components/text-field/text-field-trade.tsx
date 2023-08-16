@@ -8,9 +8,6 @@ import { IconDown } from '../icons';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   amount?: string;
-
-  error?: boolean;
-  errorMessage?: string;
 }
 
 export const TextFieldTrade = ({ amount, ...rest }: Props) => {
