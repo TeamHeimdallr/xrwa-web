@@ -45,7 +45,7 @@ const PopupSuccess = () => {
         <Title>Transaction has been confirmed.</Title>
       </Content>
       <ButtonWrapper>
-        <ButtonPrimary buttonType={'large'} onClick={() => console.log('clicked')} text={'Done'} />
+        <ButtonPrimary buttonType={'medium'} onClick={() => console.log('clicked')} text={'Done'} />
       </ButtonWrapper>
     </ContentWrapper>
   );
