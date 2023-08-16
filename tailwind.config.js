@@ -28,14 +28,18 @@ module.exports = {
       colors: {
         ...defaultTheme.colors,
 
-        black: '#1a1a1a',
+        black: '#080117',
         white: '#ffffff',
 
+        blue: '#3358ff',
+        pink: '#ff36ff',
+
         gray5: '#262a2f',
-        gray4: '#424851',
-        gray3: '#6d7684',
-        gray2: '#adb3be',
-        gray1: '#e5e7ec',
+        gray4: '#313d65',
+        gray3: '#787c9c',
+        gray2: '#b7b0ce',
+        gray1: '#edf2fa',
+        gray0: '#f9fafd',
       },
 
       fontFamily: {
@@ -153,11 +157,22 @@ module.exports = {
         '.font-r-24': { fontSize: '24px', lineHeight: '32px', fontWeight: 400 },
         '.font-r-28': { fontSize: '28px', lineHeight: '38px', fontWeight: 400 },
 
+        '.font-m-12': { fontSize: '22px', lineHeight: '30px', fontWeight: 500 },
+        '.font-m-14': { fontSize: '24px', lineHeight: '32px', fontWeight: 500 },
+        '.font-m-16': { fontSize: '28px', lineHeight: '36px', fontWeight: 500 },
+        '.font-m-18': { fontSize: '32px', lineHeight: '40px', fontWeight: 500 },
+
         '.font-sb-12': { fontSize: '12px', lineHeight: '20px', fontWeight: 600 },
         '.font-sb-14': { fontSize: '14px', lineHeight: '22px', fontWeight: 600 },
         '.font-sb-18': { fontSize: '18px', lineHeight: '26px', fontWeight: 600 },
         '.font-sb-20': { fontSize: '20px', lineHeight: '28px', fontWeight: 600 },
         '.font-sb-28': { fontSize: '28px', lineHeight: '38px', fontWeight: 600 },
+
+        '.font-b-14': { fontSize: '14px', lineHeight: '22px', fontWeight: 700 },
+        '.font-b-18': { fontSize: '18px', lineHeight: '26px', fontWeight: 700 },
+        '.font-b-20': { fontSize: '20px', lineHeight: '28px', fontWeight: 700 },
+        '.font-b-24': { fontSize: '24px', lineHeight: '32px', fontWeight: 700 },
+        '.font-b-28': { fontSize: '28px', lineHeight: '38px', fontWeight: 700 },
       });
 
       addUtilities({
