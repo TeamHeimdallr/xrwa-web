@@ -4,17 +4,17 @@ import { formatNumberWithCommas } from '~/utils/string';
 
 interface Props {
   icon?: React.ReactNode;
-  title: string;
+
   content: string;
   cardType?: 'value' | 'percent';
 }
 
-export const CardTertiary = ({ icon, title, content, cardType, ...rest }: Props) => {
+export const CardTertiary = ({ icon, content, cardType, ...rest }: Props) => {
   return (
     <Wrapper {...rest}>
       <TitleWrapper>
         <IconWrapper>{icon}</IconWrapper>
-        <Title>{title}</Title>
+        <Title>{cardType == 'value' ? 'Total Value Locked' : ' APY'}</Title>
       </TitleWrapper>
       <ContentText>
         {cardType == 'value' ? '$' + formatNumberWithCommas(content) : `${content}%`}
