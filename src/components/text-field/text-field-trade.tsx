@@ -2,7 +2,7 @@ import { InputHTMLAttributes } from 'react';
 import tw from 'twin.macro';
 
 import logoUstb from '~/assets/images/logo-ustb.png';
-import { formatNumberWithCommas } from '~/utils/string';
+import { formatNumberWithComma } from '~/utils/number';
 
 import { IconDown } from '../icons';
 
@@ -33,7 +33,7 @@ export const TextFieldTrade = ({ amount, ...rest }: Props) => {
       {amount && (
         <CaptionWrapper>
           <CaptionText>Balance</CaptionText>
-          <CaptionBalance>{`${formatNumberWithCommas(amount)}`}</CaptionBalance>
+          <CaptionBalance>{`${formatNumberWithComma(parseFloat(amount))}`}</CaptionBalance>
         </CaptionWrapper>
       )}
     </Wrapper>

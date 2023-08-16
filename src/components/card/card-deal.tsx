@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { HtmlHTMLAttributes, useRef } from 'react';
 import tw, { css, styled } from 'twin.macro';
 import { useHover } from 'usehooks-ts';
 
@@ -6,7 +6,7 @@ import { COLOR } from '~/assets/colors';
 
 import { IconLocked, IconNext, IconPercentage } from '../icons';
 import { CardSecondary } from './card-secondary';
-interface Props {
+interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   image?: string;
   title: string;
   contents?: string;

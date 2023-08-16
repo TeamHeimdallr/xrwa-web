@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
+import { HtmlHTMLAttributes } from 'react';
 import tw, { styled } from 'twin.macro';
 
-import { formatNumberWithCommas } from '~/utils/string';
+import { formatNumberWithComma } from '~/utils/number';
 
-interface Props {
+interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   icon?: React.ReactNode;
   title: string;
   content: string;
@@ -26,7 +27,7 @@ export const CardPrimary = ({
         <Title>{title}</Title>
       </TitleWrapper>
       <ContentText>
-        {cardType == 'value' ? '$' + formatNumberWithCommas(content) : `${content}`}
+        {cardType == 'value' ? '$' + formatNumberWithComma(parseFloat(content)) : `${content}`}
       </ContentText>
     </Wrapper>
   );
