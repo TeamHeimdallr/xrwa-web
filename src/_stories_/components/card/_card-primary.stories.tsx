@@ -12,7 +12,7 @@ const meta = {
     content: { control: 'text' },
     cardType: {
       control: { type: 'radio' },
-      options: ['value', 'percent'],
+      options: ['value', 'none'],
     },
   },
 } satisfies Meta<typeof CardPrimary>;
