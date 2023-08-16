@@ -17,6 +17,7 @@ export const Gnb = () => {
   const [dropdownOpended, setDropdownOpened] = useState(false);
   const [_showMenu, setShowMenu] = useState(false);
 
+  //Todo : connect wallet
   const [isConnected, setIsConnected] = useState(false);
 
   const connectedRef = useRef<HTMLDivElement>(null);
