@@ -1,8 +1,11 @@
 import styled from '@emotion/styled';
 import { InputHTMLAttributes } from 'react';
-import tw, { css } from 'twin.macro';
+import tw from 'twin.macro';
 
+import logoUstb from '~/assets/images/logo-ustb.png';
 import { formatNumberWithCommas } from '~/utils/string';
+
+import { IconDown } from '../icons';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   value?: string;
@@ -17,7 +20,17 @@ export const TextField = ({ value, amount, label, error, errorMessage, ...rest }
     <Wrapper>
       <InputWrapper>
         <Input {...rest} />
-        <Tag>{label ?? 'MATIC'}</Tag>
+        <DropdownWrapper>
+          <CurrencyImg src={logoUstb} />
+          <CurrencyName>USD</CurrencyName>
+          <IconWrapper>
+            <IconDown
+              style={{
+                cursor: 'pointer',
+              }}
+            />
+          </IconWrapper>
+        </DropdownWrapper>
       </InputWrapper>
       {amount && (
         <CaptionWrapper>
@@ -32,7 +45,7 @@ export const TextField = ({ value, amount, label, error, errorMessage, ...rest }
 };
 
 const Wrapper = tw.div`
-  flex flex-col py-16 px-20 gap-12 bg-gray0
+  flex flex-col py-16 px-20 gap-12 bg-gray0 rounded-8
 `;
 
 const InputWrapper = tw.div`
@@ -45,8 +58,20 @@ const Input = tw.input`
   placeholder-gray2
 `;
 
-const Tag = tw.div`
-  font-r-16
+const DropdownWrapper = tw.div`
+    flex items-center gap-8 py-8 px-12 bg-gray1 rounded-24
+`;
+
+const CurrencyImg = tw.img`
+    w-28 h-28
+`;
+
+const CurrencyName = tw.div`
+    font-m-22 text-gray4
+`;
+
+const IconWrapper = tw.div`
+    w-24 h-24 flex-center 
 `;
 
 const CaptionWrapper = tw.div`

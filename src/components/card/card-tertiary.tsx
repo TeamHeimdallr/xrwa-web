@@ -1,5 +1,4 @@
-import { css } from '@emotion/react';
-import tw, { styled } from 'twin.macro';
+import tw from 'twin.macro';
 
 import { formatNumberWithCommas } from '~/utils/string';
 

@@ -10,8 +10,9 @@ const meta = {
     text: { control: 'text' },
     buttonType: {
       control: { type: 'radio' },
-      options: ['small', 'large'],
+      options: ['medium', 'large'],
     },
+    isLoading: { control: 'boolean' },
   },
 } satisfies Meta<typeof ButtonPrimary>;
 
@@ -21,7 +22,8 @@ type Story = StoryObj<typeof meta>;
 export const _ButtonPrimary: Story = {
   args: {
     text: 'Text here',
-    buttonType: 'small',
+    buttonType: 'medium',
+    isLoading: false,
     onClick: () => console.log('clicked'),
   },
 };

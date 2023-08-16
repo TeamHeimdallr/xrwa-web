@@ -22,7 +22,7 @@ export const _TextField: Story = {
   render: args => <Template {...args} />,
   args: {
     placeholder: 'Enter your email',
-    amount: '18.81',
+    amount: '100,000,000',
     error: false,
   },
 };
