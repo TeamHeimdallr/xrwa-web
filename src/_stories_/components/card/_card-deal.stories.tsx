@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { CardDeal } from '~/components/card/card-deal';
-import { IconCheck } from '~/components/icons';
 
 const meta = {
   title: 'Components/CardDeal',
@@ -19,8 +18,9 @@ type Story = StoryObj<typeof meta>;
 
 export const _CardDeal: Story = {
   args: {
-    icon: <IconCheck />,
-    title: 'Card Title',
+    title: 'U.S. Short-term Treasury Bill',
+    contents:
+      'The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills.',
     image: 'https://picsum.photos/200/300',
     value: '1,234,567',
     apy: '5.3',

@@ -5,14 +5,14 @@ import { formatNumberWithCommas } from '~/utils/string';
 
 interface Props {
   icon?: React.ReactNode;
-
+  title: string;
   content: string;
   cardType?: 'value' | 'percent';
 }
 
 export const CardPrimary = ({
   icon,
-
+  title,
   content,
 
   cardType,
@@ -23,7 +23,7 @@ export const CardPrimary = ({
     <Wrapper {...rest}>
       <TitleWrapper>
         <IconWrapper>{icon}</IconWrapper>
-        <Title>{cardType == 'value' ? 'Total Value Locked' : ' APY'}</Title>
+        <Title>{title}</Title>
       </TitleWrapper>
       <ContentText>
         {cardType == 'value' ? '$' + formatNumberWithCommas(content) : `${content}%`}

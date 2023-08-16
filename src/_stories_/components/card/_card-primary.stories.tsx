@@ -8,6 +8,7 @@ const meta = {
   component: CardPrimary,
   tags: ['autodocs'],
   argTypes: {
+    title: { control: 'text' },
     content: { control: 'text' },
     cardType: {
       control: { type: 'radio' },
@@ -22,6 +23,7 @@ type Story = StoryObj<typeof meta>;
 export const _CardPrimary: Story = {
   args: {
     icon: <IconCheck />,
+    title: 'Card Title',
     content: 'Card Content',
     cardType: 'value',
   },

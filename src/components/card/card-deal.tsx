@@ -4,19 +4,18 @@ import { useHover } from 'usehooks-ts';
 
 import { COLOR } from '~/assets/colors';
 
-import { IconNext } from '../icons';
+import { IconLocked, IconNext, IconPercentage } from '../icons';
 import { CardSecondary } from './card-secondary';
-
 interface Props {
-  icon?: React.ReactNode;
   image?: string;
   title: string;
+  contents?: string;
   value: string;
   apy: string;
   cardType?: 'value' | 'percent';
 }
 
-export const CardDeal = ({ icon, image, value, apy, ...rest }: Props) => {
+export const CardDeal = ({ image, title, contents, value, apy, ...rest }: Props) => {
   const hoverRef = useRef<HTMLDivElement>(null);
   const isHover = useHover(hoverRef);
   return (
@@ -33,16 +32,25 @@ export const CardDeal = ({ icon, image, value, apy, ...rest }: Props) => {
           />
         </ImgWrapper>
         <DealTextWrapper>
-          <DealTitle>Deal</DealTitle>
-          <DealContent>
-            Get 10% off on your first order Get 10% off on your first order Get 10% off on your
-            first order{' '}
-          </DealContent>
+          <DealTitle>{title}</DealTitle>
+          <DealContent>{contents}</DealContent>
         </DealTextWrapper>
       </ContentWrapper>
       <CardWrapper>
-        <CardSecondary icon={icon} content={value} cardType="value" {...rest} />
-        <CardSecondary icon={icon} content={apy} cardType="percent" {...rest} />
+        <CardSecondary
+          icon={<IconLocked />}
+          title="Total Value Locked"
+          content={value}
+          cardType="value"
+          {...rest}
+        />
+        <CardSecondary
+          icon={<IconPercentage />}
+          title="APY"
+          content={apy}
+          cardType="percent"
+          {...rest}
+        />
       </CardWrapper>
     </Wrapper>
   );
