@@ -109,7 +109,7 @@ const ConnectedWrapper = styled.div<ConnectedWrapperProps>(({ dropdownOpended })
 `,
   dropdownOpended &&
     tw`
-  bg-gray4 text-white border-none rounded-b-0`,
+  bg-gray4 text-white border-gray4 rounded-b-0`,
 ]);
 
 const ConnectedAddress = tw.div`
