@@ -1,36 +1,47 @@
 import { useState } from 'react';
 import tw from 'twin.macro';
 
-import { useConnectWallet } from '~/api/xrpl/connect-wallet';
+import { CardPrimary } from '~/components/card/card-primary';
+import { IconActive, IconLocked, IconTotal } from '~/components/icons';
 
 const MainPage = () => {
-  const { connect, disconnect, wallet, balance, accountData } = useConnectWallet();
-
-  const [seed, setSeed] = useState<string>('');
-
   return (
     <Wrapper>
-      <div>
-        <button onClick={() => connect()}>connect</button>
-        <button onClick={() => disconnect()}>disconnect</button>
-      </div>
-
-      <div>
-        <input type="text" onChange={e => setSeed(e.target.value)} value={seed} />
-        <button onClick={() => connect(seed)}>retrive wallet</button>
-      </div>
-
-      <br />
-      <div>address: {wallet?.address}</div>
-      <div>seed: {wallet?.seed}</div>
-      <div>balance: {balance}xrp</div>
-      <div style={{ whiteSpace: 'pre-wrap' }}>
-        accountData: {JSON.stringify(accountData, null, 2)}
-      </div>
+      <DashBoardWrapper>
+        <DashBoardTitle>Dashboard</DashBoardTitle>
+        <DashBoardCardWrapper>
+          <CardPrimary
+            icon={<IconLocked />}
+            title="Total Value Locked"
+            content="1234567"
+            cardType="value"
+          />
+          <CardPrimary
+            icon={<IconTotal />}
+            title="Total Principal Issued"
+            content="1234567"
+            cardType="value"
+          />
+          <CardPrimary icon={<IconActive />} title="Number of Active Deals" content="1" />
+        </DashBoardCardWrapper>
+      </DashBoardWrapper>
     </Wrapper>
   );
 };
 
-const Wrapper = tw.div``;
+const Wrapper = tw.div`
+  flex flex-col items-center`;
+
+const DashBoardWrapper = tw.div`
+  flex flex-col w-960 gap-16
+`;
+
+const DashBoardTitle = tw.div`
+  font-b-24 text-black
+`;
+
+const DashBoardCardWrapper = tw.div`
+  flex gap-24
+`;
 
 export default MainPage;
