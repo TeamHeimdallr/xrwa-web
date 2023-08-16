@@ -1,5 +1,6 @@
-import tw from 'twin.macro';
+import tw, { css, styled } from 'twin.macro';
 
+import { IconNext } from '../icons';
 import { CardSecondary } from './card-secondary';
 
 interface Props {
@@ -10,11 +11,14 @@ interface Props {
   cardType?: 'value' | 'percent';
 }
 
-export const CardDeal = ({ icon, image, title, content, cardType, ...rest }: Props) => {
+export const CardDeal = ({ icon, image, content, cardType, ...rest }: Props) => {
   return (
     <Wrapper {...rest}>
       <ContentWrapper>
-        <DealImg src={image} />
+        <ImgWrapper>
+          <DealImg src={image} />
+          <IconNext color="white" />
+        </ImgWrapper>
         <DealTextWrapper>
           <DealTitle>Deal</DealTitle>
           <DealContent>
@@ -31,14 +35,25 @@ export const CardDeal = ({ icon, image, title, content, cardType, ...rest }: Pro
   );
 };
 
-const Wrapper = tw.div`
-  flex flex-col gap-20 w-full
+const Wrapper = styled.div(() => [
+  tw`
+  flex flex-col gap-20 w-468
   py-20 px-24 rounded-20
   bg-white
-  `;
+  `,
+  css`
+    :hover {
+      box-shadow: 0px 20px 40px 0px #3358ff4d;
+    }
+  `,
+]);
 
 const ContentWrapper = tw.div`
- flex flex-col gap-12
+ flex flex-col gap-12 
+`;
+
+const ImgWrapper = tw.div`  
+  flex justify-between items-center
 `;
 const DealImg = tw.img`
   w-48 h-48 rounded-50
