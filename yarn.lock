@@ -6127,20 +6127,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-cli@npm:^7.2.1":
-  version: 7.2.1
-  resolution: "dotenv-cli@npm:7.2.1"
-  dependencies:
-    cross-spawn: ^7.0.3
-    dotenv: ^16.0.0
-    dotenv-expand: ^10.0.0
-    minimist: ^1.2.6
-  bin:
-    dotenv: cli.js
-  checksum: 8ca27fd44ba261b974a0342ec831a714fa1cb6d6e98d4b5db8e94f111951af1fb129a64d007264b1901337c43a8ef877071f1836b6992944fd6970c16367aee0
-  languageName: node
-  linkType: hard
-
 "dotenv-expand@npm:^10.0.0":
   version: 10.0.0
   resolution: "dotenv-expand@npm:10.0.0"
@@ -11975,7 +11961,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"twin.macro@npm:^3.4.0":
+"twin.macro@npm:^3.3.1":
   version: 3.4.0
   resolution: "twin.macro@npm:3.4.0"
   dependencies:
@@ -12816,7 +12802,6 @@ __metadata:
     d3-format: ^3.1.0
     date-fns: ^2.30.0
     dotenv: ^16.3.1
-    dotenv-cli: ^7.2.1
     eslint: ^8.45.0
     eslint-config-prettier: ^8.8.0
     eslint-plugin-react: ^7.33.0
@@ -12842,7 +12827,7 @@ __metadata:
     stream-http: ^3.2.0
     tailwindcss: ^3.3.3
     tinycolor2: ^1.6.0
-    twin.macro: ^3.4.0
+    twin.macro: ^3.3.1
     typescript: ^5.1.6
     usehooks-ts: ^2.9.1
     vite: ^4.4.7

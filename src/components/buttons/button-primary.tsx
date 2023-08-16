@@ -41,9 +41,9 @@ const Wrapper = styled.button<ButtonWrapperProps>(({ isLoading, buttonType, conn
   buttonType === 'large' && tw`font-b-18 h-58 px-32 py-16`,
   connected && tw`border-solid border-1 border-blue font-r-14 color-blue`,
 
-  css`
-    &:hover {
-      box-shadow: ${isLoading || disabled ? 'none' : '0px 4px 24px 0px #FFD50D40'};
-    }
-  `,
+  // css`
+  //   &:hover {
+  //     box-shadow: ${connected 'none' : '0px 4px 24px 0px #FFD50D40'};
+  //   }
+  // `,
 ]);
