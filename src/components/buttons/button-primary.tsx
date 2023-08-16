@@ -36,7 +36,6 @@ export const ButtonPrimary = ({ text, isLoading, buttonType, ...rest }: Props) =
 };
 
 interface ButtonWrapperProps {
-  isLoading?: boolean;
   connected?: boolean;
   buttonType?: 'medium' | 'large';
 }
