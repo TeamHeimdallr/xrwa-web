@@ -129,6 +129,10 @@ const DropDownWrapper = styled.div<DropDownWrapperProps>(({ dropdownOpended }) =
    bg-gray4
 `,
   dropdownOpended ? tw`opacity-100` : tw`opacity-0 pointer-events-none `,
+  dropdownOpended &&
+    css`
+      box-shadow: 0px 12px 32px 0px #3358ff14;
+    `,
 ]);
 
 const BalanceWrapper = tw.div`
