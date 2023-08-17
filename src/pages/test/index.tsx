@@ -4,14 +4,48 @@ import { Wallet } from 'xrpl';
 
 import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import { createTrustline } from '~/api/xrpl/create-trustline';
+import { setAccount } from '~/api/xrpl/set-account';
+import { useXrplStore } from '~/states/data/xrpl';
 
 const TestPage = () => {
   const { connect, disconnect, wallet, balance, accountData } = useConnectWallet();
   const xrwaWallet = Wallet.fromSeed('sEd7EExeXE9iuc9txLJuHoiU7Kp8t7X');
 
+  const { client } = useXrplStore();
   const [deposit, setDeposit] = useState<number>(0);
 
   const price = 0.9;
+
+  const handleDeposit = async () => {
+    // set account flags
+    if (wallet && xrwaWallet) {
+      if (accountData?.Flags === 0) {
+        await setAccount({ signer: wallet, client: client });
+      }
+
+      const {
+        result: { account_data: xrwaAccountData },
+      } = await client.request({ command: 'account_info', account: xrwaWallet.address });
+
+      console.log(xrwaAccountData);
+
+      if (xrwaAccountData?.Flags === 0) {
+        await setAccount({ signer: xrwaWallet, client: client });
+      }
+    }
+
+    // create trustline
+    if (wallet && xrwaWallet) {
+      await createTrustline({
+        currency: 'CBC',
+        issuer: wallet.address,
+        signer: xrwaWallet,
+        to: xrwaWallet.address,
+        amount: deposit.toString(),
+        client: client,
+      });
+    }
+  };
 
   return (
     <Wrapper>
@@ -39,17 +73,10 @@ const TestPage = () => {
         </Input>
         <Button
           onClick={() => {
-            if (wallet)
-              createTrustline({
-                currency: 'CBC',
-                issuer: xrwaWallet.address,
-                signer: wallet,
-                to: xrwaWallet.address,
-                amount: deposit.toString(),
-              });
+            handleDeposit();
           }}
         >
-          Deposit for {wallet?.address}
+          Deposit for {wallet?.address} {accountData?.Flags} {deposit}
         </Button>
       </Deposit>
     </Wrapper>

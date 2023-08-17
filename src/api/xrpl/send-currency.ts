@@ -1,4 +1,4 @@
-import { Wallet, TransactionMetadata } from 'xrpl';
+import { Wallet, TransactionMetadata, Client } from 'xrpl';
 import { useXrplStore } from '~/states/data/xrpl';
 
 export interface SendCurrencyProps {
@@ -7,9 +7,16 @@ export interface SendCurrencyProps {
   signer: Wallet;
   to: string;
   amount: string;
+  client: Client;
 }
-export async function sendCurrency({ currency, issuer, signer, to, amount }: SendCurrencyProps) {
-  const { client } = useXrplStore();
+export async function sendCurrency({
+  currency,
+  issuer,
+  signer,
+  to,
+  amount,
+  client,
+}: SendCurrencyProps) {
   console.log('send currency');
 
   const tx = {

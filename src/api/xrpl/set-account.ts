@@ -1,12 +1,12 @@
-import { Wallet, TransactionMetadata, AccountSetAsfFlags } from 'xrpl';
+import { Wallet, TransactionMetadata, AccountSetAsfFlags, Client } from 'xrpl';
 import { useXrplStore } from '~/states/data/xrpl';
 
 export interface SetAccountProps {
   signer: Wallet;
   isClear?: boolean;
+  client: Client;
 }
-export async function setAccount({ signer, isClear }: SetAccountProps) {
-  const { client } = useXrplStore();
+export async function setAccount({ signer, client, isClear = false }: SetAccountProps) {
   console.log('set account');
 
   const tx = isClear

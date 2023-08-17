@@ -1,4 +1,4 @@
-import { Wallet, TransactionMetadata } from 'xrpl';
+import { Wallet, TransactionMetadata, Client } from 'xrpl';
 import { useXrplStore } from '~/states/data/xrpl';
 
 export interface CreateTrustLineProps {
@@ -7,6 +7,7 @@ export interface CreateTrustLineProps {
   signer: Wallet;
   to: string;
   amount: string;
+  client: Client;
 }
 export async function createTrustline({
   currency,
@@ -14,8 +15,8 @@ export async function createTrustline({
   signer,
   to,
   amount,
+  client,
 }: CreateTrustLineProps) {
-  const { client } = useXrplStore();
   console.log('create trustline');
 
   const tx = {
@@ -31,7 +32,10 @@ export async function createTrustline({
   const prepared = await client.autofill(tx);
   const signed = signer.sign(prepared);
 
+  console.log('here');
+  console.log(signed.hash);
   const result = await client.submitAndWait(signed.tx_blob);
+  console.log('submitted');
 
   const meta = result.result.meta as TransactionMetadata;
 
