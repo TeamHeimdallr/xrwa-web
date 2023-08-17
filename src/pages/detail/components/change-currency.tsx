@@ -18,6 +18,7 @@ export const ChangeCurrency = () => {
     <Wrapper>
       <TokenButton onClick={() => handleChangeCurrency('BSD')} symbol="BSD" />
       <TokenButton onClick={() => handleChangeCurrency('ENA')} symbol="ENA" />
+      <TokenButton onClick={() => handleChangeCurrency('KRW')} symbol="KRW" />
     </Wrapper>
   );
 };

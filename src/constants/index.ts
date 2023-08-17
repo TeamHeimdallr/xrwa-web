@@ -1,6 +1,8 @@
 import LogoBahama from '~/assets/images/logo-bahama.png';
+import LogoKrw from '~/assets/images/logo-krw.png';
 import LogoNigeria from '~/assets/images/logo-nigeria.png';
-import { CBDC } from '~/types/xrpl/cbdc';
+import LogoUstb from '~/assets/images/logo-ustb.png';
+import { TOKEN } from '~/types/xrpl/cbdc';
 
 /**
  * @description 서버 START ENV / MOCK 환경
@@ -72,7 +74,7 @@ export const POPUP_ID = {
 /**
  * @description token image
  */
-export const TOKEN_IMAGE: Record<CBDC, { image: string; fullname: string }> = {
+export const TOKEN_IMAGE: Record<TOKEN, { image: string; fullname: string }> = {
   BSD: {
     image: LogoBahama,
     fullname: 'Bahama CBDC Token',
@@ -82,7 +84,11 @@ export const TOKEN_IMAGE: Record<CBDC, { image: string; fullname: string }> = {
     fullname: 'Nigeria CBDC Token',
   },
   KRW: {
-    image: '',
+    image: LogoKrw,
+    fullname: 'South Korea CBDC Token',
+  },
+  USTB: {
+    image: LogoUstb,
     fullname: 'South Korea CBDC Token',
   },
 };

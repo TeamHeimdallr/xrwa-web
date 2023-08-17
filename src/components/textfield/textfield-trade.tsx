@@ -54,12 +54,14 @@ export const TextFieldTrade = ({
           )}
         </DropdownWrapper>
       </InputWrapper>
-      {amount && (
-        <CaptionWrapper>
-          <CaptionText>Balance</CaptionText>
-          <CaptionBalance>{`${formatNumberWithComma(parseFloat(amount))}`}</CaptionBalance>
-        </CaptionWrapper>
-      )}
+      <CaptionWrapper>
+        {amount && (
+          <>
+            <CaptionText>Balance</CaptionText>
+            <CaptionBalance>{`${formatNumberWithComma(parseFloat(amount))}`}</CaptionBalance>
+          </>
+        )}
+      </CaptionWrapper>
     </Wrapper>
   );
 };
@@ -69,11 +71,11 @@ const Wrapper = tw.div`
 `;
 
 const InputWrapper = tw.div`
-  w-full flex items-center gap-8
-  `;
+  flex items-center gap-8
+`;
 
 const Input = tw.input`
-  w-full bg-transparent text-28 leading-34 font-medium
+  flex flex-1 bg-transparent text-28 leading-34 font-medium
   px-0 border-none caret-blue
   placeholder-gray2
 `;

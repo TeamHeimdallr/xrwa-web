@@ -13,7 +13,8 @@ import { Toggle } from '~/components/toggle';
 import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';
 import { useSelectedTokenState, useTradeState } from '~/states/data/trade';
-import { TRADE_OPTIONS } from '~/types';
+import { TOKEN, TRADE_OPTIONS } from '~/types';
+import { convertCBDCToCurrency, getExchangeRate } from '~/utils/currency';
 
 import { ChangeCurrency } from './components/change-currency';
 
@@ -26,6 +27,7 @@ const TradePage = () => {
     opened: currencyOpened,
     close: _currencyClose,
   } = usePopup(POPUP_ID.CURRENCY);
+
   return (
     <>
       <Gnb />
@@ -54,7 +56,7 @@ const TradePage = () => {
             <CardTertiary
               title="Price Per USTB"
               icon={<IconPrice />}
-              contents={100000}
+              contents={1.123}
               cardType="value"
             />
             <CardTertiary title="APY" icon={<IconPercentage />} contents={5.3} cardType="percent" />
@@ -86,7 +88,6 @@ const TradePage = () => {
                     handleClick={currencyOpen}
                   />
                   <TextFieldTrade
-                    amount="100000"
                     placeholder="0.0"
                     currency="USTB"
                     handleChange={e => console.log(e)}
@@ -95,7 +96,6 @@ const TradePage = () => {
               ) : (
                 <>
                   <TextFieldTrade
-                    amount="100000"
                     placeholder="0.0"
                     currency="USTB"
                     handleChange={e => console.log(e)}
@@ -115,7 +115,12 @@ const TradePage = () => {
             </TradeWrapper>
             <RateWrapper>
               <RateText>Rate</RateText>
-              <RateValue>1USTB = 1USTB</RateValue>
+              <RateValue>
+                {`1${currencySelected}= ${getExchangeRate(
+                  { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
+                  { currency: 'USTB', amount: 1 }
+                )}USTB`}
+              </RateValue>
             </RateWrapper>
           </InputWrapper>
           {selected === TRADE_OPTIONS.DEPOSIT ? (

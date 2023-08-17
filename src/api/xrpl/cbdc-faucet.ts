@@ -1,7 +1,7 @@
 import * as xrpl from 'xrpl';
 
 import { useXrplStore } from '~/states/data/xrpl';
-import { CBDC } from '~/types';
+import { TOKEN } from '~/types';
 
 import { useAccounts } from './accounts';
 import { useConnectWallet } from './connect-wallet';
@@ -14,7 +14,7 @@ export const useFaucetCBDC = () => {
   const { wallet } = useConnectWallet();
   const { bsdWallet, enaWallet, krwWallet } = useAccounts();
 
-  const faucetCBDC = async (type: CBDC) => {
+  const faucetCBDC = async (type: TOKEN) => {
     if (!isConnected || !wallet) return;
 
     const cbdcWallet = type === 'BSD' ? bsdWallet : type === 'ENA' ? enaWallet : krwWallet;
