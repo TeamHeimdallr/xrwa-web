@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import { useOnClickOutside } from 'usehooks-ts';
 
+import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import { COLOR } from '~/assets/colors';
 import textLogo from '~/assets/images/logo-text.png';
 import { POPUP_ID } from '~/constants';
 import { useMediaQuery } from '~/hooks/pages/use-media-query';
 import { usePopup } from '~/hooks/pages/use-popup';
-import { useXrplStore } from '~/states/data/xrpl';
 
 import { ButtonPrimary } from '../buttons/button-primary';
 import { IconLogOut, IconPlus } from '../icons';
@@ -24,7 +24,7 @@ export const Gnb = () => {
   const [dropdownOpended, setDropdownOpened] = useState(false);
   const [_showMenu, setShowMenu] = useState(false);
 
-  const { isConnected, setConnection } = useXrplStore();
+  const { wallet, disconnect } = useConnectWallet();
 
   const connectedRef = useRef<HTMLDivElement>(null);
 
@@ -47,7 +47,7 @@ export const Gnb = () => {
           <TextLogo src={textLogo} alt="text-logo" />
         </LogoWrapper>
         <HeaderWrapper>
-          {isConnected ? (
+          {wallet ? (
             <>
               <Menu onClick={() => navigate('/mypage')}>My Page</Menu>
               <ConnectedWrapper
@@ -62,7 +62,7 @@ export const Gnb = () => {
                     <IconPlus width={20} height={20} color={COLOR.GRAY2} />
                     Faucet
                   </FaucetButton>
-                  <DisconnectButton>
+                  <DisconnectButton onClick={disconnect}>
                     <IconLogOut width={20} height={20} color={COLOR.GRAY2} />
                     Disconnect
                   </DisconnectButton>

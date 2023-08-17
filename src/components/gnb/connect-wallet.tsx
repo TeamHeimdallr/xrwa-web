@@ -1,25 +1,35 @@
+import { useState } from 'react';
 import tw from 'twin.macro';
 
+import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';
-import { useXrplStore } from '~/states/data/xrpl';
 
 import { ButtonPrimary } from '../buttons/button-primary';
 import { IconWallet } from '../icons';
 import { TextField } from '../text-field/text-field';
 
 export const ConnectWallet = () => {
-  const { isConnected, setConnection } = useXrplStore();
+  const { connect } = useConnectWallet();
   const { close } = usePopup(POPUP_ID.CONNECT);
+  const [privateKey, setPrivateKey] = useState('');
 
-  const handleConnect = () => {
-    setConnection(true);
-    close();
+  const handleConnect = async () => {
+    try {
+      await connect(privateKey);
+      close();
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPrivateKey(e.target.value);
   };
 
   return (
     <Wrapper>
-      <TextField placeholder="Enter your private key" />
+      <TextField onChange={handleChange} placeholder="Enter your private key" />
       <ButtonWrapper>
         <ButtonPrimary
           style={{

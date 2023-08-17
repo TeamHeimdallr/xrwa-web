@@ -1,4 +1,5 @@
 import { HtmlHTMLAttributes, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import tw, { css, styled } from 'twin.macro';
 import { useHover } from 'usehooks-ts';
 
@@ -17,8 +18,10 @@ interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
 export const CardDeal = ({ image, title, contents, value, estimatedYield, ...rest }: Props) => {
   const hoverRef = useRef<HTMLDivElement>(null);
   const isHover = useHover(hoverRef);
+  const navigate = useNavigate();
+
   return (
-    <Wrapper ref={hoverRef} onClick={() => isHover && console.log('hi')} {...rest}>
+    <Wrapper ref={hoverRef} onClick={() => navigate('/trade')} {...rest}>
       <ContentWrapper>
         <ImgWrapper>
           <DealImg src={image} />

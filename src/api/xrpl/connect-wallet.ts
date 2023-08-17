@@ -54,9 +54,7 @@ export const useConnectWallet = () => {
 
   const disconnect = async () => {
     if (!isConnected) return;
-
     setWalletSeed('');
-
     setWallet(undefined);
     setBalance(undefined);
     setAccountData(undefined);
