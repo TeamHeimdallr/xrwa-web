@@ -26,7 +26,7 @@ const rows = [
 export const Table = () => {
   return (
     <Wrapper>
-      <PositionLabel>Orders</PositionLabel>
+      <PositionLabel>Activity</PositionLabel>
       <TableWrapper>
         <OrderHeader>
           {headers.map(header => (

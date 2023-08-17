@@ -1,10 +1,9 @@
 import tw from 'twin.macro';
 
-import LogoUstb from '~/assets/images/logo-ustb.png';
-import { CardDeal } from '~/components/card/card-deal';
 import { CardPrimary } from '~/components/card/card-primary';
 import { Gnb } from '~/components/gnb';
-import { IconActive, IconLocked, IconTotal } from '~/components/icons';
+import { IconLocked, IconTotal, IconWithdraw } from '~/components/icons';
+import Table from '~/components/table';
 
 const MyPage = () => {
   return (
@@ -15,22 +14,27 @@ const MyPage = () => {
           <DashBoardTitle>Dashboard</DashBoardTitle>
           <DashBoardCardWrapper>
             <CardPrimary
-              icon={<IconLocked />}
-              title="Total Value Locked"
+              icon={<IconTotal />}
+              title="Total Balance in USD"
               contents={1234567}
               cardType="value"
             />
             <CardPrimary
-              icon={<IconTotal />}
-              title="Total Principal Issued"
+              icon={<IconLocked />}
+              title="Unlocked Balance in USD"
               contents={1234567}
               cardType="value"
             />
-            <CardPrimary icon={<IconActive />} title="Number of Active Deals" contents={1} />
+            <CardPrimary
+              icon={<IconWithdraw />}
+              title="Withdrawing Balance in USD"
+              contents={123455}
+              cardType="value"
+            />
           </DashBoardCardWrapper>
         </DashBoardWrapper>
         <DealsWrapper>
-          <DealsTitle>Activity</DealsTitle>
+          <Table />
         </DealsWrapper>
       </Wrapper>
     </>
@@ -54,14 +58,6 @@ const DashBoardCardWrapper = tw.div`
 
 const DealsWrapper = tw.div`
   flex flex-col w-960 gap-16
-`;
-
-const DealsTitle = tw.div`
-  font-b-24 text-black
-`;
-
-const DealsCardWrapper = tw.div`
-  flex gap-24
 `;
 
 export default MyPage;
