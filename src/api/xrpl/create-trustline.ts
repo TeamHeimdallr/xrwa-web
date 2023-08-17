@@ -31,11 +31,7 @@ export async function createTrustline({
 
   const prepared = await client.autofill(tx);
   const signed = signer.sign(prepared);
-
-  console.log('here');
-  console.log(signed.hash);
   const result = await client.submitAndWait(signed.tx_blob);
-  console.log('submitted');
 
   const meta = result.result.meta as TransactionMetadata;
 

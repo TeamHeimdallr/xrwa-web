@@ -4,6 +4,7 @@ import { Wallet } from 'xrpl';
 
 import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import { createTrustline } from '~/api/xrpl/create-trustline';
+import { sendCurrency } from '~/api/xrpl/send-currency';
 import { setAccount } from '~/api/xrpl/set-account';
 import { useXrplStore } from '~/states/data/xrpl';
 
@@ -13,6 +14,8 @@ const TestPage = () => {
 
   const { client } = useXrplStore();
   const [deposit, setDeposit] = useState<number>(0);
+  const [userBalance, setUserBalance] = useState<string>('');
+  const [xrawBalance, setXrawBalance] = useState<string>('');
 
   const price = 0.9;
 
@@ -45,6 +48,39 @@ const TestPage = () => {
         client: client,
       });
     }
+
+    // send currency
+    if (wallet && xrwaWallet) {
+      await sendCurrency({
+        currency: 'CBC',
+        issuer: wallet.address,
+        signer: wallet,
+        to: xrwaWallet.address,
+        amount: deposit.toString(),
+        client: client,
+      });
+    }
+  };
+
+  const getBalance = async () => {
+    if (wallet) {
+      const userBalanceRaw = await client.request({
+        command: 'gateway_balances',
+        account: wallet.address,
+        ledger_index: 'validated',
+        hotwallet: [xrwaWallet.address],
+      });
+
+      setUserBalance(JSON.stringify(userBalanceRaw.result, null, 2));
+    }
+
+    const xrwaBalanceRaw = await client.request({
+      command: 'gateway_balances',
+      account: xrwaWallet.address,
+      ledger_index: 'validated',
+    });
+
+    setXrawBalance(JSON.stringify(xrwaBalanceRaw.result, null, 2));
   };
 
   return (
@@ -76,8 +112,19 @@ const TestPage = () => {
             handleDeposit();
           }}
         >
-          Deposit for {wallet?.address} {accountData?.Flags} {deposit}
+          Deposit for
         </Button>
+        <Button
+          onClick={() => {
+            getBalance();
+          }}
+        >
+          Get Balance
+        </Button>
+        <div>Balance for User</div>
+        <div>{userBalance}</div>
+        <div>Balance for XRWA</div>
+        <div>{xrawBalance}</div>
       </Deposit>
     </Wrapper>
   );
