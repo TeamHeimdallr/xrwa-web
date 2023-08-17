@@ -6,6 +6,7 @@ import { useConnectXrpl } from './api/xrpl/connect-xrpl';
 
 const MainPage = lazy(() => import('./pages/main'));
 const TradePage = lazy(() => import('./pages/detail/trade-page'));
+const MyPage = lazy(() => import('./pages/mypage'));
 const AppProvider = lazy(() => import('~/hocs/hoc-app-provider'));
 
 const RouteWrapper = tw.main`relative w-full h-full`;
@@ -20,6 +21,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/trade" element={<TradePage />} />
+              <Route path="/mypage" element={<MyPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </RouteWrapper>
