@@ -16,6 +16,7 @@ const MainPage = () => {
   const { faucetCBDC } = useFaucetCBDC();
   const { getBalance } = useBalance();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onClickFaucetCBDC = async () => {
     if (!isConnected || !wallet) return;
 
@@ -30,7 +31,7 @@ const MainPage = () => {
       <Gnb />
       <Wrapper>
         <DashBoardWrapper>
-          <DashBoardTitle onClick={onClickFaucetCBDC}>Dashboard</DashBoardTitle>
+          <DashBoardTitle>Dashboard</DashBoardTitle>
           <DashBoardCardWrapper>
             <CardPrimary
               icon={<IconLocked />}

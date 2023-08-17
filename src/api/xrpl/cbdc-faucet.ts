@@ -3,8 +3,8 @@ import * as xrpl from 'xrpl';
 import { useXrplStore } from '~/states/data/xrpl';
 import { CBDC } from '~/types';
 
+import { useAccounts } from './accounts';
 import { useConnectWallet } from './connect-wallet';
-import { useWallets } from './wallets';
 
 /**
  * @description CBDC 를 생성하는 hook. cbdc 별 wallet 이 하나씩 생성되는 구조이고, 단 한번만 호출하면 됨.
@@ -12,7 +12,7 @@ import { useWallets } from './wallets';
 export const useFaucetCBDC = () => {
   const { client, isConnected } = useXrplStore();
   const { wallet } = useConnectWallet();
-  const { bsdWallet, enaWallet, krwWallet } = useWallets();
+  const { bsdWallet, enaWallet, krwWallet } = useAccounts();
 
   const faucetCBDC = async (type: CBDC) => {
     if (!isConnected || !wallet) return;
