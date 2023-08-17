@@ -19,7 +19,7 @@ const App = () => {
           <RouteWrapper>
             <Routes>
               <Route path="/" element={<MainPage />} />
-              <Route path="/transfer" element={<TradePage />} />
+              <Route path="/trade" element={<TradePage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </RouteWrapper>

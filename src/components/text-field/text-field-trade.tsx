@@ -2,11 +2,10 @@ import { InputHTMLAttributes, useCallback } from 'react';
 import { NumberFormatValues, NumericFormat } from 'react-number-format';
 import tw from 'twin.macro';
 
-import logoUstb from '~/assets/images/logo-ustb.png';
+import * as base from '~/constants/tokens/base';
 import { formatNumberWithComma } from '~/utils/number';
 
 import { IconDown } from '../icons';
-import { TOKENS } from '~/constants/tokens/base';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   amount?: string;
@@ -15,15 +14,17 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   currency?: string;
   handleChange?: (value: NumberFormatValues) => void;
+  handleClick?: () => void;
 }
 
 export const TextFieldTrade = ({
   amount,
   selectable,
   placeholder = '0.0',
-  currency = 'USTB',
+  currency,
   value,
   handleChange,
+  handleClick,
 }: Props) => {
   const CustomInput = useCallback(({ ...rest }: Props) => <Input {...rest} />, []);
 
@@ -40,10 +41,10 @@ export const TextFieldTrade = ({
           customInput={CustomInput}
         />
         <DropdownWrapper>
-          <CurrencyImg src={TOKENS['BSD']} />
+          <CurrencyImg src={base.TOKENS[currency!]} />
           <CurrencyName>{currency}</CurrencyName>
           {selectable && (
-            <IconWrapper>
+            <IconWrapper onClick={handleClick}>
               <IconDown
                 style={{
                   cursor: 'pointer',

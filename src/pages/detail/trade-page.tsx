@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { css } from '@emotion/react';
 import tw, { styled } from 'twin.macro';
 
@@ -6,13 +7,21 @@ import { ButtonPrimary } from '~/components/buttons/button-primary';
 import { CardTertiary } from '~/components/card/card-tertiary';
 import { Gnb } from '~/components/gnb';
 import { IconArrowDown, IconLocked, IconPercentage, IconPrice } from '~/components/icons';
+import { Popup } from '~/components/popups';
 import { TextFieldTrade } from '~/components/text-field/text-field-trade';
 import { Toggle } from '~/components/toggle';
+import { POPUP_ID } from '~/constants';
+import { usePopup } from '~/hooks/pages/use-popup';
 import { useTradeState } from '~/states/data/trade';
 import { TRADE_OPTIONS } from '~/types';
 
 const TradePage = () => {
   const { selected, select } = useTradeState();
+  const {
+    open: currencyOpen,
+    opened: currencyOpened,
+    close: currencyClose,
+  } = usePopup(POPUP_ID.CURRENCY);
   return (
     <>
       <Gnb />
@@ -61,40 +70,45 @@ const TradePage = () => {
             }}
           />
           <InputWrapper>
-            {selected === TRADE_OPTIONS.DEPOSIT ? (
-              <>
-                <TextFieldTrade
-                  amount="100000"
-                  value={100000}
-                  placeholder="0.0"
-                  handleChange={e => console.log(e)}
-                />
-                <TextFieldTrade
-                  amount="100000"
-                  value={120000}
-                  placeholder="0.0"
-                  handleChange={e => console.log(e)}
-                />
-              </>
-            ) : (
-              <>
-                <TextFieldTrade
-                  amount="100000"
-                  value={120000}
-                  placeholder="0.0"
-                  handleChange={e => console.log(e)}
-                />
-                <TextFieldTrade
-                  amount="100000"
-                  value={100000}
-                  placeholder="0.0"
-                  handleChange={e => console.log(e)}
-                />
-              </>
-            )}
-            <IconWrapper>
-              <IconArrowDown />
-            </IconWrapper>
+            <TradeWrapper>
+              {selected === TRADE_OPTIONS.DEPOSIT ? (
+                <>
+                  <TextFieldTrade
+                    amount="100000"
+                    placeholder="0.0"
+                    currency="BSD"
+                    selectable={true}
+                    handleChange={e => console.log(e)}
+                    handleClick={currencyOpen}
+                  />
+                  <TextFieldTrade
+                    amount="100000"
+                    placeholder="0.0"
+                    currency="USTB"
+                    handleChange={e => console.log(e)}
+                  />
+                </>
+              ) : (
+                <>
+                  <TextFieldTrade
+                    amount="100000"
+                    placeholder="0.0"
+                    currency="USTB"
+                    handleChange={e => console.log(e)}
+                  />
+                  <TextFieldTrade
+                    amount="100000"
+                    placeholder="0.0"
+                    currency="BSD"
+                    selectable={true}
+                    handleChange={e => console.log(e)}
+                  />
+                </>
+              )}
+              <IconWrapper>
+                <IconArrowDown />
+              </IconWrapper>
+            </TradeWrapper>
             <RateWrapper>
               <RateText>Rate</RateText>
               <RateValue>1USTB = 1USTB</RateValue>
@@ -102,6 +116,7 @@ const TradePage = () => {
           </InputWrapper>
           <ButtonPrimary text="Deposit" isLoading={false} buttonType="large" />
         </RightContainer>
+        {currencyOpened && <Popup type={'notification'} id={POPUP_ID.CURRENCY} />}
       </Wrapper>
     </>
   );
@@ -157,7 +172,11 @@ const ToggleText = tw.div`
 `;
 
 const InputWrapper = tw.div`
-    flex flex-col gap-16 relative
+  flex flex-col gap-16 
+`;
+
+const TradeWrapper = tw.div`
+  flex flex-col gap-16  relative
 `;
 
 const IconWrapper = tw.div`
