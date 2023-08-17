@@ -24,7 +24,7 @@ export const _CardTertiary: Story = {
   args: {
     icon: <IconCheck />,
     title: 'Card Title',
-    content: 'Card Content',
+    contents: 1234566,
     cardType: 'value',
   },
 };

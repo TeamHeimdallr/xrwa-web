@@ -7,19 +7,11 @@ import { formatNumberWithComma } from '~/utils/number';
 interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   icon?: React.ReactNode;
   title: string;
-  content: string;
+  contents: number;
   cardType?: 'value' | undefined;
 }
 
-export const CardPrimary = ({
-  icon,
-  title,
-  content,
-
-  cardType,
-
-  ...rest
-}: Props) => {
+export const CardPrimary = ({ icon, title, contents, cardType, ...rest }: Props) => {
   return (
     <Wrapper {...rest}>
       <TitleWrapper>
@@ -27,7 +19,7 @@ export const CardPrimary = ({
         <Title>{title}</Title>
       </TitleWrapper>
       <ContentText>
-        {cardType === 'value' ? '$' + formatNumberWithComma(parseFloat(content)) : `${content}`}
+        {cardType === 'value' ? '$' + formatNumberWithComma(contents) : `${contents}`}
       </ContentText>
     </Wrapper>
   );

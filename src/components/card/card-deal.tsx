@@ -10,8 +10,8 @@ interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   image?: string;
   title: string;
   contents?: string;
-  value: string;
-  apy: string;
+  value: number;
+  apy: number;
 }
 
 export const CardDeal = ({ image, title, contents, value, apy, ...rest }: Props) => {
@@ -39,14 +39,14 @@ export const CardDeal = ({ image, title, contents, value, apy, ...rest }: Props)
         <CardSecondary
           icon={<IconLocked />}
           title="Total Value Locked"
-          content={value}
+          contents={value}
           cardType="value"
           {...rest}
         />
         <CardSecondary
           icon={<IconPercentage />}
           title="APY"
-          content={apy}
+          contents={apy}
           cardType="percent"
           {...rest}
         />

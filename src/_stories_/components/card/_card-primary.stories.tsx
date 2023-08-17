@@ -24,7 +24,7 @@ export const _CardPrimary: Story = {
   args: {
     icon: <IconCheck />,
     title: 'Card Title',
-    content: '123345667',
+    contents: 123345667,
     cardType: 'value',
   },
 };

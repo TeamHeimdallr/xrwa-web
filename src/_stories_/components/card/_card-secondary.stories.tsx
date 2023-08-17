@@ -24,7 +24,7 @@ export const _CardSecondary: Story = {
   args: {
     icon: <IconCheck />,
     title: 'Card Title',
-    content: 'Card Content',
+    contents: 12344567,
     cardType: 'value',
   },
 };

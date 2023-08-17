@@ -22,7 +22,7 @@ export const _CardDeal: Story = {
     contents:
       'The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills.',
     image: 'https://picsum.photos/200/300',
-    value: '1,234,567',
-    apy: '5.3',
+    value: 1234567,
+    apy: 5.3,
   },
 };
