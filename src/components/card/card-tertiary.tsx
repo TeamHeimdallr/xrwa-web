@@ -18,7 +18,7 @@ export const CardTertiary = ({ icon, title, content, cardType, ...rest }: Props)
         <Title>{title}</Title>
       </TitleWrapper>
       <ContentText>
-        {cardType == 'value' ? '$' + formatNumberWithComma(parseFloat(content)) : `${content}%`}
+        {cardType === 'value' ? '$' + formatNumberWithComma(parseFloat(content)) : `${content}%`}
       </ContentText>
     </Wrapper>
   );
