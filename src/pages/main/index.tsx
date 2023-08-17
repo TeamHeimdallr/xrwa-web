@@ -31,6 +31,7 @@ const MainPage = () => {
   );
 };
 
-const Wrapper = tw.div``;
+const Wrapper = tw.div`
+  flex flex-col items-center`;
 
 export default MainPage;

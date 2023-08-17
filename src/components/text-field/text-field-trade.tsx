@@ -2,20 +2,32 @@ import { InputHTMLAttributes, useCallback } from 'react';
 import { NumberFormatValues, NumericFormat } from 'react-number-format';
 import tw from 'twin.macro';
 
-import logoUstb from '~/assets/images/logo-ustb.png';
+import * as base from '~/constants/tokens/base';
 import { formatNumberWithComma } from '~/utils/number';
 
 import { IconDown } from '../icons';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   amount?: string;
+  selectable?: boolean;
   value?: number | string;
   placeholder?: string;
+  currency?: string;
   handleChange?: (value: NumberFormatValues) => void;
+  handleClick?: () => void;
 }
 
-export const TextFieldTrade = ({ amount, placeholder = '0.0', value, handleChange }: Props) => {
+export const TextFieldTrade = ({
+  amount,
+  selectable,
+  placeholder = '0.0',
+  currency,
+  value,
+  handleChange,
+  handleClick,
+}: Props) => {
   const CustomInput = useCallback(({ ...rest }: Props) => <Input {...rest} />, []);
+
   return (
     <Wrapper>
       <InputWrapper>
@@ -29,15 +41,17 @@ export const TextFieldTrade = ({ amount, placeholder = '0.0', value, handleChang
           customInput={CustomInput}
         />
         <DropdownWrapper>
-          <CurrencyImg src={logoUstb} />
-          <CurrencyName>USD</CurrencyName>
-          <IconWrapper>
-            <IconDown
-              style={{
-                cursor: 'pointer',
-              }}
-            />
-          </IconWrapper>
+          <CurrencyImg src={base.TOKENS[currency!]} />
+          <CurrencyName>{currency}</CurrencyName>
+          {selectable && (
+            <IconWrapper onClick={handleClick}>
+              <IconDown
+                style={{
+                  cursor: 'pointer',
+                }}
+              />
+            </IconWrapper>
+          )}
         </DropdownWrapper>
       </InputWrapper>
       {amount && (

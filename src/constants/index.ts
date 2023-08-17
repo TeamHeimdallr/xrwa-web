@@ -60,3 +60,7 @@ export const XUMM_API_SECRET = import.meta.env.VITE_XUMM_API_SECRET;
  * @description wallet 관리 key
  */
 export const XRPL_WALLET_KEY = 'xrpl-wallet';
+
+export const POPUP_ID = {
+  CURRENCY: 'CURRENCY',
+};

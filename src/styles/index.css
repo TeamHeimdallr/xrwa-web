@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 * {
   font-variant-ligatures: no-contextual !important;
   box-sizing: border-box;
@@ -17,13 +16,12 @@
   outline: none;
 }
 
-
 html,
 body {
   height: 100%;
   font-size: 14px;
   font-family: Pretendard, Arial, Helvetica, sans-serif;
-  background-color: #fff;
+  background-color: #f9fafd;
 
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
