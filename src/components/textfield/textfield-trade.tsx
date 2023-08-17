@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, useCallback } from 'react';
 import { NumberFormatValues, NumericFormat } from 'react-number-format';
-import tw from 'twin.macro';
+import tw, { styled } from 'twin.macro';
 
 import { TOKEN_IMAGE } from '~/constants';
 import { formatNumberWithComma } from '~/utils/number';
@@ -40,11 +40,11 @@ export const TextFieldTrade = ({
           value={value}
           customInput={CustomInput}
         />
-        <DropdownWrapper>
+        <DropdownWrapper onClick={handleClick} clickable={!!handleClick}>
           <CurrencyImg src={TOKEN_IMAGE[currency!]?.image} />
           <CurrencyName>{currency}</CurrencyName>
           {selectable && (
-            <IconWrapper onClick={handleClick}>
+            <IconWrapper>
               <IconDown
                 style={{
                   cursor: 'pointer',
@@ -67,7 +67,7 @@ export const TextFieldTrade = ({
 };
 
 const Wrapper = tw.div`
-  flex flex-col py-16 px-20 gap-12 bg-gray0 rounded-8
+  flex flex-col py-12 px-20 gap-12 bg-gray0 rounded-8
 `;
 
 const InputWrapper = tw.div`
@@ -75,14 +75,18 @@ const InputWrapper = tw.div`
 `;
 
 const Input = tw.input`
-  flex flex-1 bg-transparent text-28 leading-34 font-medium
+  w-full flex flex-1 bg-transparent text-28 leading-34 font-medium
   px-0 border-none caret-blue
   placeholder-gray2
 `;
 
-const DropdownWrapper = tw.div`
-  flex items-center gap-8 py-8 px-12 bg-gray1 rounded-24 
-`;
+interface DropdownWrapperProps {
+  clickable?: boolean;
+}
+const DropdownWrapper = styled.div<DropdownWrapperProps>(({ clickable }) => [
+  tw`flex items-center gap-8 py-8 pl-8 pr-12 bg-gray1 rounded-24`,
+  clickable && tw`clickable`,
+]);
 
 const CurrencyImg = tw.img`
   w-28 h-28
@@ -97,7 +101,7 @@ const IconWrapper = tw.div`
 `;
 
 const CaptionWrapper = tw.div`
-  flex justify-end gap-4
+  flex justify-end gap-4 h-22
 `;
 
 const CaptionText = tw.div`

@@ -106,6 +106,7 @@ const TradePage = () => {
                     currency={currencySelected}
                     selectable={true}
                     handleChange={e => console.log(e)}
+                    handleClick={currencyOpen}
                   />
                 </>
               )}
@@ -129,25 +130,25 @@ const TradePage = () => {
             <ButtonPrimary text="Withdraw" isLoading={false} buttonType="large" />
           )}
         </RightContainer>
-        {currencyOpened && (
-          <Popup
-            type={'normal'}
-            title="Select a token"
-            id={POPUP_ID.CURRENCY}
-            contents={<ChangeCurrency />}
-          />
-        )}
       </Wrapper>
+      {currencyOpened && (
+        <Popup
+          type={'normal'}
+          title="Select a token"
+          id={POPUP_ID.CURRENCY}
+          contents={<ChangeCurrency />}
+        />
+      )}
     </>
   );
 };
 
 const Wrapper = tw.div`
-  flex justify-center items-center
+  flex justify-center items-start pt-60 gap-48
 `;
 
 const LeftContainer = tw.div`
-  flex flex-col w-444 gap-40 m-24
+  flex flex-col w-444 gap-40
 `;
 
 const TradeContents = tw.div`
@@ -178,7 +179,7 @@ const TradeCardWrapper = tw.div`
 `;
 
 const RightContainer = styled.div(() => [
-  tw`flex flex-col gap-24 px-24 py-20 m-24 bg-white rounded-20`,
+  tw`flex flex-col gap-24 px-24 py-20 bg-white w-468 rounded-20 mt-96`,
   css`
     box-shadow: 0px 12px 32px 0px #3358ff14;
   `,
@@ -189,11 +190,11 @@ const ToggleText = tw.div`
 `;
 
 const InputWrapper = tw.div`
-  flex flex-col gap-16 
+  flex flex-col gap-12 
 `;
 
 const TradeWrapper = tw.div`
-  flex flex-col gap-16  relative
+  flex flex-col gap-12 relative
 `;
 
 const IconWrapper = tw.div`
@@ -201,7 +202,7 @@ const IconWrapper = tw.div`
 `;
 
 const RateWrapper = tw.div`
-  flex gap-8 justify-end
+  flex gap-6 justify-end
 `;
 
 const RateText = tw.div`

@@ -54,16 +54,16 @@ const MainPage = () => {
             <CardDeal
               image={LogoUstb}
               title="Deal Title"
-              contents="Deal Contents"
+              contents="The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills."
               value={1234567}
-              apy={5.3}
+              estimatedYield={5.3}
             />
             <CardDeal
               image={LogoUstb}
               title="Deal Title"
-              contents="Deal Contents"
+              contents="The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills."
               value={1234567}
-              apy={5.3}
+              estimatedYield={5.3}
             />
           </DealsCardWrapper>
         </DealsWrapper>
@@ -73,7 +73,7 @@ const MainPage = () => {
 };
 
 const Wrapper = tw.div`
-  flex flex-col items-center gap-80`;
+  flex flex-col items-center gap-80 pt-60`;
 
 const DashBoardWrapper = tw.div`
   flex flex-col w-960 gap-16
