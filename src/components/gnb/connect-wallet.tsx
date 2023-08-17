@@ -10,13 +10,16 @@ import { IconWallet } from '../icons';
 import { TextField } from '../text-field/text-field';
 
 export const ConnectWallet = () => {
-  const { connect } = useConnectWallet();
+  const { wallet, connect } = useConnectWallet();
   const { close } = usePopup(POPUP_ID.CONNECT);
   const [privateKey, setPrivateKey] = useState('');
-
+  const [loading, setLoading] = useState(false);
   const handleConnect = async () => {
     try {
-      await connect(privateKey);
+      setLoading(true);
+      await connect();
+      console.log('wallet', wallet);
+      setLoading(false);
       close();
     } catch (e) {
       alert(e);
@@ -36,7 +39,7 @@ export const ConnectWallet = () => {
             width: '105px',
           }}
           text="Connect"
-          isLoading={false}
+          isLoading={loading}
           buttonType="medium"
           onClick={handleConnect}
         />

@@ -30,7 +30,7 @@ export const Gnb = () => {
 
   useOnClickOutside(connectedRef, () => setDropdownOpened(false));
 
-  const { open, opened, close } = usePopup(POPUP_ID.CONNECT);
+  const { open, opened } = usePopup(POPUP_ID.CONNECT);
 
   const truncatedAddress = '0x123...456';
 
@@ -39,6 +39,9 @@ export const Gnb = () => {
       setShowMenu(false);
     }
   }, [md]);
+  useEffect(() => {
+    setDropdownOpened(false);
+  }, [wallet]);
 
   return (
     <>
