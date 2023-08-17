@@ -1,5 +1,6 @@
 import tw from 'twin.macro';
 
+import { TokenButton } from '~/components/buttons/button-token';
 import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';
 import { useSelectedTokenState } from '~/states/data/trade';
@@ -15,9 +16,8 @@ export const ChangeCurrency = () => {
 
   return (
     <Wrapper>
-      <button onClick={() => handleChangeCurrency('USTB')}>change to ustb</button>
-      <button onClick={() => handleChangeCurrency('BSD')}>change to BSD</button>
-      <button onClick={() => handleChangeCurrency('ENA')}>change to ENA</button>
+      <TokenButton onClick={() => handleChangeCurrency('BSD')} symbol="BSD" />
+      <TokenButton onClick={() => handleChangeCurrency('ENA')} symbol="ENA" />
     </Wrapper>
   );
 };
