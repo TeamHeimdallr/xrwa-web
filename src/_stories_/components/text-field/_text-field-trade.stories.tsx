@@ -34,9 +34,6 @@ const Template = (args: Story['args']) => {
     setValue(e.target.value);
   };
 
-  //Todo : Error 내용에따른 에러메세지 추가
-  const errorMessage = 'Please enter a valid amount';
-
   return (
     <TextFieldTrade
       value={value}
