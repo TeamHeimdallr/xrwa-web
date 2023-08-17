@@ -1,3 +1,7 @@
+import LogoBahama from '~/assets/images/logo-bahama.png';
+import LogoNigeria from '~/assets/images/logo-nigeria.png';
+import { CBDC } from '~/types/xrpl/cbdc';
+
 /**
  * @description 서버 START ENV / MOCK 환경
  */
@@ -64,3 +68,30 @@ export const XRPL_WALLET_KEY = 'xrpl-wallet';
 export const POPUP_ID = {
   CURRENCY: 'CURRENCY',
 };
+
+/**
+ * @description token image
+ */
+export const TOKEN_IMAGE: Record<CBDC, { image: string; fullname: string }> = {
+  BSD: {
+    image: LogoBahama,
+    fullname: 'Bahama CBDC Token',
+  },
+  ENA: {
+    image: LogoNigeria,
+    fullname: 'Nigeria CBDC Token',
+  },
+  KRW: {
+    image: '',
+    fullname: 'South Korea CBDC Token',
+  },
+};
+
+/**
+ * @description wallet seeds
+ */
+export const BSD_WALLET_SEED = import.meta.env.VITE_BSD_WALLET_SEED;
+export const ENA_WALLET_SEED = import.meta.env.VITE_ENA_WALLET_SEED;
+export const KRW_WALLET_SEED = import.meta.env.VITE_KRW_WALLET_SEED;
+
+export const USTB_MASTER_WALLET_SEED = import.meta.env.VITE_USTB_MASTER_WALLET_SEED;

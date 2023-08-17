@@ -2,7 +2,7 @@ import { InputHTMLAttributes, useCallback } from 'react';
 import { NumberFormatValues, NumericFormat } from 'react-number-format';
 import tw from 'twin.macro';
 
-import * as base from '~/constants/tokens/base';
+import { TOKEN_IMAGE } from '~/constants';
 import { formatNumberWithComma } from '~/utils/number';
 
 import { IconDown } from '../icons';
@@ -41,7 +41,7 @@ export const TextFieldTrade = ({
           customInput={CustomInput}
         />
         <DropdownWrapper>
-          <CurrencyImg src={base.TOKENS[currency!]} />
+          <CurrencyImg src={TOKEN_IMAGE[currency!]?.image} />
           <CurrencyName>{currency}</CurrencyName>
           {selectable && (
             <IconWrapper onClick={handleClick}>

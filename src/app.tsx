@@ -4,7 +4,7 @@ import tw from 'twin.macro';
 
 import { useConnectXrpl } from './api/xrpl/connect-xrpl';
 
-const MainPage = lazy(() => import('./pages/main/landing-page'));
+const MainPage = lazy(() => import('./pages/main'));
 const TradePage = lazy(() => import('./pages/detail/trade-page'));
 const AppProvider = lazy(() => import('~/hocs/hoc-app-provider'));
 
