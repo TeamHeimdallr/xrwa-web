@@ -5,74 +5,80 @@ import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import { useOnClickOutside } from 'usehooks-ts';
 
+import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import { COLOR } from '~/assets/colors';
 import textLogo from '~/assets/images/logo-text.png';
-import { useMediaQuery } from '~/hooks/pages/use-media-query';
+import { POPUP_ID } from '~/constants';
+import { usePopup } from '~/hooks/pages/use-popup';
+import { useUserState } from '~/states/data/user';
+import { truncateAddress } from '~/utils/string';
 
 import { ButtonPrimary } from '../buttons/button-primary';
 import { IconLogOut, IconPlus } from '../icons';
+import { Popup } from '../popups';
+import { ConnectWallet } from './connect-wallet';
 
 export const Gnb = () => {
+  const connectedRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const { md } = useMediaQuery();
+
+  const { disconnect } = useConnectWallet();
+  const { selected } = useUserState();
+  const { open, opened } = usePopup(POPUP_ID.CONNECT);
 
   const [dropdownOpended, setDropdownOpened] = useState(false);
-  const [_showMenu, setShowMenu] = useState(false);
-
-  //Todo : connect wallet
-  const [isConnected, setIsConnected] = useState(false);
-
-  const connectedRef = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(connectedRef, () => setDropdownOpened(false));
 
-  const truncatedAddress = '0x123...456';
-
   useEffect(() => {
-    if (md) {
-      setShowMenu(false);
-    }
-  }, [md]);
+    setDropdownOpened(false);
+  }, [selected]);
 
   return (
-    <Wrapper>
-      <LogoWrapper>
-        <TextLogo src={textLogo} alt="text-logo" onClick={() => navigate('/')} />
-      </LogoWrapper>
-      <HeaderWrapper>
-        {isConnected ? (
-          <>
-            <Menu onClick={() => navigate('/me')}>My Page</Menu>
-            <ConnectedWrapper
-              onClick={() => setDropdownOpened(true)}
-              ref={connectedRef}
-              dropdownOpended={dropdownOpended}
-            >
-              <ConnectedAddress>{truncatedAddress}</ConnectedAddress>
+    <>
+      <Wrapper>
+        <LogoWrapper onClick={() => navigate('/')}>
+          <TextLogo src={textLogo} alt="text-logo" />
+        </LogoWrapper>
+        <HeaderWrapper>
+          {selected.wallet ? (
+            <>
+              <Menu onClick={() => navigate('/mypage')}>My Page</Menu>
+              <ConnectedWrapper
+                onClick={() => setDropdownOpened(true)}
+                ref={connectedRef}
+                dropdownOpended={dropdownOpended}
+              >
+                <ConnectedAddress>{truncateAddress(selected.wallet.address)}</ConnectedAddress>
 
-              <DropDownWrapper dropdownOpended={dropdownOpended}>
-                <FaucetButton>
-                  <IconPlus width={20} height={20} color={COLOR.GRAY2} />
-                  Faucet
-                </FaucetButton>
-                <DisconnectButton onClick={() => setIsConnected(!isConnected)}>
-                  <IconLogOut width={20} height={20} color={COLOR.GRAY2} />
-                  Disconnect
-                </DisconnectButton>
-              </DropDownWrapper>
-            </ConnectedWrapper>
-          </>
-        ) : (
-          <ButtonWrapper>
-            <ButtonPrimary
-              buttonType="medium"
-              text="Connect Wallet"
-              onClick={() => setIsConnected(!isConnected)}
-            />
-          </ButtonWrapper>
-        )}
-      </HeaderWrapper>
-    </Wrapper>
+                <DropDownWrapper dropdownOpended={dropdownOpended}>
+                  <FaucetButton>
+                    <IconPlus width={20} height={20} color={COLOR.GRAY2} />
+                    Faucet
+                  </FaucetButton>
+                  <DisconnectButton onClick={disconnect}>
+                    <IconLogOut width={20} height={20} color={COLOR.GRAY2} />
+                    Disconnect
+                  </DisconnectButton>
+                </DropDownWrapper>
+              </ConnectedWrapper>
+            </>
+          ) : (
+            <ButtonWrapper>
+              <ButtonPrimary buttonType="medium" text="Connect Wallet" onClick={open} />
+            </ButtonWrapper>
+          )}
+        </HeaderWrapper>
+      </Wrapper>
+      {opened && (
+        <Popup
+          type={'normal'}
+          title="Connect XRP wallet"
+          id={POPUP_ID.CONNECT}
+          contents={<ConnectWallet />}
+        />
+      )}
+    </>
   );
 };
 
@@ -102,12 +108,11 @@ interface ConnectedWrapperProps {
   dropdownOpended: boolean;
 }
 const ConnectedWrapper = styled.div<ConnectedWrapperProps>(({ dropdownOpended }) => [
-  tw`relative flex flex-col items-center gap-12 px-24 py-10 border-solid w-148 clickable rounded-8 border-1 border-blue text-blue`,
+  tw`relative flex flex-col items-center gap-12 px-24 py-10 border-solid w-148 clickable rounded-8 border-1 border-blue text-blue bg-blue/5`,
   dropdownOpended && tw`text-white bg-gray4 border-gray4 rounded-b-0`,
 ]);
 
-const ConnectedAddress = tw.div`
-`;
+const ConnectedAddress = tw.div``;
 
 interface DropDownWrapperProps {
   dropdownOpended: boolean;

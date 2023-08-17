@@ -7,6 +7,7 @@ const headers = ['Type', 'Amount', 'Status', 'Date', 'Exchange Rate', 'Transacti
 
 const rows = [
   {
+    id: 1,
     type: 'Withdraw',
     amount: '50 USTB',
     status: '8 days left',
@@ -15,6 +16,7 @@ const rows = [
     transaction: '72561528...',
   },
   {
+    id: 2,
     type: 'Deposit',
     amount: '50 USTB',
     status: 'Locked',
@@ -40,17 +42,13 @@ export const Table = () => {
             <ButtonPrimary
               text="Go to Deals"
               buttonType="medium"
-              onClick={() => {
-                console.log('Deposit');
-              }}
-              style={{
-                width: '126px',
-              }}
+              onClick={() => console.log('Deposit')}
+              style={{ width: '126px' }}
             />
           </EmptyWrapper>
         )}
         {rows.map(row => (
-          <OrderRow key={row.transaction}>
+          <OrderRow key={row.id}>
             <RowType>{row.type}</RowType>
             <RowText>{row.amount}</RowText>
             <RowText>{row.status}</RowText>
@@ -71,10 +69,7 @@ const PositionLabel = tw.div`
   font-b-24 text-black
 `;
 const TableWrapper = styled.div(() => [
-  tw`
-  w-full py-20 px-24 rounded-20 bg-white
-  flex flex-col gap-20
-`,
+  tw`flex flex-col w-full gap-20 px-24 py-20 bg-white rounded-20`,
   css`
     box-shadow: 0px 12px 32px 0px #3358ff14;
   `,

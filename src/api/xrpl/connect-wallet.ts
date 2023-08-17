@@ -1,18 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
 import { Wallet } from 'xrpl';
 
 import { XRPL_WALLET_KEY } from '~/constants';
+import { useUserState } from '~/states/data/user';
 import { useXrplStore } from '~/states/data/xrpl';
-import { AccountData } from '~/types';
 
 export const useConnectWallet = () => {
   const currentWalletSeed = useReadLocalStorage<string>(XRPL_WALLET_KEY) ?? '';
   const [walletSeed, setWalletSeed] = useLocalStorage<string>(XRPL_WALLET_KEY, currentWalletSeed);
 
-  const [wallet, setWallet] = useState<Wallet>();
-  const [balance, setBalance] = useState<number>();
-  const [accountData, setAccountData] = useState<AccountData>();
+  const { selected, select } = useUserState();
 
   const { client, isConnected } = useXrplStore();
 
@@ -54,12 +52,8 @@ export const useConnectWallet = () => {
 
   const disconnect = async () => {
     if (!isConnected) return;
-
     setWalletSeed('');
-
-    setWallet(undefined);
-    setBalance(undefined);
-    setAccountData(undefined);
+    select({ wallet: undefined, balance: undefined, accountData: undefined });
   };
 
   const getInfo = async (wallet: Wallet, currentBalance?: number) => {
@@ -69,17 +63,23 @@ export const useConnectWallet = () => {
       result: { account_data: accountData },
     } = await client.request({ command: 'account_info', account: wallet.address });
 
-    setWallet(wallet);
-    setBalance(balance);
-    setAccountData(accountData);
+    select({ wallet, balance, accountData });
   };
 
   useEffect(() => {
-    if (walletSeed) {
+    if (walletSeed && !selected.wallet) {
       retrive();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isConnected]);
+  }, [isConnected, walletSeed, selected.wallet]);
 
-  return { connect, disconnect, create, retrive, wallet, balance, accountData };
+  return {
+    connect,
+    disconnect,
+    create,
+    retrive,
+    wallet: selected.wallet,
+    balance: selected.balance,
+    accountData: selected.accountData,
+  };
 };
