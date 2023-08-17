@@ -3,41 +3,35 @@ import tw, { styled } from 'twin.macro';
 
 import LogoUstb from '~/assets/images/logo-ustb.png';
 import { ButtonPrimary } from '~/components/buttons/button-primary';
-import { CardDeal } from '~/components/card/card-deal';
-import { CardPrimary } from '~/components/card/card-primary';
 import { CardTertiary } from '~/components/card/card-tertiary';
 import { Gnb } from '~/components/gnb';
-import {
-  IconActive,
-  IconArrowDown,
-  IconLocked,
-  IconPercentage,
-  IconPrice,
-  IconTotal,
-} from '~/components/icons';
+import { IconArrowDown, IconLocked, IconPercentage, IconPrice } from '~/components/icons';
 import { TextFieldTrade } from '~/components/text-field/text-field-trade';
 import { Toggle } from '~/components/toggle';
+import { useTradeState } from '~/states/data/trade';
+import { TRADE_OPTIONS } from '~/types';
 
-const TransferPage = () => {
+const TradePage = () => {
+  const { selected, select } = useTradeState();
   return (
     <>
       <Gnb />
       <Wrapper>
         <LeftContainer>
-          <TransferContents>
-            <TransferImage src={LogoUstb} />
-            <TransferText>
-              <TransferTitle>U.S. Short-term Treasury Bill</TransferTitle>
-              <TransferDesc>
+          <TradeContents>
+            <TradeImage src={LogoUstb} />
+            <TradeText>
+              <TradeTitle>U.S. Short-term Treasury Bill</TradeTitle>
+              <TradeDesc>
                 The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and
                 backed by U.S. Treasury Bills. These are government bonds that don't carry regular
                 interest payments and are issued at a discounted rate, only to be redeemed at their
                 full value upon maturity. Given the backing of the U.S. government, they're viewed
                 as the "risk-free" standard and rank among the most secure investments globally.
-              </TransferDesc>
-            </TransferText>
-          </TransferContents>
-          <TransferCardWrapper>
+              </TradeDesc>
+            </TradeText>
+          </TradeContents>
+          <TradeCardWrapper>
             <CardTertiary
               title="Total Value Locked"
               icon={<IconLocked />}
@@ -51,34 +45,53 @@ const TransferPage = () => {
               cardType="value"
             />
             <CardTertiary title="APY" icon={<IconPercentage />} contents={5.3} cardType="percent" />
-          </TransferCardWrapper>
+          </TradeCardWrapper>
         </LeftContainer>
         <RightContainer>
           <Toggle
             left={{
-              id: 'deposit',
+              id: TRADE_OPTIONS.DEPOSIT,
               text: <ToggleText>Deposit</ToggleText>,
-              handler: id => select(id),
+              handler: id => select(id as TRADE_OPTIONS),
             }}
             right={{
-              id: 'withdraw',
+              id: TRADE_OPTIONS.WITHDRAW,
               text: <ToggleText>Withdraw</ToggleText>,
-              handler: id => select(id),
+              handler: id => select(id as TRADE_OPTIONS),
             }}
           />
           <InputWrapper>
-            <TextFieldTrade
-              amount="100000"
-              value={100000}
-              placeholder="0.0"
-              handleChange={e => console.log(e)}
-            />
-            <TextFieldTrade
-              amount="100000"
-              value={100000}
-              placeholder="0.0"
-              handleChange={e => console.log(e)}
-            />
+            {selected === TRADE_OPTIONS.DEPOSIT ? (
+              <>
+                <TextFieldTrade
+                  amount="100000"
+                  value={100000}
+                  placeholder="0.0"
+                  handleChange={e => console.log(e)}
+                />
+                <TextFieldTrade
+                  amount="100000"
+                  value={120000}
+                  placeholder="0.0"
+                  handleChange={e => console.log(e)}
+                />
+              </>
+            ) : (
+              <>
+                <TextFieldTrade
+                  amount="100000"
+                  value={120000}
+                  placeholder="0.0"
+                  handleChange={e => console.log(e)}
+                />
+                <TextFieldTrade
+                  amount="100000"
+                  value={100000}
+                  placeholder="0.0"
+                  handleChange={e => console.log(e)}
+                />
+              </>
+            )}
             <IconWrapper>
               <IconArrowDown />
             </IconWrapper>
@@ -102,30 +115,30 @@ const LeftContainer = tw.div`
     flex flex-col w-444 gap-40 m-24
 `;
 
-const TransferContents = tw.div`
+const TradeContents = tw.div`
     flex flex-col gap-16
 `;
 
-const TransferImage = styled.img(() => [
+const TradeImage = styled.img(() => [
   tw`w-80 h-80 rounded-50`,
   css`
     box-shadow: 0px 8px 24px 0px #3358ff33;
   `,
 ]);
 
-const TransferText = tw.div`
+const TradeText = tw.div`
     flex flex-col gap-8
 `;
 
-const TransferTitle = tw.div`
+const TradeTitle = tw.div`
     font-b-28 text-black
 `;
 
-const TransferDesc = tw.div`
+const TradeDesc = tw.div`
     font-r-16 text-gray3
 `;
 
-const TransferCardWrapper = tw.div`
+const TradeCardWrapper = tw.div`
     grid grid-cols-2 gap-16
 `;
 
@@ -163,4 +176,4 @@ const RateValue = tw.div`
     font-r-14 text-gray4
 `;
 
-export default TransferPage;
+export default TradePage;
