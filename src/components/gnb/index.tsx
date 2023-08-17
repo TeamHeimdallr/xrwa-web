@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import { useOnClickOutside } from 'usehooks-ts';
 
@@ -12,6 +13,7 @@ import { ButtonPrimary } from '../buttons/button-primary';
 import { IconLogOut, IconPlus } from '../icons';
 
 export const Gnb = () => {
+  const navigate = useNavigate();
   const { md } = useMediaQuery();
 
   const [dropdownOpended, setDropdownOpened] = useState(false);
@@ -35,12 +37,12 @@ export const Gnb = () => {
   return (
     <Wrapper>
       <LogoWrapper>
-        <TextLogo src={textLogo} alt="text-logo" />
+        <TextLogo src={textLogo} alt="text-logo" onClick={() => navigate('/')} />
       </LogoWrapper>
       <HeaderWrapper>
         {isConnected ? (
           <>
-            <Menu>My Page</Menu>
+            <Menu onClick={() => navigate('/me')}>My Page</Menu>
             <ConnectedWrapper
               onClick={() => setDropdownOpened(true)}
               ref={connectedRef}
