@@ -138,11 +138,11 @@ const Wrapper = tw.div`
 `;
 
 const LeftContainer = tw.div`
-    flex flex-col w-444 gap-40 m-24
+  flex flex-col w-444 gap-40 m-24
 `;
 
 const TradeContents = tw.div`
-    flex flex-col gap-16
+  flex flex-col gap-16
 `;
 
 const TradeImage = styled.img(() => [
@@ -153,33 +153,33 @@ const TradeImage = styled.img(() => [
 ]);
 
 const TradeText = tw.div`
-    flex flex-col gap-8
+  flex flex-col gap-8
 `;
 
 const TradeTitle = tw.div`
-    font-b-28 text-black
+  font-b-28 text-black
 `;
 
 const TradeDesc = tw.div`
-    font-r-16 text-gray3
+  font-r-16 text-gray3
 `;
 
 const TradeCardWrapper = tw.div`
-    grid grid-cols-2 gap-16
+  grid grid-cols-2 gap-16
 `;
 
 const RightContainer = styled.div(() => [
   tw`
-      flex flex-col bg-white rounded-20
-      py-20 px-24 gap-24 m-24
-      `,
+    flex flex-col bg-white rounded-20
+    py-20 px-24 gap-24 m-24
+  `,
   css`
     box-shadow: 0px 12px 32px 0px #3358ff14;
   `,
 ]);
 
 const ToggleText = tw.div`
-    font-b-18 rounded-40
+  font-b-18 rounded-40
 `;
 
 const InputWrapper = tw.div`
@@ -191,19 +191,19 @@ const TradeWrapper = tw.div`
 `;
 
 const IconWrapper = tw.div`
-   absolute absolute-center flex-center w-32 h-32 rounded-16 border-solid border-gray1 bg-white
+  absolute absolute-center flex-center w-32 h-32 rounded-16 border-solid border-gray1 bg-white
 `;
 
 const RateWrapper = tw.div`
-    flex gap-8 justify-end
+  flex gap-8 justify-end
 `;
 
 const RateText = tw.div`
-    font-r-14 text-gray3
+  font-r-14 text-gray3
 `;
 
 const RateValue = tw.div`
-    font-r-14 text-gray4
+  font-r-14 text-gray4
 `;
 
 export default TradePage;
