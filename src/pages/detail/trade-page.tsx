@@ -12,11 +12,15 @@ import { TextFieldTrade } from '~/components/text-field/text-field-trade';
 import { Toggle } from '~/components/toggle';
 import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';
-import { useTradeState } from '~/states/data/trade';
+import { useSelectedTokenState, useTradeState } from '~/states/data/trade';
 import { TRADE_OPTIONS } from '~/types';
+
+import { ChangeCurrency } from './components/change-currency';
 
 const TradePage = () => {
   const { selected, select } = useTradeState();
+  const { selected: currencySelected, select: currencySelect } = useSelectedTokenState();
+
   const {
     open: currencyOpen,
     opened: currencyOpened,
@@ -76,7 +80,7 @@ const TradePage = () => {
                   <TextFieldTrade
                     amount="100000"
                     placeholder="0.0"
-                    currency="BSD"
+                    currency={currencySelected}
                     selectable={true}
                     handleChange={e => console.log(e)}
                     handleClick={currencyOpen}
@@ -99,7 +103,7 @@ const TradePage = () => {
                   <TextFieldTrade
                     amount="100000"
                     placeholder="0.0"
-                    currency="BSD"
+                    currency={currencySelected}
                     selectable={true}
                     handleChange={e => console.log(e)}
                   />
@@ -116,7 +120,9 @@ const TradePage = () => {
           </InputWrapper>
           <ButtonPrimary text="Deposit" isLoading={false} buttonType="large" />
         </RightContainer>
-        {currencyOpened && <Popup type={'notification'} id={POPUP_ID.CURRENCY} />}
+        {currencyOpened && (
+          <Popup type={'notification'} id={POPUP_ID.CURRENCY} contents={<ChangeCurrency />} />
+        )}
       </Wrapper>
     </>
   );
