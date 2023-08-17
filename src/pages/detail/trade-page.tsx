@@ -118,7 +118,11 @@ const TradePage = () => {
               <RateValue>1USTB = 1USTB</RateValue>
             </RateWrapper>
           </InputWrapper>
-          <ButtonPrimary text="Deposit" isLoading={false} buttonType="large" />
+          {selected === TRADE_OPTIONS.DEPOSIT ? (
+            <ButtonPrimary text="Deposit" isLoading={false} buttonType="large" />
+          ) : (
+            <ButtonPrimary text="Withdraw" isLoading={false} buttonType="large" />
+          )}
         </RightContainer>
         {currencyOpened && (
           <Popup
