@@ -32,6 +32,8 @@ module.exports = {
         white: '#ffffff',
 
         blue: '#3358ff',
+        darkblue: '#2547E0',
+
         pink: '#ff36ff',
 
         gray5: '#262a2f',
@@ -157,10 +159,10 @@ module.exports = {
         '.font-r-24': { fontSize: '24px', lineHeight: '32px', fontWeight: 400 },
         '.font-r-28': { fontSize: '28px', lineHeight: '38px', fontWeight: 400 },
 
-        '.font-m-12': { fontSize: '22px', lineHeight: '30px', fontWeight: 500 },
-        '.font-m-14': { fontSize: '24px', lineHeight: '32px', fontWeight: 500 },
-        '.font-m-16': { fontSize: '28px', lineHeight: '36px', fontWeight: 500 },
-        '.font-m-18': { fontSize: '32px', lineHeight: '40px', fontWeight: 500 },
+        '.font-m-22': { fontSize: '22px', lineHeight: '30px', fontWeight: 500 },
+        '.font-m-24': { fontSize: '24px', lineHeight: '32px', fontWeight: 500 },
+        '.font-m-28': { fontSize: '28px', lineHeight: '36px', fontWeight: 500 },
+        '.font-m-32': { fontSize: '32px', lineHeight: '38px', fontWeight: 500 },
 
         '.font-sb-12': { fontSize: '12px', lineHeight: '20px', fontWeight: 600 },
         '.font-sb-14': { fontSize: '14px', lineHeight: '22px', fontWeight: 600 },
