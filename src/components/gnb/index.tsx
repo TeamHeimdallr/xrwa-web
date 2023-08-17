@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import { useOnClickOutside } from 'usehooks-ts';
@@ -9,7 +9,6 @@ import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import { COLOR } from '~/assets/colors';
 import textLogo from '~/assets/images/logo-text.png';
 import { POPUP_ID } from '~/constants';
-import { useMediaQuery } from '~/hooks/pages/use-media-query';
 import { usePopup } from '~/hooks/pages/use-popup';
 import { useUserState } from '~/states/data/user';
 import { truncateAddress } from '~/utils/string';
@@ -20,31 +19,16 @@ import { Popup } from '../popups';
 import { ConnectWallet } from './connect-wallet';
 
 export const Gnb = () => {
+  const connectedRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const { md } = useMediaQuery();
-
-  const [dropdownOpended, setDropdownOpened] = useState(false);
-  const [_showMenu, setShowMenu] = useState(false);
 
   const { disconnect } = useConnectWallet();
-
-  const connectedRef = useRef<HTMLDivElement>(null);
-
   const { selected } = useUserState();
-
-  useOnClickOutside(connectedRef, () => setDropdownOpened(false));
-
   const { open, opened } = usePopup(POPUP_ID.CONNECT);
 
-  useEffect(() => {
-    if (md) {
-      setShowMenu(false);
-    }
-  }, [md]);
+  const [dropdownOpended, setDropdownOpened] = useState(false);
 
-  useEffect(() => {
-    setDropdownOpened(false);
-  }, [selected]);
+  useOnClickOutside(connectedRef, () => setDropdownOpened(false));
 
   return (
     <>
@@ -120,12 +104,11 @@ interface ConnectedWrapperProps {
   dropdownOpended: boolean;
 }
 const ConnectedWrapper = styled.div<ConnectedWrapperProps>(({ dropdownOpended }) => [
-  tw`relative flex flex-col items-center gap-12 px-24 py-10 border-solid w-148 clickable rounded-8 border-1 border-blue text-blue`,
+  tw`relative flex flex-col items-center gap-12 px-24 py-10 border-solid w-148 clickable rounded-8 border-1 border-blue text-blue bg-blue/5`,
   dropdownOpended && tw`text-white bg-gray4 border-gray4 rounded-b-0`,
 ]);
 
-const ConnectedAddress = tw.div`
-`;
+const ConnectedAddress = tw.div``;
 
 interface DropDownWrapperProps {
   dropdownOpended: boolean;

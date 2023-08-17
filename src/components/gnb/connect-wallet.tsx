@@ -2,32 +2,29 @@ import { useState } from 'react';
 import tw from 'twin.macro';
 
 import { useConnectWallet } from '~/api/xrpl/connect-wallet';
+import { ButtonPrimary } from '~/components/buttons/button-primary';
+import { IconWallet } from '~/components/icons';
+import { TextField } from '~/components/textfield/textfield';
 import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';
-
-import { ButtonPrimary } from '../buttons/button-primary';
-import { IconWallet } from '../icons';
-import { TextField } from '../text-field/text-field';
 
 export const ConnectWallet = () => {
   const { connect } = useConnectWallet();
   const { close } = usePopup(POPUP_ID.CONNECT);
-  const [_privateKey, setPrivateKey] = useState('');
+  const [seed, setSeed] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleConnect = async () => {
-    try {
-      setLoading(true);
-      await connect();
-      setLoading(false);
-      close();
-    } catch (e) {
-      alert(e);
-    }
+    setLoading(true);
+
+    await connect(seed);
+
+    setLoading(false);
+    close();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPrivateKey(e.target.value);
+    setSeed(e.target.value);
   };
 
   return (
@@ -35,9 +32,7 @@ export const ConnectWallet = () => {
       <TextField onChange={handleChange} placeholder="Enter your private key" />
       <ButtonWrapper>
         <ButtonPrimary
-          style={{
-            width: '105px',
-          }}
+          style={{ width: '105px' }}
           text="Connect"
           isLoading={loading}
           buttonType="medium"
@@ -45,7 +40,7 @@ export const ConnectWallet = () => {
         />
         <CreateButtonWrapper>
           <IconWallet />
-          <CreateText> Create a new Wallet</CreateText>
+          <CreateText onClick={handleConnect}> Create a new Wallet</CreateText>
         </CreateButtonWrapper>
       </ButtonWrapper>
     </Wrapper>
