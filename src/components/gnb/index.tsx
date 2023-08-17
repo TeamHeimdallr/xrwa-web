@@ -43,7 +43,7 @@ export const Gnb = () => {
         <HeaderWrapper>
           {selected.wallet ? (
             <>
-              <Menu onClick={() => navigate('/mypage')}>My Page</Menu>
+              <Menu onClick={() => navigate('/me')}>My Page</Menu>
               <ConnectedWrapper
                 onClick={() => setDropdownOpened(true)}
                 ref={connectedRef}
