@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes } from 'react';
 import tw from 'twin.macro';
 
-import { TOKEN_IMAGE } from '~/constants/tokens/base';
+import { TOKEN_IMAGE } from '~/constants/tokens';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   symbol?: string;

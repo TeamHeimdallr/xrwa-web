@@ -173,10 +173,7 @@ const TradeCardWrapper = tw.div`
 `;
 
 const RightContainer = styled.div(() => [
-  tw`
-    flex flex-col bg-white rounded-20
-    py-20 px-24 gap-24 m-24
-  `,
+  tw`flex flex-col gap-24 px-24 py-20 m-24 bg-white rounded-20`,
   css`
     box-shadow: 0px 12px 32px 0px #3358ff14;
   `,
