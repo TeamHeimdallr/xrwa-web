@@ -34,28 +34,4 @@ const MainPage = () => {
 const Wrapper = tw.div`
   flex flex-col items-center`;
 
-const DashBoardWrapper = tw.div`
-  flex flex-col w-960 gap-16
-`;
-
-const DashBoardTitle = tw.div`
-  font-b-24 text-black
-`;
-
-const DashBoardCardWrapper = tw.div`
-  flex gap-24
-`;
-
-const DealsWrapper = tw.div`
-  flex flex-col w-960 gap-16
-`;
-
-const DealsTitle = tw.div`
-  font-b-24 text-black
-`;
-
-const DealsCardWrapper = tw.div`
-  flex gap-24
-`;
-
 export default MainPage;

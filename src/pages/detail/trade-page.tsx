@@ -121,7 +121,12 @@ const TradePage = () => {
           <ButtonPrimary text="Deposit" isLoading={false} buttonType="large" />
         </RightContainer>
         {currencyOpened && (
-          <Popup type={'notification'} id={POPUP_ID.CURRENCY} contents={<ChangeCurrency />} />
+          <Popup
+            type={'normal'}
+            title="Select a token"
+            id={POPUP_ID.CURRENCY}
+            contents={<ChangeCurrency />}
+          />
         )}
       </Wrapper>
     </>
