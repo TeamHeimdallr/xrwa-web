@@ -92,7 +92,7 @@ const HeaderWrapper = tw.div`
 `;
 
 const Menu = tw.div`
- font-b-18
+  font-b-18 clickable
 `;
 
 const ButtonWrapper = tw.div`
