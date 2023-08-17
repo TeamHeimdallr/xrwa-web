@@ -45,7 +45,7 @@ export const Toggle = ({ left, right, ...rest }: Props) => {
 };
 
 const Wrapper = tw.div`
-  flex-center gap-8 rounded-40 bg-gray0
+  flex-center gap-8 rounded-40 bg-gray0 w-full
 `;
 
 interface ToggleButtonProps {
@@ -54,7 +54,7 @@ interface ToggleButtonProps {
 const ToggleWrapper = styled.div<ToggleButtonProps>(({ selected }) => [
   tw`flex-1 flex-shrink-0 px-40 py-16 select-none flex-center rounded-32  font-b-18 
   clickable
-  text-gray2 bg-gray0`,
+  text-gray2 `,
 
   selected && tw`text-blue bg-white`,
   selected &&
