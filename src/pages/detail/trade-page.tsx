@@ -24,7 +24,7 @@ const TradePage = () => {
   const {
     open: currencyOpen,
     opened: currencyOpened,
-    close: currencyClose,
+    close: _currencyClose,
   } = usePopup(POPUP_ID.CURRENCY);
   return (
     <>
