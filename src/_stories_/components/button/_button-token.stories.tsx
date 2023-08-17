@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { TokenButton } from '~/components/buttons/button-token';
-import { IconCheck } from '~/components/icons';
 
 const meta = {
   title: 'Components/TokenButton',
