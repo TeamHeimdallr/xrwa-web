@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import { useOnClickOutside } from 'usehooks-ts';
@@ -29,6 +29,10 @@ export const Gnb = () => {
   const [dropdownOpended, setDropdownOpened] = useState(false);
 
   useOnClickOutside(connectedRef, () => setDropdownOpened(false));
+
+  useEffect(() => {
+    setDropdownOpened(false);
+  }, [selected]);
 
   return (
     <>
