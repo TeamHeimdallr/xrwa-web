@@ -16,7 +16,6 @@ export const useXrplStore = create<XrplState>()(
   immer(
     logger(set => ({
       name: 'xrpl-store',
-
       client: new Client(XRPL_WSS_TEST_NET),
       isConnected: false,
       setConnection: isConnected => set({ isConnected }),

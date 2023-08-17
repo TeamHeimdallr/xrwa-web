@@ -7,10 +7,15 @@ import { useOnClickOutside } from 'usehooks-ts';
 
 import { COLOR } from '~/assets/colors';
 import textLogo from '~/assets/images/logo-text.png';
+import { POPUP_ID } from '~/constants';
 import { useMediaQuery } from '~/hooks/pages/use-media-query';
+import { usePopup } from '~/hooks/pages/use-popup';
+import { useXrplStore } from '~/states/data/xrpl';
 
 import { ButtonPrimary } from '../buttons/button-primary';
 import { IconLogOut, IconPlus } from '../icons';
+import { Popup } from '../popups';
+import { ConnectWallet } from './connect-wallet';
 
 export const Gnb = () => {
   const navigate = useNavigate();
@@ -19,12 +24,13 @@ export const Gnb = () => {
   const [dropdownOpended, setDropdownOpened] = useState(false);
   const [_showMenu, setShowMenu] = useState(false);
 
-  //Todo : connect wallet
-  const [isConnected, setIsConnected] = useState(false);
+  const { isConnected, setConnection } = useXrplStore();
 
   const connectedRef = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(connectedRef, () => setDropdownOpened(false));
+
+  const { open, opened, close } = usePopup(POPUP_ID.CONNECT);
 
   const truncatedAddress = '0x123...456';
 
@@ -35,44 +41,50 @@ export const Gnb = () => {
   }, [md]);
 
   return (
-    <Wrapper>
-      <LogoWrapper>
-        <TextLogo src={textLogo} alt="text-logo" onClick={() => navigate('/')} />
-      </LogoWrapper>
-      <HeaderWrapper>
-        {isConnected ? (
-          <>
-            <Menu onClick={() => navigate('/me')}>My Page</Menu>
-            <ConnectedWrapper
-              onClick={() => setDropdownOpened(true)}
-              ref={connectedRef}
-              dropdownOpended={dropdownOpended}
-            >
-              <ConnectedAddress>{truncatedAddress}</ConnectedAddress>
+    <>
+      <Wrapper>
+        <LogoWrapper onClick={() => navigate('/')}>
+          <TextLogo src={textLogo} alt="text-logo" />
+        </LogoWrapper>
+        <HeaderWrapper>
+          {isConnected ? (
+            <>
+              <Menu onClick={() => navigate('/mypage')}>My Page</Menu>
+              <ConnectedWrapper
+                onClick={() => setDropdownOpened(true)}
+                ref={connectedRef}
+                dropdownOpended={dropdownOpended}
+              >
+                <ConnectedAddress>{truncatedAddress}</ConnectedAddress>
 
-              <DropDownWrapper dropdownOpended={dropdownOpended}>
-                <FaucetButton>
-                  <IconPlus width={20} height={20} color={COLOR.GRAY2} />
-                  Faucet
-                </FaucetButton>
-                <DisconnectButton onClick={() => setIsConnected(!isConnected)}>
-                  <IconLogOut width={20} height={20} color={COLOR.GRAY2} />
-                  Disconnect
-                </DisconnectButton>
-              </DropDownWrapper>
-            </ConnectedWrapper>
-          </>
-        ) : (
-          <ButtonWrapper>
-            <ButtonPrimary
-              buttonType="medium"
-              text="Connect Wallet"
-              onClick={() => setIsConnected(!isConnected)}
-            />
-          </ButtonWrapper>
-        )}
-      </HeaderWrapper>
-    </Wrapper>
+                <DropDownWrapper dropdownOpended={dropdownOpended}>
+                  <FaucetButton>
+                    <IconPlus width={20} height={20} color={COLOR.GRAY2} />
+                    Faucet
+                  </FaucetButton>
+                  <DisconnectButton>
+                    <IconLogOut width={20} height={20} color={COLOR.GRAY2} />
+                    Disconnect
+                  </DisconnectButton>
+                </DropDownWrapper>
+              </ConnectedWrapper>
+            </>
+          ) : (
+            <ButtonWrapper>
+              <ButtonPrimary buttonType="medium" text="Connect Wallet" onClick={open} />
+            </ButtonWrapper>
+          )}
+        </HeaderWrapper>
+      </Wrapper>
+      {opened && (
+        <Popup
+          type={'normal'}
+          title="Connect XRP wallet"
+          id={POPUP_ID.CONNECT}
+          contents={<ConnectWallet />}
+        />
+      )}
+    </>
   );
 };
 
@@ -92,7 +104,11 @@ const HeaderWrapper = tw.div`
 `;
 
 const Menu = tw.div`
+<<<<<<< HEAD
   font-b-18 clickable
+=======
+ font-b-18 clickable
+>>>>>>> 811ccd3 (Update : connect wallet popup)
 `;
 
 const ButtonWrapper = tw.div`
