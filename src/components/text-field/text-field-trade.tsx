@@ -1,4 +1,5 @@
-import { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, useCallback } from 'react';
+import { NumberFormatValues, NumericFormat } from 'react-number-format';
 import tw from 'twin.macro';
 
 import logoUstb from '~/assets/images/logo-ustb.png';
@@ -8,13 +9,25 @@ import { IconDown } from '../icons';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   amount?: string;
+  value?: number | string;
+  placeholder?: string;
+  handleChange?: (value: NumberFormatValues) => void;
 }
 
-export const TextFieldTrade = ({ amount, ...rest }: Props) => {
+export const TextFieldTrade = ({ amount, placeholder = '0.0', value, handleChange }: Props) => {
+  const CustomInput = useCallback(({ ...rest }: Props) => <Input {...rest} />, []);
   return (
     <Wrapper>
       <InputWrapper>
-        <Input {...rest} />
+        <NumericFormat
+          allowLeadingZeros={false}
+          allowNegative={false}
+          placeholder={placeholder}
+          thousandSeparator
+          onValueChange={values => handleChange?.(values)}
+          value={value}
+          customInput={CustomInput}
+        />
         <DropdownWrapper>
           <CurrencyImg src={logoUstb} />
           <CurrencyName>USD</CurrencyName>

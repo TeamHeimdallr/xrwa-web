@@ -10,8 +10,6 @@ const meta = {
   argTypes: {
     placeholder: { control: 'text' },
     amount: { control: 'text' },
-    error: { control: 'boolean' },
-    errorMessage: { control: 'text' },
   },
 } satisfies Meta<typeof TextFieldTrade>;
 
@@ -21,9 +19,8 @@ type Story = StoryObj<typeof meta>;
 export const _TextField: Story = {
   render: args => <Template {...args} />,
   args: {
-    placeholder: 'Enter your email',
+    placeholder: '0.0',
     amount: '100,000,000',
-    error: false,
   },
 };
 
@@ -46,8 +43,6 @@ const Template = (args: Story['args']) => {
       onChange={handleChange}
       placeholder={args?.placeholder}
       amount={amount}
-      error={args?.error}
-      errorMessage={errorMessage}
     />
   );
 };
