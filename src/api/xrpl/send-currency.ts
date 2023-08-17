@@ -43,7 +43,7 @@ export async function sendCurrency({
 
     return signed.hash;
   } else {
-    console.log('error when create trustline');
+    console.log('error when sending currency');
 
     throw `Error sending transaction: ${meta.TransactionResult}`;
   }

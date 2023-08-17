@@ -65,22 +65,22 @@ const TestPage = () => {
   const getBalance = async () => {
     if (wallet) {
       const userBalanceRaw = await client.request({
-        command: 'gateway_balances',
+        command: 'account_lines',
         account: wallet.address,
         ledger_index: 'validated',
-        hotwallet: [xrwaWallet.address],
       });
 
       setUserBalance(JSON.stringify(userBalanceRaw.result, null, 2));
+
+      const xrwaBalanceRaw = await client.request({
+        command: 'gateway_balances',
+        account: xrwaWallet.address,
+        ledger_index: 'validated',
+        hotwallet: [wallet.address],
+      });
+
+      setXrawBalance(JSON.stringify(xrwaBalanceRaw.result, null, 2));
     }
-
-    const xrwaBalanceRaw = await client.request({
-      command: 'gateway_balances',
-      account: xrwaWallet.address,
-      ledger_index: 'validated',
-    });
-
-    setXrawBalance(JSON.stringify(xrwaBalanceRaw.result, null, 2));
   };
 
   return (
