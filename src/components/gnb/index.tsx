@@ -11,6 +11,8 @@ import textLogo from '~/assets/images/logo-text.png';
 import { POPUP_ID } from '~/constants';
 import { useMediaQuery } from '~/hooks/pages/use-media-query';
 import { usePopup } from '~/hooks/pages/use-popup';
+import { useUserState } from '~/states/data/user';
+import { truncateAddress } from '~/utils/string';
 
 import { ButtonPrimary } from '../buttons/button-primary';
 import { IconLogOut, IconPlus } from '../icons';
@@ -24,24 +26,25 @@ export const Gnb = () => {
   const [dropdownOpended, setDropdownOpened] = useState(false);
   const [_showMenu, setShowMenu] = useState(false);
 
-  const { wallet, disconnect } = useConnectWallet();
+  const { disconnect } = useConnectWallet();
 
   const connectedRef = useRef<HTMLDivElement>(null);
+
+  const { selected } = useUserState();
 
   useOnClickOutside(connectedRef, () => setDropdownOpened(false));
 
   const { open, opened } = usePopup(POPUP_ID.CONNECT);
-
-  const truncatedAddress = '0x123...456';
 
   useEffect(() => {
     if (md) {
       setShowMenu(false);
     }
   }, [md]);
+
   useEffect(() => {
     setDropdownOpened(false);
-  }, [wallet]);
+  }, [selected]);
 
   return (
     <>
@@ -50,7 +53,7 @@ export const Gnb = () => {
           <TextLogo src={textLogo} alt="text-logo" />
         </LogoWrapper>
         <HeaderWrapper>
-          {wallet ? (
+          {selected.wallet ? (
             <>
               <Menu onClick={() => navigate('/mypage')}>My Page</Menu>
               <ConnectedWrapper
@@ -58,7 +61,7 @@ export const Gnb = () => {
                 ref={connectedRef}
                 dropdownOpended={dropdownOpended}
               >
-                <ConnectedAddress>{truncatedAddress}</ConnectedAddress>
+                <ConnectedAddress>{truncateAddress(selected.wallet.address)}</ConnectedAddress>
 
                 <DropDownWrapper dropdownOpended={dropdownOpended}>
                   <FaucetButton>
@@ -107,11 +110,7 @@ const HeaderWrapper = tw.div`
 `;
 
 const Menu = tw.div`
-<<<<<<< HEAD
   font-b-18 clickable
-=======
- font-b-18 clickable
->>>>>>> 811ccd3 (Update : connect wallet popup)
 `;
 
 const ButtonWrapper = tw.div`

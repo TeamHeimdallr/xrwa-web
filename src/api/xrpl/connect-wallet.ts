@@ -3,6 +3,7 @@ import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
 import { Wallet } from 'xrpl';
 
 import { XRPL_WALLET_KEY } from '~/constants';
+import { useUserState } from '~/states/data/user';
 import { useXrplStore } from '~/states/data/xrpl';
 import { AccountData } from '~/types';
 
@@ -13,6 +14,8 @@ export const useConnectWallet = () => {
   const [wallet, setWallet] = useState<Wallet>();
   const [balance, setBalance] = useState<number>();
   const [accountData, setAccountData] = useState<AccountData>();
+
+  const { select } = useUserState();
 
   const { client, isConnected } = useXrplStore();
 
@@ -58,6 +61,7 @@ export const useConnectWallet = () => {
     setWallet(undefined);
     setBalance(undefined);
     setAccountData(undefined);
+    select({ wallet: undefined, balance: undefined, accountData: undefined });
   };
 
   const getInfo = async (wallet: Wallet, currentBalance?: number) => {
@@ -70,6 +74,7 @@ export const useConnectWallet = () => {
     setWallet(wallet);
     setBalance(balance);
     setAccountData(accountData);
+    select({ wallet, balance, accountData });
   };
 
   useEffect(() => {
