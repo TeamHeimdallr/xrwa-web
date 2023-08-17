@@ -21,7 +21,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/trade" element={<TradePage />} />
-              <Route path="/mypage" element={<MyPage />} />
+              <Route path="/me" element={<MyPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </RouteWrapper>
