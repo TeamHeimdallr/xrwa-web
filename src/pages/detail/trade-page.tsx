@@ -8,7 +8,7 @@ import { CardTertiary } from '~/components/card/card-tertiary';
 import { Gnb } from '~/components/gnb';
 import { IconArrowDown, IconLocked, IconPercentage, IconPrice } from '~/components/icons';
 import { Popup } from '~/components/popups';
-import { TextFieldTrade } from '~/components/text-field/text-field-trade';
+import { TextFieldTrade } from '~/components/textfield/textfield-trade';
 import { Toggle } from '~/components/toggle';
 import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';

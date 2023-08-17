@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ChangeEvent, useState } from 'react';
 
-import { TextFieldTrade } from '~/components/text-field/text-field-trade';
+import { TextFieldTrade } from '~/components/textfield/textfield-trade';
 
 const meta = {
   title: 'Components/TextFieldTrade',
