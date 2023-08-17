@@ -26,14 +26,14 @@ const Wrapper = tw.button`
   `;
 
 const TokenImg = tw.img`
-    w-40 h-40 rounded-full
-    `;
+  w-40 h-40 rounded-full
+`;
 const TextWrapper = tw.div`
-    flex flex-col items-start
-    `;
+  flex flex-col items-start
+`;
 const Symbol = tw.div`
-    font-b-14 text-black
-    `;
+  font-b-14 text-black
+`;
 const FullName = tw.div`
-    font-r-12 text-gray3
-    `;
+  font-r-12 text-gray3
+`;
