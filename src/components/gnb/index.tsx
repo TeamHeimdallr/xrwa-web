@@ -9,7 +9,7 @@ import textLogo from '~/assets/images/logo-text.png';
 import { useMediaQuery } from '~/hooks/pages/use-media-query';
 
 import { ButtonPrimary } from '../buttons/button-primary';
-import { IconLogOut } from '../icons';
+import { IconLogOut, IconPlus } from '../icons';
 
 export const Gnb = () => {
   const { md } = useMediaQuery();
@@ -49,12 +49,12 @@ export const Gnb = () => {
               <ConnectedAddress>{truncatedAddress}</ConnectedAddress>
 
               <DropDownWrapper dropdownOpended={dropdownOpended}>
-                <BalanceWrapper>
-                  <Balance>12312314</Balance>
-                  <BalanceUnit>ETH</BalanceUnit>
-                </BalanceWrapper>
+                <FaucetButton>
+                  <IconPlus width={20} height={20} color={COLOR.GRAY2} />
+                  Faucet
+                </FaucetButton>
                 <DisconnectButton onClick={() => setIsConnected(!isConnected)}>
-                  <IconLogOut width={16} height={16} color={COLOR.GRAY2} />
+                  <IconLogOut width={20} height={20} color={COLOR.GRAY2} />
                   Disconnect
                 </DisconnectButton>
               </DropDownWrapper>
@@ -75,7 +75,7 @@ export const Gnb = () => {
 };
 
 const Wrapper = tw.header`
-  flex items-center justify-between w-full relative
+  h-90 flex items-center justify-between w-full relative
   py-24 px-20
 `;
 const LogoWrapper = tw.div`
@@ -100,34 +100,18 @@ interface ConnectedWrapperProps {
   dropdownOpended: boolean;
 }
 const ConnectedWrapper = styled.div<ConnectedWrapperProps>(({ dropdownOpended }) => [
-  tw`
-  relative w-148 clickable
-  flex flex-col items-center
-  py-10 px-24 gap-12
-  rounded-8 border-solid border-1 border-blue
-  text-blue
-`,
-  dropdownOpended &&
-    tw`
-  bg-gray4 text-white border-gray4 rounded-b-0`,
+  tw`relative flex flex-col items-center gap-12 px-24 py-10 border-solid w-148 clickable rounded-8 border-1 border-blue text-blue`,
+  dropdownOpended && tw`text-white bg-gray4 border-gray4 rounded-b-0`,
 ]);
 
 const ConnectedAddress = tw.div`
-  
 `;
 
 interface DropDownWrapperProps {
   dropdownOpended: boolean;
 }
 const DropDownWrapper = styled.div<DropDownWrapperProps>(({ dropdownOpended }) => [
-  tw`
-   absolute top-36 w-148
-   flex flex-col items-center
-   py-8 px-12 gap-12
-   rounded-8
-   rounded-t-0
-   bg-gray4
-`,
+  tw`absolute flex flex-col items-center gap-12 px-12 pt-8 pb-12 top-36 w-148 rounded-8 rounded-t-0 bg-gray4`,
   dropdownOpended ? tw`opacity-100` : tw`opacity-0 pointer-events-none `,
   dropdownOpended &&
     css`
@@ -135,34 +119,10 @@ const DropDownWrapper = styled.div<DropDownWrapperProps>(({ dropdownOpended }) =
     `,
 ]);
 
-const BalanceWrapper = tw.div`
-  flex items-center justify-between
-  w-full
-  gap-4
-  bg-none
- 
+const FaucetButton = tw.div`
+  flex items-center h-20 gap-4 clickable text-gray2
 `;
 
-const Balance = tw.div`
-  font-r-12 text-white
+const DisconnectButton = tw.div`
+  flex items-center h-20 gap-4 clickable text-gray2
 `;
-
-const BalanceUnit = tw.div`
-  font-r-12 text-gray2
-`;
-
-const DisconnectButton = styled.div(() => [
-  tw`
-   flex items-center gap-4 clickable
-   h-20 text-gray2 hover:(text-gray5)
-`,
-  css`
-    &:hover {
-      svg {
-        path {
-          fill: ${COLOR.GRAY5};
-        }
-      }
-    }
-  `,
-]);

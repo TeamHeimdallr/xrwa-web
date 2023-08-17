@@ -11,24 +11,18 @@ interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   title: string;
   contents?: string;
   value: number;
-  apy: number;
+  estimatedYield: number;
 }
 
-export const CardDeal = ({ image, title, contents, value, apy, ...rest }: Props) => {
+export const CardDeal = ({ image, title, contents, value, estimatedYield, ...rest }: Props) => {
   const hoverRef = useRef<HTMLDivElement>(null);
   const isHover = useHover(hoverRef);
   return (
-    <Wrapper {...rest} ref={hoverRef}>
+    <Wrapper ref={hoverRef} onClick={() => isHover && console.log('hi')} {...rest}>
       <ContentWrapper>
         <ImgWrapper>
           <DealImg src={image} />
-          <IconNext
-            color={isHover ? COLOR.BLUE : 'white'}
-            style={{
-              cursor: isHover ? 'pointer' : 'auto',
-            }}
-            onClick={() => isHover && console.log('hi')}
-          />
+          <IconNext color={isHover ? COLOR.BLUE : 'white'} />
         </ImgWrapper>
         <DealTextWrapper>
           <DealTitle>{title}</DealTitle>
@@ -45,8 +39,8 @@ export const CardDeal = ({ image, title, contents, value, apy, ...rest }: Props)
         />
         <CardSecondary
           icon={<IconPercentage />}
-          title="APY"
-          contents={apy}
+          title="Estimated Yield"
+          contents={estimatedYield}
           cardType="percent"
           {...rest}
         />
@@ -56,12 +50,9 @@ export const CardDeal = ({ image, title, contents, value, apy, ...rest }: Props)
 };
 
 const Wrapper = styled.div(() => [
-  tw`
-  flex flex-col gap-20 w-468
-  py-20 px-24 rounded-20
-  bg-white
-  `,
+  tw`flex flex-col gap-20 px-24 py-20 bg-white w-468 rounded-20 clickable`,
   css`
+    box-shadow: 0px 12px 32px 0px rgba(51, 88, 255, 0.08);
     :hover {
       box-shadow: 0px 20px 40px 0px #3358ff4d;
     }

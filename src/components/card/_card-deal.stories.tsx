@@ -9,7 +9,7 @@ const meta = {
   argTypes: {
     title: { control: 'text' },
     value: { control: 'text' },
-    apy: { control: 'text' },
+    estimatedYield: { control: 'text' },
   },
 } satisfies Meta<typeof CardDeal>;
 
@@ -23,6 +23,6 @@ export const _CardDeal: Story = {
       'The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills.',
     image: 'https://picsum.photos/200/300',
     value: 1234567,
-    apy: 5.3,
+    estimatedYield: 5.3,
   },
 };
