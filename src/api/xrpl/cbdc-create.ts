@@ -19,7 +19,7 @@ export const useCreateCBDC = () => {
 
     const wallet = type === 'BSD' ? bsdWallet : type === 'ENA' ? enaWallet : krwWallet;
 
-    const coldSettingsTx: xrpl.AccountSet = {
+    const settingsTx: xrpl.AccountSet = {
       TransactionType: 'AccountSet',
       Account: wallet.address,
       TransferRate: 0,
@@ -29,13 +29,13 @@ export const useCreateCBDC = () => {
       Flags: xrpl.AccountSetTfFlags.tfDisallowXRP | xrpl.AccountSetTfFlags.tfRequireDestTag,
     };
 
-    const cstPrepared = await client.autofill<xrpl.AccountSet>(coldSettingsTx);
-    const cstSigned = wallet.sign(cstPrepared);
-    const cstResult = await client.submitAndWait(cstSigned.tx_blob);
+    const prepared = await client.autofill<xrpl.AccountSet>(settingsTx);
+    const signed = wallet.sign(prepared);
+    const result = await client.submitAndWait(signed.tx_blob);
 
-    const txMeta = cstResult?.result?.meta;
+    const txMeta = result?.result?.meta;
     if (typeof txMeta !== 'object' || txMeta?.TransactionResult !== 'tesSUCCESS') {
-      throw `Error sending transaction: ${cstResult}`;
+      throw `Error sending transaction: ${result}`;
     }
   };
 

@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
 import tw from 'twin.macro';
 
-import { useConnectXrpl } from '~/api/xrpl/connect-xrpl';
-import { useCreateCBDC } from '~/api/xrpl/mint-token';
+import { useBalance } from '~/api/xrpl/balance';
+import { useFaucetCBDC } from '~/api/xrpl/cbdc-faucet';
+import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import LogoUstb from '~/assets/images/logo-ustb.png';
 import { CardDeal } from '~/components/card/card-deal';
 import { CardPrimary } from '~/components/card/card-primary';
@@ -11,12 +11,26 @@ import { IconActive, IconLocked, IconTotal } from '~/components/icons';
 import { useXrplStore } from '~/states/data/xrpl';
 
 const MainPage = () => {
+  const { isConnected } = useXrplStore();
+  const { wallet } = useConnectWallet();
+  const { faucetCBDC } = useFaucetCBDC();
+  const { getBalance } = useBalance();
+
+  const onClickFaucetCBDC = async () => {
+    if (!isConnected || !wallet) return;
+
+    await faucetCBDC('BSD');
+    const userBalance = await getBalance(wallet.address);
+
+    console.log('userBalance', userBalance);
+  };
+
   return (
     <>
       <Gnb />
       <Wrapper>
         <DashBoardWrapper>
-          <DashBoardTitle>Dashboard</DashBoardTitle>
+          <DashBoardTitle onClick={onClickFaucetCBDC}>Dashboard</DashBoardTitle>
           <DashBoardCardWrapper>
             <CardPrimary
               icon={<IconLocked />}

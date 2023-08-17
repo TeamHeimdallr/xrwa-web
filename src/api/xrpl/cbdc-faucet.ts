@@ -1,0 +1,92 @@
+import * as xrpl from 'xrpl';
+
+import { useXrplStore } from '~/states/data/xrpl';
+import { CBDC } from '~/types';
+
+import { useConnectWallet } from './connect-wallet';
+import { useWallets } from './wallets';
+
+/**
+ * @description CBDC 를 생성하는 hook. cbdc 별 wallet 이 하나씩 생성되는 구조이고, 단 한번만 호출하면 됨.
+ */
+export const useFaucetCBDC = () => {
+  const { client, isConnected } = useXrplStore();
+  const { wallet } = useConnectWallet();
+  const { bsdWallet, enaWallet, krwWallet } = useWallets();
+
+  const faucetCBDC = async (type: CBDC) => {
+    if (!isConnected || !wallet) return;
+
+    const cbdcWallet = type === 'BSD' ? bsdWallet : type === 'ENA' ? enaWallet : krwWallet;
+
+    //// wallet prepare
+    const settingsTx: xrpl.AccountSet = {
+      TransactionType: 'AccountSet',
+      Account: wallet.address,
+      Domain: '787261772E776F726C64', // xrwa.world
+      SetFlag: xrpl.AccountSetAsfFlags.asfRequireAuth,
+      Flags: xrpl.AccountSetTfFlags.tfDisallowXRP | xrpl.AccountSetTfFlags.tfRequireDestTag,
+    };
+
+    const prepared = await client.autofill<xrpl.AccountSet>(settingsTx);
+    const signed = wallet.sign(prepared);
+    console.log('sending AccountSet transaction...');
+    const result = await client.submitAndWait(signed.tx_blob);
+
+    const txMeta = result?.result?.meta;
+    if (typeof txMeta !== 'object' || txMeta?.TransactionResult !== 'tesSUCCESS') {
+      throw `Error sending transaction: ${result}`;
+    }
+    console.log(`AccountSet completed - https://testnet.xrpl.org/transactions/${signed.hash}`);
+
+    //// trust line prepare
+    const currencyCode = type;
+    const trustSetTx: xrpl.TrustSet = {
+      TransactionType: 'TrustSet',
+      Account: wallet.address,
+      LimitAmount: {
+        currency: currencyCode,
+        issuer: cbdcWallet.address,
+        value: '10000',
+      },
+    };
+
+    const tsPrepared = await client.autofill<xrpl.TrustSet>(trustSetTx);
+    const tsSigned = wallet.sign(tsPrepared);
+    console.log('Creating trust line from hot address to issuer...');
+    const tsResult = await client.submitAndWait(tsSigned.tx_blob);
+
+    const tsTxMeta = tsResult?.result?.meta;
+    if (typeof tsTxMeta !== 'object' || tsTxMeta?.TransactionResult !== 'tesSUCCESS') {
+      throw `Error sending transaction: ${tsResult}`;
+    }
+    console.log(`Transaction completed - https://testnet.xrpl.org/transactions/${tsSigned.hash}`);
+
+    //// send token
+    const issueQuantity = '500';
+    const sendTokenTx: xrpl.Payment = {
+      TransactionType: 'Payment',
+      Account: cbdcWallet.address,
+      Amount: {
+        currency: type,
+        value: issueQuantity,
+        issuer: cbdcWallet.address,
+      },
+      Destination: wallet.address,
+      DestinationTag: 1,
+    };
+
+    const payPrepared = await client.autofill(sendTokenTx);
+    const paySigned = cbdcWallet.sign(payPrepared);
+    console.log(`Sending ${issueQuantity} ${type} to ${wallet.address}...`);
+    const payResult = await client.submitAndWait(paySigned.tx_blob);
+
+    const payTxMeta = payResult?.result?.meta;
+    if (typeof payTxMeta !== 'object' || payTxMeta?.TransactionResult !== 'tesSUCCESS') {
+      throw `Error sending transaction: ${payResult}`;
+    }
+    console.log(`Transaction completed - https://testnet.xrpl.org/transactions/${paySigned.hash}`);
+  };
+
+  return { faucetCBDC };
+};
