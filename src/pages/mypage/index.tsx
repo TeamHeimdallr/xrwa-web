@@ -42,7 +42,8 @@ const MyPage = () => {
 };
 
 const Wrapper = tw.div`
-  flex flex-col items-center gap-80`;
+  flex flex-col items-center gap-80 pt-60
+`;
 
 const DashBoardWrapper = tw.div`
   flex flex-col w-960 gap-16
