@@ -6,12 +6,14 @@ import logoUstb from '~/assets/images/logo-ustb.png';
 import { formatNumberWithComma } from '~/utils/number';
 
 import { IconDown } from '../icons';
+import { TOKENS } from '~/constants/tokens/base';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   amount?: string;
   selectable?: boolean;
   value?: number | string;
   placeholder?: string;
+  currency?: string;
   handleChange?: (value: NumberFormatValues) => void;
 }
 
@@ -19,6 +21,7 @@ export const TextFieldTrade = ({
   amount,
   selectable,
   placeholder = '0.0',
+  currency = 'USTB',
   value,
   handleChange,
 }: Props) => {
@@ -37,8 +40,8 @@ export const TextFieldTrade = ({
           customInput={CustomInput}
         />
         <DropdownWrapper>
-          <CurrencyImg src={logoUstb} />
-          <CurrencyName>USTB</CurrencyName>
+          <CurrencyImg src={TOKENS['BSD']} />
+          <CurrencyName>{currency}</CurrencyName>
           {selectable && (
             <IconWrapper>
               <IconDown
