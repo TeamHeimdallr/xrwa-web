@@ -19,7 +19,7 @@ import { ChangeCurrency } from './components/change-currency';
 
 const TradePage = () => {
   const { selected, select } = useTradeState();
-  const { selected: currencySelected, select: currencySelect } = useSelectedTokenState();
+  const { selected: currencySelected } = useSelectedTokenState();
 
   const {
     open: currencyOpen,
