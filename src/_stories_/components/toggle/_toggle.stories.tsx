@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import tw from 'twin.macro';
 
-import { IconNext } from '~/components/icons';
 import { Toggle } from '~/components/toggle';
 
 const meta = {

@@ -9,13 +9,21 @@ import { IconDown } from '../icons';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   amount?: string;
+  selectable?: boolean;
   value?: number | string;
   placeholder?: string;
   handleChange?: (value: NumberFormatValues) => void;
 }
 
-export const TextFieldTrade = ({ amount, placeholder = '0.0', value, handleChange }: Props) => {
+export const TextFieldTrade = ({
+  amount,
+  selectable,
+  placeholder = '0.0',
+  value,
+  handleChange,
+}: Props) => {
   const CustomInput = useCallback(({ ...rest }: Props) => <Input {...rest} />, []);
+
   return (
     <Wrapper>
       <InputWrapper>
@@ -30,14 +38,16 @@ export const TextFieldTrade = ({ amount, placeholder = '0.0', value, handleChang
         />
         <DropdownWrapper>
           <CurrencyImg src={logoUstb} />
-          <CurrencyName>USD</CurrencyName>
-          <IconWrapper>
-            <IconDown
-              style={{
-                cursor: 'pointer',
-              }}
-            />
-          </IconWrapper>
+          <CurrencyName>USTB</CurrencyName>
+          {selectable && (
+            <IconWrapper>
+              <IconDown
+                style={{
+                  cursor: 'pointer',
+                }}
+              />
+            </IconWrapper>
+          )}
         </DropdownWrapper>
       </InputWrapper>
       {amount && (
