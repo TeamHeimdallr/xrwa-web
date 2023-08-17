@@ -1,1 +1,1 @@
-export type CBDC = 'BSD' | 'ENA' | 'KRW';
+export type TOKEN = 'BSD' | 'ENA' | 'KRW' | 'USTB';
