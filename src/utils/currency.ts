@@ -32,3 +32,12 @@ export const convertCBDCToCurrency = (cbdc: TOKEN) => {
 
   return 'USD';
 };
+
+export const getTreasuryDiscountRate = (maturityDate: Date, ytm: number) => {
+  const now = new Date();
+  const daily = ytm / 365.0;
+  const days = (maturityDate.getTime() - now.getTime()) / (1000 * 3600 * 24);
+
+  if (days <= 0) return 1;
+  return 1 / (1 + daily * days);
+};

@@ -6,45 +6,8 @@ import { useHover } from 'usehooks-ts';
 
 import { ButtonPrimary } from '../buttons/button-primary';
 import { IconInfo } from '../icons';
+import { portfolioData } from './data/portfolio-data';
 
-const rows = [
-  {
-    id: 1,
-    issuer: 'US Treasury 0% 00. 00. 2023',
-    cusip: 'US912797GR22',
-    maturityDate: '2023-00-00',
-    ytm: '5.28%',
-    principalAmount: '243,200.00',
-    marketValue: '242,533.96',
-  },
-  {
-    id: 2,
-    issuer: 'US Treasury 0% 00. 00. 2023',
-    cusip: 'US912797GR22',
-    maturityDate: '2023-00-00',
-    ytm: '5.28%',
-    principalAmount: '243,200.00',
-    marketValue: '242,533.96',
-  },
-  {
-    id: 3,
-    issuer: 'US Treasury 0% 00. 00. 2023',
-    cusip: 'US912797GR22',
-    maturityDate: '2023-00-00',
-    ytm: '5.28%',
-    principalAmount: '243,200.00',
-    marketValue: '242,533.96',
-  },
-  {
-    id: 4,
-    issuer: 'US Treasury 0% 00. 00. 2023',
-    cusip: 'US912797GR22',
-    maturityDate: '2023-00-00',
-    ytm: '5.28%',
-    principalAmount: '243,200.00',
-    marketValue: '242,533.96',
-  },
-];
 export const Portfolio = () => {
   const principalHoverRef = useRef(null);
   const isPrincipalHover = useHover(principalHoverRef);
@@ -84,7 +47,7 @@ export const Portfolio = () => {
           </HeaderMarketValue>
         </OrderHeader>
         <Divider />
-        {rows.length == 0 && (
+        {portfolioData.length == 0 && (
           <EmptyWrapper>
             <EmptyText>No transactions found!</EmptyText>
             <ButtonPrimary
@@ -95,7 +58,7 @@ export const Portfolio = () => {
             />
           </EmptyWrapper>
         )}
-        {rows.map(row => (
+        {portfolioData.map(row => (
           <OrderRow key={row.id}>
             <RowIssuer>{row.issuer}</RowIssuer>
             <RowCusip>{row.cusip}</RowCusip>
@@ -179,7 +142,7 @@ const TooltipMarketValue = styled.div<TooltipProps>(({ isHovered }) => [
 
 const BubblePolygon = styled.div(() => [
   tw`
-    border-b-gray4 
+    border-b-gray4
     `,
   css`
     content: '';
@@ -220,7 +183,7 @@ const RowPrincipalAmount = tw.div`
   font-r-14 w-161 text-black text-center
 `;
 const RowMarketValue = tw.div`
-  font-r-14 w-161 text-black text-center 
+  font-r-14 w-161 text-black text-center
 `;
 
 const EmptyWrapper = tw.div`

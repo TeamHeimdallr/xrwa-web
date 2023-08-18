@@ -8,9 +8,10 @@ interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   title: string;
   contents: number;
   cardType?: 'value' | 'percent';
+  decimal?: number;
 }
 
-export const CardTertiary = ({ icon, title, contents, cardType, ...rest }: Props) => {
+export const CardTertiary = ({ icon, title, contents, cardType, decimal, ...rest }: Props) => {
   return (
     <Wrapper {...rest}>
       <TitleWrapper>
@@ -18,7 +19,7 @@ export const CardTertiary = ({ icon, title, contents, cardType, ...rest }: Props
         <Title>{title}</Title>
       </TitleWrapper>
       <ContentText>
-        {cardType === 'value' ? '$' + formatNumber(contents, 2) : `${contents}%`}
+        {cardType === 'value' ? '$' + formatNumber(contents, decimal ?? 2) : `${contents}%`}
       </ContentText>
     </Wrapper>
   );

@@ -42,3 +42,10 @@ export const formatNumber = (data?: number | string, decimal = 4) => {
 
   return formattedWithUnit;
 };
+
+export const weightedAverage = (data: { value: number; weight: number }[]) => {
+  const sum = data.reduce((acc, cur) => acc + cur.value * cur.weight, 0);
+  const weightSum = data.reduce((acc, cur) => acc + cur.weight, 0);
+
+  return sum / weightSum;
+};

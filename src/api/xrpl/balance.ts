@@ -1,14 +1,16 @@
 import { AccountLinesRequest, AccountLinesResponse, GatewayBalancesRequest } from 'xrpl';
 
-import { TOKEN_LIST } from '~/constants';
+import { CBDC_LIST, TOKEN_LIST } from '~/constants';
 import { useCBDCBalanceStore } from '~/states/data/user-cbdc-balance';
 import { useXrplStore } from '~/states/data/xrpl';
 import { getCurrencyPriceUSD } from '~/utils/currency';
 
 import { useConnectWallet } from './connect-wallet';
+import { useAccounts } from './accounts';
 
 export const useBalance = () => {
   const { client, isConnected } = useXrplStore();
+  const { ustbWallet } = useAccounts();
 
   const { wallet } = useConnectWallet();
   const { cbdcBalance, usdBalance, setCBDCBalance, setUSDBalance } = useCBDCBalanceStore();
@@ -64,5 +66,32 @@ export const useBalance = () => {
     setUSDBalance(usdBalance);
   };
 
-  return { getBalance, getCBDCBalance, cbdcBalance, usdBalance };
+  const getCBDCBalanceForUstbWallet = async () => {
+    const res = (await getBalance(ustbWallet.address)) as AccountLinesResponse;
+    if (!res) return;
+
+    const {
+      result: { lines },
+    } = res;
+    const cbdcBalance = lines
+      .filter(line => CBDC_LIST.includes(line.currency))
+      .map(line => ({ currency: line.currency, balance: Number(line.balance ?? 0) }));
+
+    return cbdcBalance.reduce((acc, cur) => {
+      const { currency, balance } = cur;
+
+      const price = getCurrencyPriceUSD(currency);
+      const total = price * balance;
+
+      return acc + total;
+    }, 0);
+  };
+
+  return {
+    getBalance,
+    getCBDCBalance,
+    getCBDCBalanceForUstbWallet,
+    cbdcBalance,
+    usdBalance,
+  };
 };

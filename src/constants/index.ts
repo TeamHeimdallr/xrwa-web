@@ -105,3 +105,4 @@ export const USTB_MASTER_WALLET_SEED = import.meta.env.VITE_USTB_MASTER_WALLET_S
 export const USTB_MINTER_SEED = import.meta.env.VITE_USTB_MINTER_SEED;
 
 export const TOKEN_LIST = ['BSD', 'ENA', 'KRW', 'USTB'];
+export const CBDC_LIST = ['BSD', 'ENA', 'KRW'];

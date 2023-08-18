@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import tw from 'twin.macro';
+import { useBalance } from '~/api/xrpl/balance';
 
 import LogoBitcoin from '~/assets/images/logo-bitcoin.png';
 import LogoUstb from '~/assets/images/logo-ustb.png';
@@ -6,8 +8,17 @@ import { CardDeal } from '~/components/card/card-deal';
 import { CardPrimary } from '~/components/card/card-primary';
 import { Gnb } from '~/components/gnb';
 import { IconActive, IconLocked, IconTotal } from '~/components/icons';
+import { portfolioData } from '~/components/portfolio/data/portfolio-data';
+import { weightedAverage } from '~/utils/number';
 
 const MainPage = () => {
+  const [cbdcBalance, setCbdcBalance] = useState(0);
+  const { getCBDCBalanceForUstbWallet } = useBalance();
+
+  useEffect(() => {
+    getCBDCBalanceForUstbWallet().then(res => setCbdcBalance(res ?? 0));
+  }, []);
+
   return (
     <>
       <Gnb />
@@ -18,13 +29,22 @@ const MainPage = () => {
             <CardPrimary
               icon={<IconLocked />}
               title="Total Value Locked"
-              contents={1234567}
+              contents={
+                cbdcBalance +
+                portfolioData.reduce(
+                  (acc, cur) => acc + Number(cur.marketValue.replace(',', '')),
+                  0
+                )
+              }
               cardType="value"
             />
             <CardPrimary
               icon={<IconTotal />}
               title="Total Principal Issued"
-              contents={1234567}
+              contents={portfolioData.reduce(
+                (acc, cur) => acc + Number(cur.principalAmount.replace(',', '')),
+                0
+              )}
               cardType="value"
             />
             <CardPrimary icon={<IconActive />} title="Number of Active Deals" contents={1} />
@@ -37,15 +57,30 @@ const MainPage = () => {
               image={LogoUstb}
               title="Deal Title"
               contents="The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills."
-              value={1234567}
-              estimatedYield={5.3}
+              value={
+                cbdcBalance +
+                portfolioData.reduce(
+                  (acc, cur) => acc + Number(cur.marketValue.replace(',', '')),
+                  0
+                )
+              }
+              estimatedYield={Number(
+                weightedAverage(
+                  portfolioData.map(p => {
+                    return {
+                      weight: Number(p.principalAmount.replace(',', '')),
+                      value: Number(p.ytm.replace('%', '')),
+                    };
+                  })
+                ).toFixed(3)
+              )}
             />
             <CardDeal
               image={LogoBitcoin}
               title="Deal Title"
               contents="The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills."
-              value={1234567}
-              estimatedYield={5.3}
+              value={10584.61}
+              estimatedYield={21.3}
               disabled={true}
             />
           </DealsCardWrapper>
