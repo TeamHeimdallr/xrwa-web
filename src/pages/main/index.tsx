@@ -1,5 +1,6 @@
 import tw from 'twin.macro';
 
+import LogoBitcoin from '~/assets/images/logo-bitcoin.png';
 import LogoUstb from '~/assets/images/logo-ustb.png';
 import { CardDeal } from '~/components/card/card-deal';
 import { CardPrimary } from '~/components/card/card-primary';
@@ -40,11 +41,12 @@ const MainPage = () => {
               estimatedYield={5.3}
             />
             <CardDeal
-              image={LogoUstb}
+              image={LogoBitcoin}
               title="Deal Title"
               contents="The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills."
               value={1234567}
               estimatedYield={5.3}
+              disabled={true}
             />
           </DealsCardWrapper>
         </DealsWrapper>
