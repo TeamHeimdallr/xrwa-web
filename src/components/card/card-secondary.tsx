@@ -1,7 +1,7 @@
 import { HtmlHTMLAttributes } from 'react';
 import tw from 'twin.macro';
 
-import { formatNumberWithComma } from '~/utils/number';
+import { formatNumber } from '~/utils/number';
 
 interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   icon?: React.ReactNode;
@@ -18,7 +18,7 @@ export const CardSecondary = ({ icon, title, contents, cardType, ...rest }: Prop
         <Title>{title}</Title>
       </TitleWrapper>
       <ContentText>
-        {cardType === 'value' ? '$' + formatNumberWithComma(contents) : `${contents}%`}
+        {cardType === 'value' ? '$' + formatNumber(contents, 2) : `${contents}%`}
       </ContentText>
     </Wrapper>
   );

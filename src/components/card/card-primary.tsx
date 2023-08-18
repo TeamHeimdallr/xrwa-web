@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { HtmlHTMLAttributes } from 'react';
 import tw, { styled } from 'twin.macro';
 
-import { formatNumberWithComma } from '~/utils/number';
+import { formatNumber } from '~/utils/number';
 
 interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   icon?: React.ReactNode;
@@ -19,18 +19,14 @@ export const CardPrimary = ({ icon, title, contents, cardType, ...rest }: Props)
         <Title>{title}</Title>
       </TitleWrapper>
       <ContentText>
-        {cardType === 'value' ? '$' + formatNumberWithComma(contents) : `${contents}`}
+        {cardType === 'value' ? '$' + formatNumber(contents, 2) : `${contents}`}
       </ContentText>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div(() => [
-  tw`
-    flex flex-col gap-20 w-full
-    py-20 px-24 rounded-20
-    bg-white
-  `,
+  tw`flex flex-col w-full gap-20 px-24 py-20 bg-white rounded-20`,
 
   css`
     box-shadow: 0px 12px 32px 0px #3358ff14;

@@ -10,7 +10,7 @@ import { COLOR } from '~/assets/colors';
 import textLogo from '~/assets/images/logo-text.png';
 import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';
-import { useUserState } from '~/states/data/user';
+import { useAccountStore } from '~/states/data/user-account';
 import { truncateAddress } from '~/utils/string';
 
 import { ButtonPrimary } from '../buttons/button-primary';
@@ -23,7 +23,7 @@ export const Gnb = () => {
   const navigate = useNavigate();
 
   const { disconnect } = useConnectWallet();
-  const { selected } = useUserState();
+  const { account } = useAccountStore();
   const { open, opened } = usePopup(POPUP_ID.CONNECT);
 
   const [dropdownOpended, setDropdownOpened] = useState(false);
@@ -32,7 +32,7 @@ export const Gnb = () => {
 
   useEffect(() => {
     setDropdownOpened(false);
-  }, [selected]);
+  }, [account.wallet]);
 
   return (
     <>
@@ -41,7 +41,7 @@ export const Gnb = () => {
           <TextLogo src={textLogo} alt="text-logo" />
         </LogoWrapper>
         <HeaderWrapper>
-          {selected.wallet ? (
+          {account.wallet ? (
             <>
               <Menu onClick={() => navigate('/me')}>My Page</Menu>
               <ConnectedWrapper
@@ -49,7 +49,7 @@ export const Gnb = () => {
                 ref={connectedRef}
                 dropdownOpended={dropdownOpended}
               >
-                <ConnectedAddress>{truncateAddress(selected.wallet.address)}</ConnectedAddress>
+                <ConnectedAddress>{truncateAddress(account.wallet.address)}</ConnectedAddress>
 
                 <DropDownWrapper dropdownOpended={dropdownOpended}>
                   <FaucetButton>
