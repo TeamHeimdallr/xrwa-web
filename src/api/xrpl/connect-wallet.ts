@@ -3,14 +3,14 @@ import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
 import { Wallet } from 'xrpl';
 
 import { XRPL_WALLET_KEY } from '~/constants';
-import { useUserState } from '~/states/data/user';
+import { useAccountStore } from '~/states/data/user-account';
 import { useXrplStore } from '~/states/data/xrpl';
 
 export const useConnectWallet = () => {
   const currentWalletSeed = useReadLocalStorage<string>(XRPL_WALLET_KEY) ?? '';
   const [walletSeed, setWalletSeed] = useLocalStorage<string>(XRPL_WALLET_KEY, currentWalletSeed);
 
-  const { selected, select } = useUserState();
+  const { account, setAccount } = useAccountStore();
 
   const { client, isConnected } = useXrplStore();
 
@@ -53,7 +53,7 @@ export const useConnectWallet = () => {
   const disconnect = async () => {
     if (!isConnected) return;
     setWalletSeed('');
-    select({ wallet: undefined, balance: undefined, accountData: undefined });
+    setAccount({ wallet: undefined, balance: undefined, accountData: undefined });
   };
 
   const getInfo = async (wallet: Wallet, currentBalance?: number) => {
@@ -63,23 +63,23 @@ export const useConnectWallet = () => {
       result: { account_data: accountData },
     } = await client.request({ command: 'account_info', account: wallet.address });
 
-    select({ wallet, balance, accountData });
+    setAccount({ wallet, balance, accountData });
   };
 
   useEffect(() => {
-    if (walletSeed && !selected.wallet) {
+    if (walletSeed && !account.wallet) {
       retrive();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isConnected, walletSeed, selected.wallet]);
+  }, [isConnected, walletSeed, account.wallet]);
 
   return {
     connect,
     disconnect,
     create,
     retrive,
-    wallet: selected.wallet,
-    balance: selected.balance,
-    accountData: selected.accountData,
+    wallet: account.wallet,
+    balance: account.balance,
+    accountData: account.accountData,
   };
 };

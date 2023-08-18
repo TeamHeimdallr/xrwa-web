@@ -48,7 +48,7 @@ export const BREAKPOINT = {
 /**
  * @description FORMAT NUMBER 를 진행할때 UNIT(K,M,B,T) 를 붙이는 기준
  */
-export const FORMAT_NUMBER_THRESHOLD = 10000000;
+export const FORMAT_NUMBER_THRESHOLD = 1000000000;
 
 /**
  * @description XRPL NETWORK
@@ -102,3 +102,5 @@ export const ENA_WALLET_SEED = import.meta.env.VITE_ENA_WALLET_SEED;
 export const KRW_WALLET_SEED = import.meta.env.VITE_KRW_WALLET_SEED;
 
 export const USTB_MASTER_WALLET_SEED = import.meta.env.VITE_USTB_MASTER_WALLET_SEED;
+
+export const TOKEN_LIST = ['BSD', 'ENA', 'KRW', 'USTB'];

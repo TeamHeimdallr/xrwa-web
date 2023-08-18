@@ -1,5 +1,5 @@
-export const truncateAddress = (addr?: string, limit = 4) => {
+export const truncateAddress = (addr?: string, limit = 12) => {
   if (!addr) return '';
 
-  return addr.slice(0, limit) + '...' + addr.slice(-limit, addr.length);
+  return addr.slice(0, limit) + '...';
 };

@@ -3,7 +3,7 @@ import { NumberFormatValues, NumericFormat } from 'react-number-format';
 import tw, { styled } from 'twin.macro';
 
 import { TOKEN_IMAGE } from '~/constants';
-import { formatNumberWithComma } from '~/utils/number';
+import { formatNumber } from '~/utils/number';
 
 import { IconDown } from '../icons';
 
@@ -58,7 +58,7 @@ export const TextFieldTrade = ({
         {amount && (
           <>
             <CaptionText>Balance</CaptionText>
-            <CaptionBalance>{`${formatNumberWithComma(parseFloat(amount))}`}</CaptionBalance>
+            <CaptionBalance>{`${formatNumber(amount, 2)}`}</CaptionBalance>
           </>
         )}
       </CaptionWrapper>
