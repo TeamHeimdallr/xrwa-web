@@ -56,7 +56,7 @@ const MainPage = () => {
           <DealsCardWrapper>
             <CardDeal
               image={LogoUstb}
-              title="Deal Title"
+              title="U.S. Short-term Treasury Bill"
               contents="The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills."
               value={
                 cbdcBalance +
@@ -78,7 +78,7 @@ const MainPage = () => {
             />
             <CardDeal
               image={LogoBitcoin}
-              title="Deal Title"
+              title="U.S. Short-term Treasury Bill"
               contents="The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills."
               value={10584.61}
               estimatedYield={21.3}
