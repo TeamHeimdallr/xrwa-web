@@ -106,3 +106,9 @@ export const USTB_MINTER_SEED = import.meta.env.VITE_USTB_MINTER_SEED;
 
 export const TOKEN_LIST = ['BSD', 'ENA', 'KRW', 'USTB'];
 export const CBDC_LIST = ['BSD', 'ENA', 'KRW'];
+
+export const BSD_ACCOUNT_ADDRESS = 'rsUGJxpPw1vgQWsC9aTLbTYAjLEsU6tjqB';
+export const ENA_ACCOUNT_ADDRESS = 'r3H1RCy8t6pwDGLjtrfxMkqTmPeGFh649d';
+export const KRW_ACCOUNT_ADDRESS = 'rh2e1V7hVECXPXjEz2fEY5LTYkZDdAcCF4';
+
+export const USTB_ACCOUNT_ADDRESS = 'rEUtrf3ewziPNFphXwq78zsC5PRBu4ofLK';
