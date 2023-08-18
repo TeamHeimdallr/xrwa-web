@@ -54,6 +54,8 @@ const TradePage = () => {
     if (price) {
       setUstbPrice(price);
     }
+    setCbdcAmount(0);
+    setUstbAmount(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet, selected, currencySelected, loading]);
 
@@ -193,6 +195,7 @@ const TradePage = () => {
                       selectable={true}
                       handleChange={e => setCbdcAmount(e.floatValue ?? 0)}
                       handleClick={currencyOpen}
+                      value={cbdcAmount}
                     />
                     <TextFieldTrade
                       amount={
@@ -209,7 +212,6 @@ const TradePage = () => {
                       ).toString()}
                       currency="USTB"
                       disabled={true}
-                      handleChange={e => console.log(e)}
                     />
                   </>
                 ) : (
@@ -223,6 +225,7 @@ const TradePage = () => {
                       placeholder="0.0"
                       currency="USTB"
                       handleChange={e => setUstbAmount(e.floatValue ?? 0)}
+                      value={ustbAmount}
                     />
                     <TextFieldTrade
                       amount={
@@ -241,6 +244,7 @@ const TradePage = () => {
                       selectable={true}
                       handleChange={e => console.log(e)}
                       handleClick={currencyOpen}
+                      disabled={true}
                     />
                   </>
                 )}
@@ -275,6 +279,7 @@ const TradePage = () => {
                 text="Deposit"
                 isLoading={loading}
                 buttonType="large"
+                disabled={!cbdcAmount}
               />
             ) : (
               <ButtonPrimary
@@ -282,6 +287,7 @@ const TradePage = () => {
                 text="Withdraw"
                 isLoading={loading}
                 buttonType="large"
+                disabled={!ustbAmount}
               />
             )}
           </RightContainer>

@@ -9,7 +9,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
   buttonType?: 'medium' | 'large';
 }
-export const ButtonPrimary = ({ text, isLoading, buttonType, ...rest }: Props) => {
+export const ButtonPrimary = ({ text, isLoading, buttonType, disabled, ...rest }: Props) => {
   const warpperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const ButtonPrimary = ({ text, isLoading, buttonType, ...rest }: Props) =
   }, [warpperRef, isLoading]);
 
   return (
-    <Wrapper isLoading={isLoading} buttonType={buttonType} {...rest}>
+    <Wrapper isLoading={isLoading} buttonType={buttonType} disabled={disabled} {...rest}>
       {text}
       <LottieWrapper ref={warpperRef} />
     </Wrapper>
@@ -41,11 +41,12 @@ interface ButtonWrapperProps {
   buttonType?: 'medium' | 'large';
 }
 
-const Wrapper = styled.button<ButtonWrapperProps>(({ buttonType, isLoading }) => [
+const Wrapper = styled.button<ButtonWrapperProps>(({ buttonType, isLoading, disabled }) => [
   tw`relative flex w-full gap-8 text-white flex-center rounded-8 bg-blue clickable transition-color hover:bg-darkblue`,
   isLoading && tw`text-transparent non-clickable hover:bg-blue`,
   buttonType === 'medium' && tw`px-24 py-10 font-b-14 h-42 `,
   buttonType === 'large' && tw`px-32 py-16 font-b-18 h-58`,
+  disabled && tw`opacity-40 non-clickable`,
 ]);
 
 const LottieWrapper = tw.div`
