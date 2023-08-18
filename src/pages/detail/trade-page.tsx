@@ -78,6 +78,7 @@ const TradePage = () => {
         )
       ).toFixed(4)
     );
+    confirmOpen();
     setLoading(false);
   };
 
