@@ -30,7 +30,7 @@ jobs:
         run: |
           jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$VARS_CONTEXT" >> .env
         env:
-          SECRETS_CONTEXT: ${{ toJson(vars) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
 
 
       - name: Build
