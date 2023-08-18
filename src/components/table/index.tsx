@@ -21,6 +21,8 @@ export const Table = () => {
     { enabled: !!wallet?.address }
   );
 
+  const isEmpty = !data || !data?.data || data.data?.length === 0;
+
   return (
     <Wrapper>
       <PositionLabel>Activity</PositionLabel>
@@ -31,7 +33,7 @@ export const Table = () => {
           ))}
         </OrderHeader>
         <Divider />
-        {data?.data?.length === 0 ? (
+        {isEmpty ? (
           <EmptyWrapper>
             <EmptyText>No transactions found!</EmptyText>
             <ButtonPrimary
@@ -42,7 +44,7 @@ export const Table = () => {
             />
           </EmptyWrapper>
         ) : (
-          data?.data?.map(row => {
+          data.data.map(row => {
             const status =
               row.type === 'withdraw' && row.status === 'locked'
                 ? `${formatDistance(new Date(), new Date(row.unlockDate))} left`
