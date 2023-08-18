@@ -36,14 +36,6 @@ const MyPage = () => {
           <DashBoardTitle>Balance</DashBoardTitle>
           <BalanceCardWrapper>
             <BalanceCard>
-              <BalanceImg src="https://via.placeholder.com/50" />
-              <BalanceTextWrapper>
-                <BalanceAmount>{formatNumberWithComma(999999999999)}</BalanceAmount>
-                <BalanceTitle>USD</BalanceTitle>
-              </BalanceTextWrapper>
-            </BalanceCard>
-            <Divider />
-            <BalanceCard>
               <BalanceImg src={LogoBsd} />
               <BalanceTextWrapper>
                 <BalanceAmount>{formatNumberWithComma(999999999999)}</BalanceAmount>
@@ -134,7 +126,7 @@ const BalanceTitle = tw.div`
 `;
 
 const Divider = tw.div`
-  h-full w-1 flex-shrink-0 bg-gray1
+  h-full w-1 bg-gray1
 `;
 
 const DashBoardWrapper = tw.div`

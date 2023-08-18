@@ -73,7 +73,7 @@ const Wrapper = styled.div<WrapperProps>(({ disabled }) => [
       box-shadow: 0px 20px 40px 0px #3358ff4d;
     }
   `,
-  disabled && tw`opacity-40`,
+  disabled && tw`opacity-40 pointer-events-none `,
 ]);
 
 const ContentWrapper = tw.div`

@@ -1,7 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 import { css } from '@emotion/react';
+import { useEffect, useState } from 'react';
 import tw, { styled } from 'twin.macro';
+import { AccountLinesResponse, AccountLinesTrustline } from 'xrpl';
 
+import { useBalance } from '~/api/xrpl/balance';
+import { useDepositCBDC } from '~/api/xrpl/cbdc-deposit';
+import { useConnectWallet } from '~/api/xrpl/connect-wallet';
+import { useDepositUSTB } from '~/api/xrpl/ustb-deposit';
 import LogoUstb from '~/assets/images/logo-ustb.png';
 import { ButtonPrimary } from '~/components/buttons/button-primary';
 import { CardTertiary } from '~/components/card/card-tertiary';
@@ -15,15 +21,10 @@ import { usePopup } from '~/hooks/pages/use-popup';
 import { useSelectedTokenState, useTradeState } from '~/states/data/trade';
 import { TOKEN, TRADE_OPTIONS } from '~/types';
 import { convertCBDCToCurrency, getExchangeRate } from '~/utils/currency';
+import { formatNumber } from '~/utils/number';
 
 import { ChangeCurrency } from './components/change-currency';
-import { useEffect, useState } from 'react';
-import { useDepositCBDC } from '~/api/xrpl/cbdc-deposit';
-import { useDepositUSTB } from '~/api/xrpl/ustb-deposit';
-import { useBalance } from '~/api/xrpl/balance';
-import { useConnectWallet } from '~/api/xrpl/connect-wallet';
-import { AccountLinesResponse, AccountLinesTrustline } from 'xrpl';
-import { formatNumber } from '~/utils/number';
+import Portfolio from '~/components/portfolio';
 
 const TradePage = () => {
   const { wallet } = useConnectWallet();
@@ -32,16 +33,12 @@ const TradePage = () => {
   const [cbdcAmount, setCbdcAmount] = useState(0);
   const [ustbAmount, setUstbAmount] = useState(0);
   const [balances, setBalances] = useState<AccountLinesTrustline[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const { depositCBDC } = useDepositCBDC();
   const { depositUSTB } = useDepositUSTB();
   const { getBalance } = useBalance();
 
   const handleDeposit = async () => {
-    if (cbdcAmount === 0) return;
-
-    setLoading(true);
     await depositCBDC(currencySelected as TOKEN, cbdcAmount.toString());
     await depositUSTB(
       (
@@ -55,7 +52,6 @@ const TradePage = () => {
         ) / 10000
       ).toString()
     );
-    setLoading(false);
   };
 
   const {
@@ -71,157 +67,166 @@ const TradePage = () => {
         setBalances(lines);
       });
     }
-  }, [wallet, selected, currencySelected, loading]);
+  }, [wallet, selected, currencySelected]);
 
   return (
     <>
       <Gnb />
       <Wrapper>
-        <LeftContainer>
-          <TradeContents>
-            <TradeImage src={LogoUstb} />
-            <TradeText>
-              <TradeTitle>U.S. Short-term Treasury Bill</TradeTitle>
-              <TradeDesc>
-                The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and
-                backed by U.S. Treasury Bills. These are government bonds that don't carry regular
-                interest payments and are issued at a discounted rate, only to be redeemed at their
-                full value upon maturity. Given the backing of the U.S. government, they're viewed
-                as the "risk-free" standard and rank among the most secure investments globally.
-              </TradeDesc>
-            </TradeText>
-          </TradeContents>
-          <TradeCardWrapper>
-            <CardTertiary
-              title="Total Value Locked"
-              icon={<IconLocked />}
-              contents={100000}
-              cardType="value"
+        <ContainerWrapper>
+          <LeftContainer>
+            <TradeContents>
+              <TradeImage src={LogoUstb} />
+              <TradeText>
+                <TradeTitle>U.S. Short-term Treasury Bill</TradeTitle>
+                <TradeDesc>
+                  The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus
+                  and backed by U.S. Treasury Bills. These are government bonds that don't carry
+                  regular interest payments and are issued at a discounted rate, only to be redeemed
+                  at their full value upon maturity. Given the backing of the U.S. government,
+                  they're viewed as the "risk-free" standard and rank among the most secure
+                  investments globally.
+                </TradeDesc>
+              </TradeText>
+            </TradeContents>
+            <TradeCardWrapper>
+              <CardTertiary
+                title="Total Value Locked"
+                icon={<IconLocked />}
+                contents={100000}
+                cardType="value"
+              />
+              <CardTertiary
+                title="Price Per USTB"
+                icon={<IconPrice />}
+                contents={1.123}
+                cardType="value"
+              />
+              <CardTertiary
+                title="APY"
+                icon={<IconPercentage />}
+                contents={5.3}
+                cardType="percent"
+              />
+            </TradeCardWrapper>
+          </LeftContainer>
+          <RightContainer>
+            <Toggle
+              left={{
+                id: TRADE_OPTIONS.DEPOSIT,
+                text: <ToggleText>Deposit</ToggleText>,
+                handler: id => select(id as TRADE_OPTIONS),
+              }}
+              right={{
+                id: TRADE_OPTIONS.WITHDRAW,
+                text: <ToggleText>Withdraw</ToggleText>,
+                handler: id => select(id as TRADE_OPTIONS),
+              }}
             />
-            <CardTertiary
-              title="Price Per USTB"
-              icon={<IconPrice />}
-              contents={1.123}
-              cardType="value"
-            />
-            <CardTertiary title="APY" icon={<IconPercentage />} contents={5.3} cardType="percent" />
-          </TradeCardWrapper>
-        </LeftContainer>
-        <RightContainer>
-          <Toggle
-            left={{
-              id: TRADE_OPTIONS.DEPOSIT,
-              text: <ToggleText>Deposit</ToggleText>,
-              handler: id => select(id as TRADE_OPTIONS),
-            }}
-            right={{
-              id: TRADE_OPTIONS.WITHDRAW,
-              text: <ToggleText>Withdraw</ToggleText>,
-              handler: id => select(id as TRADE_OPTIONS),
-            }}
-          />
-          <InputWrapper>
-            <TradeWrapper>
-              {selected === TRADE_OPTIONS.DEPOSIT ? (
-                <>
-                  <TextFieldTrade
-                    amount={
-                      balances.length === 0
-                        ? '0'
-                        : balances.find(b => b.currency === currencySelected)?.balance ?? '0'
-                    }
-                    placeholder="0.0"
-                    currency={currencySelected}
-                    selectable={true}
-                    handleChange={e => setCbdcAmount(e.floatValue ?? 0)}
-                    handleClick={currencyOpen}
-                  />
-                  <TextFieldTrade
-                    amount={
-                      balances.length === 0
-                        ? '0'
-                        : balances.find(b => b.currency === 'UST')?.balance ?? '0'
-                    }
-                    placeholder={(
-                      cbdcAmount *
-                      getExchangeRate(
-                        { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
-                        { currency: 'USTB', amount: 1 }
-                      )
-                    ).toString()}
-                    currency="USTB"
-                    disabled={true}
-                    handleChange={e => console.log(e)}
-                  />
-                </>
-              ) : (
-                <>
-                  <TextFieldTrade
-                    amount={
-                      balances.length === 0
-                        ? '0'
-                        : balances.find(b => b.currency === 'UST')?.balance ?? '0'
-                    }
-                    placeholder="0.0"
-                    currency="USTB"
-                    handleChange={e => setUstbAmount(e.floatValue ?? 0)}
-                  />
-                  <TextFieldTrade
-                    amount={
-                      balances.length === 0
-                        ? '0'
-                        : balances.find(b => b.currency === currencySelected)?.balance ?? '0'
-                    }
-                    placeholder={(
-                      ustbAmount *
-                      getExchangeRate(
-                        { currency: 'USTB', amount: 1 },
-                        { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 }
-                      )
-                    ).toString()}
-                    currency={currencySelected}
-                    selectable={true}
-                    handleChange={e => console.log(e)}
-                    handleClick={currencyOpen}
-                  />
-                </>
-              )}
-              <IconWrapper>
-                <IconArrowDown />
-              </IconWrapper>
-            </TradeWrapper>
-            <RateWrapper>
-              <RateText>Rate</RateText>
-              <RateValue>
-                {selected === TRADE_OPTIONS.DEPOSIT
-                  ? `1USTB= ${formatNumber(
-                      getExchangeRate(
-                        { currency: 'USTB', amount: 1 },
-                        { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 }
-                      ),
-                      6
-                    )}${currencySelected}`
-                  : `1${currencySelected}= ${formatNumber(
-                      getExchangeRate(
-                        { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
-                        { currency: 'USTB', amount: 1 }
-                      ),
-                      6
-                    )}USTB`}
-              </RateValue>
-            </RateWrapper>
-          </InputWrapper>
-          {selected === TRADE_OPTIONS.DEPOSIT ? (
-            <ButtonPrimary
-              onClick={() => handleDeposit()}
-              text="Deposit"
-              isLoading={loading}
-              buttonType="large"
-            />
-          ) : (
-            <ButtonPrimary text="Withdraw" isLoading={false} buttonType="large" />
-          )}
-        </RightContainer>
+            <InputWrapper>
+              <TradeWrapper>
+                {selected === TRADE_OPTIONS.DEPOSIT ? (
+                  <>
+                    <TextFieldTrade
+                      amount={
+                        balances.length === 0
+                          ? '0'
+                          : balances.find(b => b.currency === currencySelected)?.balance ?? '0'
+                      }
+                      placeholder="0.0"
+                      currency={currencySelected}
+                      selectable={true}
+                      handleChange={e => setCbdcAmount(e.floatValue ?? 0)}
+                      handleClick={currencyOpen}
+                    />
+                    <TextFieldTrade
+                      amount={
+                        balances.length === 0
+                          ? '0'
+                          : balances.find(b => b.currency === 'UST')?.balance ?? '0'
+                      }
+                      placeholder={(
+                        cbdcAmount *
+                        getExchangeRate(
+                          { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
+                          { currency: 'USTB', amount: 1 }
+                        )
+                      ).toString()}
+                      currency="USTB"
+                      disabled={true}
+                      handleChange={e => console.log(e)}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <TextFieldTrade
+                      amount={
+                        balances.length === 0
+                          ? '0'
+                          : balances.find(b => b.currency === 'UST')?.balance ?? '0'
+                      }
+                      placeholder="0.0"
+                      currency="USTB"
+                      handleChange={e => setUstbAmount(e.floatValue ?? 0)}
+                    />
+                    <TextFieldTrade
+                      amount={
+                        balances.length === 0
+                          ? '0'
+                          : balances.find(b => b.currency === currencySelected)?.balance ?? '0'
+                      }
+                      placeholder={(
+                        ustbAmount *
+                        getExchangeRate(
+                          { currency: 'USTB', amount: 1 },
+                          { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 }
+                        )
+                      ).toString()}
+                      currency={currencySelected}
+                      selectable={true}
+                      handleChange={e => console.log(e)}
+                      handleClick={currencyOpen}
+                    />
+                  </>
+                )}
+                <IconWrapper>
+                  <IconArrowDown />
+                </IconWrapper>
+              </TradeWrapper>
+              <RateWrapper>
+                <RateText>Rate</RateText>
+                <RateValue>
+                  {selected === TRADE_OPTIONS.DEPOSIT
+                    ? `1USTB= ${formatNumber(
+                        getExchangeRate(
+                          { currency: 'USTB', amount: 1 },
+                          { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 }
+                        ),
+                        6
+                      )}${currencySelected}`
+                    : `1${currencySelected}= ${formatNumber(
+                        getExchangeRate(
+                          { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
+                          { currency: 'USTB', amount: 1 }
+                        ),
+                        6
+                      )}USTB`}
+                </RateValue>
+              </RateWrapper>
+            </InputWrapper>
+            {selected === TRADE_OPTIONS.DEPOSIT ? (
+              <ButtonPrimary
+                onClick={() => handleDeposit()}
+                text="Deposit"
+                isLoading={false}
+                buttonType="large"
+              />
+            ) : (
+              <ButtonPrimary text="Withdraw" isLoading={false} buttonType="large" />
+            )}
+          </RightContainer>
+        </ContainerWrapper>
+        <Portfolio />
       </Wrapper>
       {currencyOpened && (
         <Popup
@@ -236,7 +241,11 @@ const TradePage = () => {
 };
 
 const Wrapper = tw.div`
-  flex justify-center items-start pt-60 gap-48
+flex-center flex-col gap-120 pb-120
+`;
+
+const ContainerWrapper = tw.div`
+  flex-center pt-60 gap-48
 `;
 
 const LeftContainer = tw.div`

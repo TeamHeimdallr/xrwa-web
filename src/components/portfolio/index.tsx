@@ -111,7 +111,7 @@ export const Portfolio = () => {
 };
 
 const Wrapper = tw.div`
-  flex flex-col gap-16
+  flex flex-col gap-16 max-w-960
 `;
 const PositionLabel = tw.div`
   font-b-24 text-black
