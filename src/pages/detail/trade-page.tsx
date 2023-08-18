@@ -6,8 +6,10 @@ import { AccountLinesResponse, AccountLinesTrustline } from 'xrpl';
 
 import { useBalance } from '~/api/xrpl/balance';
 import { useDepositCBDC } from '~/api/xrpl/cbdc-deposit';
+import { useWithdrawCBDC } from '~/api/xrpl/cbdc-withdraw';
 import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import { useDepositUSTB } from '~/api/xrpl/ustb-deposit';
+import { useWithdrawUSTB } from '~/api/xrpl/ustb-withdraw';
 import LogoUstb from '~/assets/images/logo-ustb.png';
 import { ButtonPrimary } from '~/components/buttons/button-primary';
 import { CardTertiary } from '~/components/card/card-tertiary';
@@ -21,7 +23,7 @@ import { Toggle } from '~/components/toggle';
 import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';
 import { useSelectedTokenState, useTradeState } from '~/states/data/trade';
-import { TOKEN, TRADE_OPTIONS } from '~/types';
+import { CBDC_TOKEN, TOKEN, TRADE_OPTIONS } from '~/types';
 import { convertCBDCToCurrency, getCurrencyPriceUSD, getExchangeRate } from '~/utils/currency';
 import { formatNumber, weightedAverage } from '~/utils/number';
 
@@ -40,6 +42,10 @@ const TradePage = () => {
 
   const { depositCBDC } = useDepositCBDC();
   const { depositUSTB } = useDepositUSTB();
+
+  const { withdrawCBDC } = useWithdrawCBDC();
+  const { withdrawUSTB } = useWithdrawUSTB();
+
   const { getBalance, getCBDCBalanceForUstbWallet } = useBalance();
 
   useEffect(() => {
@@ -73,6 +79,24 @@ const TradePage = () => {
     opened: currencyOpened,
     close: _currencyClose,
   } = usePopup(POPUP_ID.CURRENCY);
+
+  const handleWithdraw = async () => {
+    if (ustbAmount === 0) return;
+
+    setLoading(true);
+    await withdrawUSTB(ustbAmount.toString());
+    await withdrawCBDC(
+      currencySelected as CBDC_TOKEN,
+      (
+        ustbAmount *
+        getExchangeRate(
+          { currency: 'USTB', amount: 1 },
+          { currency: convertCBDCToCurrency(currencySelected as CBDC_TOKEN), amount: 1 }
+        )
+      ).toFixed(4)
+    );
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (wallet) {
@@ -253,7 +277,12 @@ const TradePage = () => {
                 buttonType="large"
               />
             ) : (
-              <ButtonPrimary text="Withdraw" isLoading={false} buttonType="large" />
+              <ButtonPrimary
+                onClick={() => handleWithdraw()}
+                text="Withdraw"
+                isLoading={loading}
+                buttonType="large"
+              />
             )}
           </RightContainer>
         </ContainerWrapper>

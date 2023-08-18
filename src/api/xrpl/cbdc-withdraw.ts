@@ -1,6 +1,7 @@
 import { add } from 'date-fns';
 import * as xrpl from 'xrpl';
 
+import { portfolioData } from '~/components/portfolio/data/portfolio-data';
 import { useXrplStore } from '~/states/data/xrpl';
 import { CBDC_TOKEN } from '~/types';
 import { convertCBDCToCurrency, getCurrencyPriceUSD, getExchangeRate } from '~/utils/currency';
@@ -117,11 +118,14 @@ export const useWithdrawCBDC = () => {
     // total
     const currentTypeTotalUsdPrice = Number(amount) * getCurrencyPriceUSD(type);
     const currentCBDCBalanceForUstbWalletUsdPrice = (await getCBDCBalanceForUstbWallet()) ?? 0;
+    const portfolioValue = portfolioData.reduce(
+      (acc, cur) => acc + Number(cur.marketValue.replace(',', '')),
+      0
+    );
+    const total = currentCBDCBalanceForUstbWalletUsdPrice + portfolioValue;
 
-    const needLockup = currentTypeTotalUsdPrice < currentCBDCBalanceForUstbWalletUsdPrice * 0.05;
-    const lockupAmount = needLockup
-      ? currentTypeTotalUsdPrice - currentCBDCBalanceForUstbWalletUsdPrice * 0.05
-      : 0;
+    const needLockup = currentTypeTotalUsdPrice > total * 0.05;
+    const lockupAmount = needLockup ? currentTypeTotalUsdPrice - total * 0.05 : 0;
 
     //// send token
     const sendTokenTx: xrpl.Payment = {
@@ -129,7 +133,7 @@ export const useWithdrawCBDC = () => {
       Account: ustbWallet.address,
       Amount: {
         currency: type,
-        value: needLockup ? (Number(amount) - lockupAmount).toString() : amount,
+        value: needLockup ? (Number(amount) - lockupAmount).toFixed(4) : amount,
         issuer: cbdcWallet.address,
       },
       Destination: wallet.address,
@@ -138,6 +142,7 @@ export const useWithdrawCBDC = () => {
 
     const payPrepared = await client.autofill(sendTokenTx);
     const paySigned = wallet.sign(payPrepared);
+    console.log(`Transaction completed - https://testnet.xrpl.org/transactions/${paySigned.hash}`);
     console.log(`Sending ${amount} ${type} to ${wallet.address}...`);
     const payResult = await client.submitAndWait(paySigned.tx_blob);
 

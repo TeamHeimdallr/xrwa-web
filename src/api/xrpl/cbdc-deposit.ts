@@ -144,7 +144,7 @@ export const useDepositCBDC = () => {
       status: 'locked',
 
       amount,
-      currency: 'UST',
+      currency: type,
 
       date: new Date(),
       exchangeRate: getExchangeRate(
