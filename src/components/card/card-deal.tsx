@@ -13,15 +13,24 @@ interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   contents?: string;
   value: number;
   estimatedYield: number;
+  disabled?: boolean;
 }
 
-export const CardDeal = ({ image, title, contents, value, estimatedYield, ...rest }: Props) => {
+export const CardDeal = ({
+  image,
+  title,
+  contents,
+  value,
+  estimatedYield,
+  disabled,
+  ...rest
+}: Props) => {
   const hoverRef = useRef<HTMLDivElement>(null);
   const isHover = useHover(hoverRef);
   const navigate = useNavigate();
 
   return (
-    <Wrapper ref={hoverRef} onClick={() => navigate('/trade')} {...rest}>
+    <Wrapper ref={hoverRef} disabled={disabled} onClick={() => navigate('/trade')} {...rest}>
       <ContentWrapper>
         <ImgWrapper>
           <DealImg src={image} />
@@ -52,7 +61,11 @@ export const CardDeal = ({ image, title, contents, value, estimatedYield, ...res
   );
 };
 
-const Wrapper = styled.div(() => [
+interface WrapperProps {
+  disabled?: boolean | undefined;
+}
+
+const Wrapper = styled.div<WrapperProps>(({ disabled }) => [
   tw`flex flex-col gap-20 px-24 py-20 bg-white w-468 rounded-20 clickable`,
   css`
     box-shadow: 0px 12px 32px 0px rgba(51, 88, 255, 0.08);
@@ -60,6 +73,7 @@ const Wrapper = styled.div(() => [
       box-shadow: 0px 20px 40px 0px #3358ff4d;
     }
   `,
+  disabled && tw`opacity-40`,
 ]);
 
 const ContentWrapper = tw.div`
