@@ -24,8 +24,20 @@ export const IS_MAINNET = import.meta.env.VITE_BLOCKCHAIN_ENV === 'mainnet';
 /**
  * @description BE API ENDPOINT / FE BASE URL // ASSET URL
  */
-export const API_URL = IS_PROD ? '' : IS_STAGING ? '' : IS_DEV ? '' : 'http://localhost:8080';
-export const BASE_URL = IS_PROD ? '' : IS_STAGING ? '' : IS_DEV ? '' : 'http://localhost:3000';
+export const API_URL = IS_PROD
+  ? 'https://api.xrwa.world'
+  : IS_STAGING
+  ? 'https://api.xrwa.world'
+  : IS_DEV
+  ? 'https://api.xrwa.world'
+  : 'http://localhost:8080';
+export const BASE_URL = IS_PROD
+  ? 'https://xrwa.world'
+  : IS_STAGING
+  ? 'https://xrwa.world'
+  : IS_DEV
+  ? 'https://xrwa.world'
+  : 'http://localhost:3000';
 export const ASSET_URL = '';
 
 /**
