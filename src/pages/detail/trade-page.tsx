@@ -21,12 +21,11 @@ import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';
 import { useSelectedTokenState, useTradeState } from '~/states/data/trade';
 import { TOKEN, TRADE_OPTIONS } from '~/types';
-import { convertCBDCToCurrency, getExchangeRate } from '~/utils/currency';
+import { convertCBDCToCurrency, getCurrencyPriceUSD, getExchangeRate } from '~/utils/currency';
 import { formatNumber, weightedAverage } from '~/utils/number';
 
 import { ChangeCurrency } from './components/change-currency';
 import { portfolioData } from '~/components/portfolio/data/portfolio-data';
-import { exchangeRate } from '~/data/exchange-rate';
 
 const TradePage = () => {
   const { wallet } = useConnectWallet();
@@ -34,6 +33,7 @@ const TradePage = () => {
   const { selected: currencySelected } = useSelectedTokenState();
   const [cbdcAmount, setCbdcAmount] = useState(0);
   const [ustbAmount, setUstbAmount] = useState(0);
+  const [ustbPrice, setUstbPrice] = useState(0);
   const [balances, setBalances] = useState<AccountLinesTrustline[]>([]);
   const [loading, setLoading] = useState(false);
   const [cbdcBalance, setCbdcBalance] = useState(0);
@@ -44,6 +44,10 @@ const TradePage = () => {
 
   useEffect(() => {
     getCBDCBalanceForUstbWallet().then(res => setCbdcBalance(res ?? 0));
+    const price = getCurrencyPriceUSD('USTB');
+    if (price) {
+      setUstbPrice(price);
+    }
   }, [wallet, selected, currencySelected, loading]);
 
   const handleDeposit = async () => {
@@ -114,7 +118,7 @@ const TradePage = () => {
               <CardTertiary
                 title="Price Per USTB"
                 icon={<IconPrice />}
-                contents={1 / exchangeRate.conversion_rates['USTB']}
+                contents={ustbPrice}
                 decimal={3}
                 cardType="value"
               />

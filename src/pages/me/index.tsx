@@ -25,9 +25,6 @@ const MyPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, wallet]);
 
-  // TODO: use this
-  console.log(cbdcBalance, usdBalance);
-
   return (
     <>
       <Gnb />

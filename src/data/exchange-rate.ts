@@ -1,3 +1,12 @@
+export const getUstbPriceDiscountRate = (startDate: Date, ytm: number = 0.05285) => {
+  const now = new Date();
+  const daily = ytm / 365.0;
+  const days = (now.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
+
+  if (days <= 0) return 1;
+  return 1 / (1 + daily * days);
+};
+
 export const exchangeRate = {
   result: 'success',
   documentation: 'https://www.exchangerate-api.com/docs',
@@ -170,6 +179,6 @@ export const exchangeRate = {
     ZAR: 19.1605,
     ZMW: 19.5432,
     ZWL: 4569.4981,
-    USTB: 0.984848,
+    USTB: 0.984848 * getUstbPriceDiscountRate(new Date(2023, 8, 17)),
   },
 };
