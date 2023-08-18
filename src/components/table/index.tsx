@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { format, formatDistance } from 'date-fns';
+import { differenceInMilliseconds, format, formatDistance } from 'date-fns';
 import { upperFirst } from 'lodash-es';
 import tw, { styled } from 'twin.macro';
 
@@ -44,29 +44,31 @@ export const Table = () => {
             />
           </EmptyWrapper>
         ) : (
-          data.data.reverse().map(row => {
-            const status =
-              row.type === 'withdraw' && row.status === 'locked'
-                ? `${formatDistance(new Date(), new Date(row.unlockDate))} left`
-                : row.type === 'withdraw' && row.status === 'withdrawn'
-                ? 'Withdrawn'
-                : 'Locked';
+          data.data
+            .sort((a, b) => differenceInMilliseconds(new Date(b.date), new Date(a.date)))
+            .map(row => {
+              const status =
+                row.type === 'withdraw' && row.status === 'locked'
+                  ? `${formatDistance(new Date(), new Date(row.unlockDate))} left`
+                  : row.type === 'withdraw' && row.status === 'withdrawn'
+                  ? 'Withdrawn'
+                  : 'Locked';
 
-            return (
-              <OrderRow key={row.id}>
-                <RowType>{upperFirst(row.type)}</RowType>
-                <RowText>{`${formatNumber(row.amount)} ${row.currency}`}</RowText>
-                <RowText>{status}</RowText>
-                <RowText>{format(new Date(row.date), DATE_FORMATTER.yyyy_MM_dd_HHmmss)}</RowText>
-                <RowText>{formatNumber(row.exchangeRate)}</RowText>
-                <RowTransaction
-                  onClick={() => window.open(`https://testnet.xrpl.org/transactions/${row.tx}`)}
-                >
-                  {truncateAddress(row.tx, 8)}
-                </RowTransaction>
-              </OrderRow>
-            );
-          })
+              return (
+                <OrderRow key={row.id}>
+                  <RowType>{upperFirst(row.type)}</RowType>
+                  <RowText>{`${formatNumber(row.amount)} ${row.currency}`}</RowText>
+                  <RowText>{status}</RowText>
+                  <RowText>{format(new Date(row.date), DATE_FORMATTER.yyyy_MM_dd_HHmmss)}</RowText>
+                  <RowText>{formatNumber(row.exchangeRate)}</RowText>
+                  <RowTransaction
+                    onClick={() => window.open(`https://testnet.xrpl.org/transactions/${row.tx}`)}
+                  >
+                    {truncateAddress(row.tx, 8)}
+                  </RowTransaction>
+                </OrderRow>
+              );
+            })
         )}
       </TableWrapper>
     </Wrapper>
