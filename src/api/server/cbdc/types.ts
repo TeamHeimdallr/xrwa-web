@@ -31,7 +31,7 @@ export interface GetWithdrawBalancesResponse {
  * POST /cbdc
  */
 export interface CreateDepositWithdrawRequest {
-  type: DepositWithdrawStatus;
+  type: DepositWithdrawType;
 
   account: string;
   destination: string;
@@ -39,7 +39,7 @@ export interface CreateDepositWithdrawRequest {
   amount: string;
   currency: string;
 
-  status: DepositWithdrawType;
+  status: DepositWithdrawStatus;
 
   date: Date;
   unlockDate?: Date;

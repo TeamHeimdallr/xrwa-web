@@ -12,7 +12,7 @@ import {
  * Create deposit withdraw
  * POST /cbdc
  */
-const createUsersAxios = async (data: CreateDepositWithdrawRequest) =>
+const createDepositWithdrawAxios = async (data: CreateDepositWithdrawRequest) =>
   (
     await api.post<
       CreateDepositWithdrawResponse,
@@ -21,9 +21,9 @@ const createUsersAxios = async (data: CreateDepositWithdrawRequest) =>
     >(`/cbdc`, data)
   ).data;
 
-export const useCreateUsersMutate = (options?: UseCreateDepositWithdrawMutationOptions) =>
+export const useCreateDepositWithdrawMutate = (options?: UseCreateDepositWithdrawMutationOptions) =>
   useMutation<
     CreateDepositWithdrawResponse,
     AxiosError<CreateDepositWithdrawResponse, CreateDepositWithdrawRequest>,
     CreateDepositWithdrawRequest
-  >(['cbdc', 'create-deposit-withdraw'], createUsersAxios, { ...options });
+  >(['cbdc', 'create-deposit-withdraw'], createDepositWithdrawAxios, { ...options });

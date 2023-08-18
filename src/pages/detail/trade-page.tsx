@@ -15,6 +15,7 @@ import { Gnb } from '~/components/gnb';
 import { IconArrowDown, IconLocked, IconPercentage, IconPrice } from '~/components/icons';
 import { Popup } from '~/components/popups';
 import Portfolio from '~/components/portfolio';
+import { portfolioData } from '~/components/portfolio/data/portfolio-data';
 import { TextFieldTrade } from '~/components/textfield/textfield-trade';
 import { Toggle } from '~/components/toggle';
 import { POPUP_ID } from '~/constants';
@@ -25,7 +26,6 @@ import { convertCBDCToCurrency, getCurrencyPriceUSD, getExchangeRate } from '~/u
 import { formatNumber, weightedAverage } from '~/utils/number';
 
 import { ChangeCurrency } from './components/change-currency';
-import { portfolioData } from '~/components/portfolio/data/portfolio-data';
 
 const TradePage = () => {
   const { wallet } = useConnectWallet();
@@ -48,6 +48,7 @@ const TradePage = () => {
     if (price) {
       setUstbPrice(price);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet, selected, currencySelected, loading]);
 
   const handleDeposit = async () => {
@@ -80,6 +81,7 @@ const TradePage = () => {
         setBalances(lines);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet, selected, currencySelected, loading]);
 
   return (

@@ -1,23 +1,26 @@
+import { add } from 'date-fns';
 import * as xrpl from 'xrpl';
 
 import { useXrplStore } from '~/states/data/xrpl';
-import { TOKEN } from '~/types';
-import { convertCBDCToCurrency, getExchangeRate } from '~/utils/currency';
+import { CBDC_TOKEN } from '~/types';
+import { convertCBDCToCurrency, getCurrencyPriceUSD, getExchangeRate } from '~/utils/currency';
 
 import { useCreateDepositWithdrawMutate } from '../server/cbdc/users-post';
 import { useAccounts } from './accounts';
+import { useBalance } from './balance';
 import { useConnectWallet } from './connect-wallet';
 
 /**
  * @description CBDC 를 ustb wallet 으로 Deposit 하는 hook.
  */
-export const useDepositCBDC = () => {
+export const useWithdrawCBDC = () => {
   const { client, isConnected } = useXrplStore();
   const { wallet } = useConnectWallet();
   const { bsdWallet, enaWallet, krwWallet, ustbWallet } = useAccounts();
   const { mutateAsync } = useCreateDepositWithdrawMutate();
+  const { getCBDCBalanceForUstbWallet } = useBalance();
 
-  const depositCBDC = async (type: TOKEN, amount: string) => {
+  const withdrawCBDC = async (type: CBDC_TOKEN, amount: string) => {
     if (!isConnected || !wallet) return;
 
     const cbdcWallet = type === 'BSD' ? bsdWallet : type === 'ENA' ? enaWallet : krwWallet;
@@ -77,7 +80,7 @@ export const useDepositCBDC = () => {
     //// trust line prepare
     const {
       result: { lines },
-    } = await client.request({ command: 'account_lines', account: ustbWallet.address });
+    } = await client.request({ command: 'account_lines', account: wallet.address });
 
     const trustline = lines.find(line => line.currency === type);
     if (
@@ -87,7 +90,7 @@ export const useDepositCBDC = () => {
       const currencyCode = type;
       const trustSetTx: xrpl.TrustSet = {
         TransactionType: 'TrustSet',
-        Account: ustbWallet.address,
+        Account: wallet.address,
         LimitAmount: {
           currency: currencyCode,
           issuer: cbdcWallet.address,
@@ -100,7 +103,7 @@ export const useDepositCBDC = () => {
       };
 
       const tsPrepared = await client.autofill<xrpl.TrustSet>(trustSetTx);
-      const tsSigned = ustbWallet.sign(tsPrepared);
+      const tsSigned = wallet.sign(tsPrepared);
       console.log('Creating trust line from hot address to issuer...');
       const tsResult = await client.submitAndWait(tsSigned.tx_blob);
 
@@ -111,22 +114,31 @@ export const useDepositCBDC = () => {
       console.log(`Transaction completed - https://testnet.xrpl.org/transactions/${tsSigned.hash}`);
     }
 
+    // total
+    const currentTypeTotalUsdPrice = Number(amount) * getCurrencyPriceUSD(type);
+    const currentCBDCBalanceForUstbWalletUsdPrice = (await getCBDCBalanceForUstbWallet()) ?? 0;
+
+    const needLockup = currentTypeTotalUsdPrice < currentCBDCBalanceForUstbWalletUsdPrice * 0.05;
+    const lockupAmount = needLockup
+      ? currentTypeTotalUsdPrice - currentCBDCBalanceForUstbWalletUsdPrice * 0.05
+      : 0;
+
     //// send token
     const sendTokenTx: xrpl.Payment = {
       TransactionType: 'Payment',
-      Account: wallet.address,
+      Account: ustbWallet.address,
       Amount: {
         currency: type,
-        value: amount,
+        value: needLockup ? (Number(amount) - lockupAmount).toString() : amount,
         issuer: cbdcWallet.address,
       },
-      Destination: ustbWallet.address,
+      Destination: wallet.address,
       DestinationTag: 1,
     };
 
     const payPrepared = await client.autofill(sendTokenTx);
     const paySigned = wallet.sign(payPrepared);
-    console.log(`Sending ${amount} ${type} to ${ustbWallet.address}...`);
+    console.log(`Sending ${amount} ${type} to ${wallet.address}...`);
     const payResult = await client.submitAndWait(paySigned.tx_blob);
 
     const payTxMeta = payResult?.result?.meta;
@@ -136,26 +148,49 @@ export const useDepositCBDC = () => {
     console.log(`Transaction completed - https://testnet.xrpl.org/transactions/${paySigned.hash}`);
 
     await mutateAsync({
-      type: 'deposit',
+      type: 'withdraw',
 
-      account: wallet.address,
-      destination: ustbWallet.address,
+      account: ustbWallet.address,
+      destination: wallet.address,
 
-      status: 'locked',
+      status: 'withdrawn',
 
-      amount,
-      currency: 'UST',
+      amount: needLockup ? (Number(amount) - lockupAmount).toString() : amount,
+      currency: type,
 
       date: new Date(),
       exchangeRate: getExchangeRate(
-        { currency: 'USTB', amount: 1 },
-        { currency: convertCBDCToCurrency(type), amount: 1 }
+        { currency: convertCBDCToCurrency(type), amount: 1 },
+        { currency: 'USTB', amount: 1 }
       ),
 
       tx: paySigned.hash,
     });
+
+    if (needLockup) {
+      await mutateAsync({
+        type: 'withdraw',
+
+        account: ustbWallet.address,
+        destination: wallet.address,
+
+        status: 'locked',
+
+        amount: lockupAmount.toString(),
+        currency: type,
+
+        date: new Date(),
+        unlockDate: add(new Date(), { days: 2 }),
+        exchangeRate: getExchangeRate(
+          { currency: convertCBDCToCurrency(type), amount: 1 },
+          { currency: 'USTB', amount: 1 }
+        ),
+
+        tx: paySigned.hash,
+      });
+    }
     console.log(`Save deposit completed`);
   };
 
-  return { depositCBDC };
+  return { withdrawCBDC };
 };

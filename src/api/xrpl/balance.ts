@@ -5,8 +5,8 @@ import { useCBDCBalanceStore } from '~/states/data/user-cbdc-balance';
 import { useXrplStore } from '~/states/data/xrpl';
 import { getCurrencyPriceUSD } from '~/utils/currency';
 
-import { useConnectWallet } from './connect-wallet';
 import { useAccounts } from './accounts';
+import { useConnectWallet } from './connect-wallet';
 
 export const useBalance = () => {
   const { client, isConnected } = useXrplStore();
