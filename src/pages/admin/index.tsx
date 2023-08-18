@@ -38,7 +38,7 @@ const AdminPage = () => {
             onValueChange={values => setValue(values.floatValue || 1000)}
             value={value}
           />
-          <Mint onClick={() => createUSTB(value.toString())}>Mint USTB</Mint>
+          <Mint onClick={() => createUSTB(value.toString())}>Mint UST</Mint>
         </InnerWrapper>
       </Wrapper>
     </>

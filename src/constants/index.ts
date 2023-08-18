@@ -100,7 +100,7 @@ export const TOKEN_IMAGE: Record<TOKEN, { image: string; fullname: string }> = {
     image: LogoKrw,
     fullname: 'South Korea CBDC Token',
   },
-  USTB: {
+  UST: {
     image: LogoUstb,
     fullname: 'South Korea CBDC Token',
   },

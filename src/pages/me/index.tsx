@@ -126,7 +126,7 @@ const BalanceImg = tw.img`
 `;
 
 const BalanceTextWrapper = tw.div`
-  flex flex-col gap-2 
+  flex flex-col gap-2
 `;
 
 const BalanceAmount = tw.div`

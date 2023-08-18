@@ -121,7 +121,7 @@ const TradePage = () => {
               <TradeText>
                 <TradeTitle>U.S. Short-term Treasury Bill</TradeTitle>
                 <TradeDesc>
-                  The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus
+                  The U.S. Short-term Treasury Bill ($UST) is a token underpinned by a prospectus
                   and backed by U.S. Treasury Bills. These are government bonds that don't carry
                   regular interest payments and are issued at a discounted rate, only to be redeemed
                   at their full value upon maturity. Given the backing of the U.S. government,
@@ -144,7 +144,7 @@ const TradePage = () => {
                 cardType="value"
               />
               <CardTertiary
-                title="Price Per USTB"
+                title="Price Per UST"
                 icon={<IconPrice />}
                 contents={ustbPrice}
                 decimal={3}
@@ -215,7 +215,7 @@ const TradePage = () => {
                           )
                         ).toFixed(4)
                       ).toString()}
-                      currency="USTB"
+                      currency="UST"
                       disabled={true}
                     />
                   </>
@@ -228,7 +228,7 @@ const TradePage = () => {
                           : balances.find(b => b.currency === 'UST')?.balance ?? '0'
                       }
                       placeholder="0.0"
-                      currency="USTB"
+                      currency="UST"
                       handleChange={e => setUstbAmount(e.floatValue ?? 0)}
                       value={ustbAmount}
                     />
@@ -266,7 +266,7 @@ const TradePage = () => {
                 <RateText>Rate</RateText>
                 <RateValue>
                   {selected === TRADE_OPTIONS.DEPOSIT
-                    ? `1USTB= ${formatNumber(
+                    ? `1UST= ${formatNumber(
                         getExchangeRate(
                           { currency: 'USTB', amount: 1 },
                           { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 }
@@ -279,7 +279,7 @@ const TradePage = () => {
                           { currency: 'USTB', amount: 1 }
                         ),
                         6
-                      )}USTB`}
+                      )}UST`}
                 </RateValue>
               </RateWrapper>
             </InputWrapper>

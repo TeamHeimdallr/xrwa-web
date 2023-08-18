@@ -57,7 +57,7 @@ const MainPage = () => {
             <CardDeal
               image={LogoUstb}
               title="U.S. Short-term Treasury Bill"
-              contents="The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills."
+              contents="The U.S. Short-term Treasury Bill ($UST) is a token underpinned by a prospectus and backed by U.S. Treasury Bills."
               value={
                 cbdcBalance +
                 portfolioData.reduce(
