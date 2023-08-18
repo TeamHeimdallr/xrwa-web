@@ -1,16 +1,20 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import lottie from 'lottie-web/build/player/lottie_light';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import { useOnClickOutside } from 'usehooks-ts';
 
+import { useFaucetCBDC } from '~/api/xrpl/cbdc-faucet';
 import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import { COLOR } from '~/assets/colors';
 import textLogo from '~/assets/images/logo-text.png';
+import loading from '~/assets/lottie/loading-dot-black.json';
 import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';
 import { useAccountStore } from '~/states/data/user-account';
+import { useXrplStore } from '~/states/data/xrpl';
 import { truncateAddress } from '~/utils/string';
 
 import { ButtonPrimary } from '../buttons/button-primary';
@@ -20,19 +24,56 @@ import { ConnectWallet } from './connect-wallet';
 
 export const Gnb = () => {
   const connectedRef = useRef<HTMLDivElement>(null);
+  const lottieRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const { disconnect } = useConnectWallet();
+  const { isConnected } = useXrplStore();
+  const { faucetCBDC } = useFaucetCBDC();
+  const { wallet, disconnect } = useConnectWallet();
   const { account } = useAccountStore();
   const { open, opened } = usePopup(POPUP_ID.CONNECT);
 
   const [dropdownOpended, setDropdownOpened] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   useOnClickOutside(connectedRef, () => setDropdownOpened(false));
 
+  const faucet = async () => {
+    if (!isConnected || !wallet) return;
+
+    setLoading(true);
+
+    const promises = [faucetCBDC('BSD'), faucetCBDC('ENA'), faucetCBDC('KRW')];
+    await Promise.all(promises);
+
+    setLoading(false);
+  };
+
+  const openDropdown = () => {
+    if (isLoading) return;
+
+    setDropdownOpened(true);
+  };
+
   useEffect(() => {
-    setDropdownOpened(false);
-  }, [account.wallet]);
+    if (account.wallet || isLoading) setDropdownOpened(false);
+  }, [account.wallet, isLoading]);
+
+  useEffect(() => {
+    if (!lottieRef.current || !isLoading) return;
+
+    lottie.loadAnimation({
+      container: lottieRef.current,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      animationData: loading,
+    });
+
+    return () => {
+      lottie.destroy();
+    };
+  }, [lottieRef, isLoading, account.wallet]);
 
   return (
     <>
@@ -45,14 +86,17 @@ export const Gnb = () => {
             <>
               <Menu onClick={() => navigate('/me')}>My Page</Menu>
               <ConnectedWrapper
-                onClick={() => setDropdownOpened(true)}
+                onClick={openDropdown}
                 ref={connectedRef}
                 dropdownOpended={dropdownOpended}
               >
-                <ConnectedAddress>{truncateAddress(account.wallet.address)}</ConnectedAddress>
+                <ConnectedAddress>
+                  {!isLoading && truncateAddress(account.wallet.address)}
+                  <LottieWrapper ref={lottieRef} />
+                </ConnectedAddress>
 
                 <DropDownWrapper dropdownOpended={dropdownOpended}>
-                  <FaucetButton>
+                  <FaucetButton onClick={faucet}>
                     <IconPlus width={20} height={20} color={COLOR.GRAY2} />
                     Faucet
                   </FaucetButton>
@@ -108,11 +152,14 @@ interface ConnectedWrapperProps {
   dropdownOpended: boolean;
 }
 const ConnectedWrapper = styled.div<ConnectedWrapperProps>(({ dropdownOpended }) => [
-  tw`relative flex flex-col items-center gap-12 px-24 py-10 border-solid w-148 clickable rounded-8 border-1 border-blue text-blue bg-blue/5`,
+  tw`relative flex flex-col items-center gap-12 px-24 py-10 border-solid h-42 w-148 clickable rounded-8 border-1 border-blue text-blue bg-blue/5`,
   dropdownOpended && tw`text-white bg-gray4 border-gray4 rounded-b-0`,
 ]);
 
 const ConnectedAddress = tw.div``;
+const LottieWrapper = tw.div`
+  w-full h-full flex-center absolute absolute-center
+`;
 
 interface DropDownWrapperProps {
   dropdownOpended: boolean;

@@ -14,10 +14,58 @@ export const useFaucetCBDC = () => {
   const { wallet } = useConnectWallet();
   const { bsdWallet, enaWallet, krwWallet } = useAccounts();
 
+  const getTrustLines = async () => {
+    if (!isConnected || !wallet) return;
+
+    const payload: xrpl.AccountCurrenciesRequest = {
+      command: 'account_currencies',
+      account: wallet.address,
+    };
+
+    const {
+      result: { receive_currencies: receiveCurrencies },
+    } = await client.request(payload);
+
+    return receiveCurrencies;
+  };
   const faucetCBDC = async (type: TOKEN) => {
     if (!isConnected || !wallet) return;
 
+    const trustLines = await getTrustLines();
+    // [ 'BSD', 'ENA', 'KRW']
+
     const cbdcWallet = type === 'BSD' ? bsdWallet : type === 'ENA' ? enaWallet : krwWallet;
+    const currencyCode = type;
+
+    if (trustLines?.includes(currencyCode)) {
+      //// send token
+      const issueQuantity = '500';
+      const sendTokenTx: xrpl.Payment = {
+        TransactionType: 'Payment',
+        Account: cbdcWallet.address,
+        Amount: {
+          currency: type,
+          value: issueQuantity,
+          issuer: cbdcWallet.address,
+        },
+        Destination: wallet.address,
+        DestinationTag: 1,
+      };
+
+      const payPrepared = await client.autofill(sendTokenTx);
+      const paySigned = cbdcWallet.sign(payPrepared);
+      console.log(`Sending ${issueQuantity} ${type} to ${wallet.address}...`);
+      const payResult = await client.submitAndWait(paySigned.tx_blob);
+
+      const payTxMeta = payResult?.result?.meta;
+      if (typeof payTxMeta !== 'object' || payTxMeta?.TransactionResult !== 'tesSUCCESS') {
+        throw `Error sending transaction: ${payResult}`;
+      }
+      console.log(
+        `Transaction completed - https://testnet.xrpl.org/transactions/${paySigned.hash}`
+      );
+      return;
+    }
 
     //// wallet prepare
     const settingsTx: xrpl.AccountSet = {
@@ -40,7 +88,6 @@ export const useFaucetCBDC = () => {
     console.log(`AccountSet completed - https://testnet.xrpl.org/transactions/${signed.hash}`);
 
     //// trust line prepare
-    const currencyCode = type;
     const trustSetTx: xrpl.TrustSet = {
       TransactionType: 'TrustSet',
       Account: wallet.address,
