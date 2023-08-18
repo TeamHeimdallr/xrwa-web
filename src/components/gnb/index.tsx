@@ -98,11 +98,7 @@ export const Gnb = () => {
                 </ConnectedAddress>
 
                 <DropDownWrapper dropdownOpended={dropdownOpended}>
-<<<<<<< HEAD
                   <FaucetButton onClick={faucet}>
-=======
-                  <FaucetButton onClick={handleFaucet}>
->>>>>>> a00572e (feat: cbdc deposit)
                     <IconPlus width={20} height={20} color={COLOR.GRAY2} />
                     Faucet
                   </FaucetButton>
