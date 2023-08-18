@@ -38,7 +38,7 @@ const MyPage = () => {
             <BalanceCard>
               <BalanceImg src={LogoBsd} />
               <BalanceTextWrapper>
-                <BalanceAmount>{formatNumberWithComma(999999999999)}</BalanceAmount>
+                <BalanceAmount>{formatNumberWithComma(cbdcBalance['BSD'])}</BalanceAmount>
                 <BalanceTitle>BSD</BalanceTitle>
               </BalanceTextWrapper>
             </BalanceCard>
@@ -46,7 +46,7 @@ const MyPage = () => {
             <BalanceCard>
               <BalanceImg src={LogoEna} />
               <BalanceTextWrapper>
-                <BalanceAmount>{formatNumberWithComma(999999999999)}</BalanceAmount>
+                <BalanceAmount>{formatNumberWithComma(cbdcBalance['ENA'])}</BalanceAmount>
                 <BalanceTitle>ENA</BalanceTitle>
               </BalanceTextWrapper>
             </BalanceCard>
@@ -54,7 +54,7 @@ const MyPage = () => {
             <BalanceCard>
               <BalanceImg src={LogoKrw} />
               <BalanceTextWrapper>
-                <BalanceAmount>{formatNumberWithComma(999999999999)}</BalanceAmount>
+                <BalanceAmount>{formatNumberWithComma(cbdcBalance['KRW'])}</BalanceAmount>
                 <BalanceTitle>KRW</BalanceTitle>
               </BalanceTextWrapper>
             </BalanceCard>
@@ -67,19 +67,19 @@ const MyPage = () => {
             <CardPrimary
               icon={<IconTotal />}
               title="Total Balance in USD"
-              contents={usdBalance}
+              contents={usdBalance} // TODO: usdBalance + withdrawing balance
               cardType="value"
             />
             <CardPrimary
               icon={<IconLocked />}
               title="Unlocked Balance in USD"
-              contents={1234567}
+              contents={usdBalance}
               cardType="value"
             />
             <CardPrimary
               icon={<IconWithdraw />}
               title="Withdrawing Balance in USD"
-              contents={123455}
+              contents={123455} // TODO
               cardType="value"
             />
           </DashBoardCardWrapper>

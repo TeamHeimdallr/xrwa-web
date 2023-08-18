@@ -170,6 +170,6 @@ export const exchangeRate = {
     ZAR: 19.1605,
     ZMW: 19.5432,
     ZWL: 4569.4981,
-    USTB: 1.123,
+    USTB: 0.984848,
   },
 };

@@ -22,9 +22,11 @@ import { usePopup } from '~/hooks/pages/use-popup';
 import { useSelectedTokenState, useTradeState } from '~/states/data/trade';
 import { TOKEN, TRADE_OPTIONS } from '~/types';
 import { convertCBDCToCurrency, getExchangeRate } from '~/utils/currency';
-import { formatNumber } from '~/utils/number';
+import { formatNumber, weightedAverage } from '~/utils/number';
 
 import { ChangeCurrency } from './components/change-currency';
+import { portfolioData } from '~/components/portfolio/data/portfolio-data';
+import { exchangeRate } from '~/data/exchange-rate';
 
 const TradePage = () => {
   const { wallet } = useConnectWallet();
@@ -34,10 +36,15 @@ const TradePage = () => {
   const [ustbAmount, setUstbAmount] = useState(0);
   const [balances, setBalances] = useState<AccountLinesTrustline[]>([]);
   const [loading, setLoading] = useState(false);
+  const [cbdcBalance, setCbdcBalance] = useState(0);
 
   const { depositCBDC } = useDepositCBDC();
   const { depositUSTB } = useDepositUSTB();
-  const { getBalance } = useBalance();
+  const { getBalance, getCBDCBalanceForUstbWallet } = useBalance();
+
+  useEffect(() => {
+    getCBDCBalanceForUstbWallet().then(res => setCbdcBalance(res ?? 0));
+  }, [wallet, selected, currencySelected, loading]);
 
   const handleDeposit = async () => {
     if (cbdcAmount === 0) return;
@@ -46,15 +53,12 @@ const TradePage = () => {
     await depositCBDC(currencySelected as TOKEN, cbdcAmount.toString());
     await depositUSTB(
       (
-        Math.floor(
-          10000 *
-            cbdcAmount *
-            getExchangeRate(
-              { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
-              { currency: 'USTB', amount: 1 }
-            )
-        ) / 10000
-      ).toString()
+        cbdcAmount *
+        getExchangeRate(
+          { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
+          { currency: 'USTB', amount: 1 }
+        )
+      ).toFixed(4)
     );
     setLoading(false);
   };
@@ -98,19 +102,35 @@ const TradePage = () => {
               <CardTertiary
                 title="Total Value Locked"
                 icon={<IconLocked />}
-                contents={100000}
+                contents={
+                  cbdcBalance +
+                  portfolioData.reduce(
+                    (acc, cur) => acc + Number(cur.marketValue.replace(',', '')),
+                    0
+                  )
+                }
                 cardType="value"
               />
               <CardTertiary
                 title="Price Per USTB"
                 icon={<IconPrice />}
-                contents={1.123}
+                contents={1 / exchangeRate.conversion_rates['USTB']}
+                decimal={3}
                 cardType="value"
               />
               <CardTertiary
                 title="APY"
                 icon={<IconPercentage />}
-                contents={5.3}
+                contents={Number(
+                  weightedAverage(
+                    portfolioData.map(p => {
+                      return {
+                        weight: Number(p.principalAmount.replace(',', '')),
+                        value: Number(p.ytm.replace('%', '')),
+                      };
+                    })
+                  ).toFixed(3)
+                )}
                 cardType="percent"
               />
             </TradeCardWrapper>
