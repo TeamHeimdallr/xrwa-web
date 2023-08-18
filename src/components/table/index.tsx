@@ -44,7 +44,7 @@ export const Table = () => {
             />
           </EmptyWrapper>
         ) : (
-          data.data.map(row => {
+          data.data.reverse().map(row => {
             const status =
               row.type === 'withdraw' && row.status === 'locked'
                 ? `${formatDistance(new Date(), new Date(row.unlockDate))} left`
