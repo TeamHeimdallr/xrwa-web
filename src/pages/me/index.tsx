@@ -108,7 +108,7 @@ const MyPage = () => {
 };
 
 const Wrapper = tw.div`
-  flex flex-col items-center gap-80 pt-60`;
+  flex flex-col items-center gap-80 pt-60 pb-60`;
 
 const BalanceCardWrapper = styled.div(() => [
   tw`flex justify-between gap-24 px-24 py-20 bg-white rounded-20 h-134`,
