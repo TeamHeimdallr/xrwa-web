@@ -12,7 +12,9 @@ import {
  * Get all activities
  * GET /cbdc
  */
-export interface GetActivitiesParams {}
+export interface GetActivitiesParams {
+  account: string;
+}
 export interface GetActivitiesResponse {
   data: DepositWithdraw[];
 }
@@ -21,7 +23,9 @@ export interface GetActivitiesResponse {
  * Get withdraw balances
  * GET /cbdc/balances
  */
-export interface GetWithdrawBalancesParams {}
+export interface GetWithdrawBalancesParams {
+  account: string;
+}
 export interface GetWithdrawBalancesResponse {
   data: BalanceWithdraws;
 }

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import tw, { css, styled } from 'twin.macro';
 
+import { useGetWithdrawBalancesQuery } from '~/api/server/cbdc/users-get';
 import { useBalance } from '~/api/xrpl/balance';
 import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import LogoBsd from '~/assets/images/logo-bahama.png';
@@ -11,12 +12,29 @@ import { Gnb } from '~/components/gnb';
 import { IconLocked, IconTotal, IconWithdraw } from '~/components/icons';
 import Table from '~/components/table';
 import { useXrplStore } from '~/states/data/xrpl';
+import { getCurrencyPriceUSD } from '~/utils/currency';
 import { formatNumberWithComma } from '~/utils/number';
 
 const MyPage = () => {
   const { isConnected } = useXrplStore();
   const { wallet } = useConnectWallet();
   const { getCBDCBalance, cbdcBalance, usdBalance } = useBalance();
+
+  const { data } = useGetWithdrawBalancesQuery(
+    { account: wallet?.address ?? '' },
+    { enabled: !!wallet?.address }
+  );
+
+  const withdrawingsUsd =
+    data?.data.withdrawings?.reduce(
+      (acc, cur) => acc + getCurrencyPriceUSD(cur.currency) * cur.amount,
+      0
+    ) ?? 0;
+  const withdrawnsUsd =
+    data?.data.withdrawns?.reduce(
+      (acc, cur) => acc + getCurrencyPriceUSD(cur.currency) * cur.amount,
+      0
+    ) ?? 0;
 
   useEffect(() => {
     if (!isConnected || !wallet) return;
@@ -64,19 +82,19 @@ const MyPage = () => {
             <CardPrimary
               icon={<IconTotal />}
               title="Total Balance in USD"
-              contents={usdBalance} // TODO: usdBalance + withdrawing balance
+              contents={usdBalance}
               cardType="value"
             />
             <CardPrimary
               icon={<IconLocked />}
               title="Unlocked Balance in USD"
-              contents={usdBalance}
+              contents={withdrawnsUsd}
               cardType="value"
             />
             <CardPrimary
               icon={<IconWithdraw />}
               title="Withdrawing Balance in USD"
-              contents={123455} // TODO
+              contents={withdrawingsUsd}
               cardType="value"
             />
           </DashBoardCardWrapper>
@@ -93,17 +111,14 @@ const Wrapper = tw.div`
   flex flex-col items-center gap-80 pt-60`;
 
 const BalanceCardWrapper = styled.div(() => [
-  tw`
-  flex py-20 px-24 rounded-20 h-134 gap-24
-  justify-between
-`,
+  tw`flex justify-between gap-24 px-24 py-20 bg-white rounded-20 h-134`,
   css`
     box-shadow: 0px 12px 32px 0px #3358ff14;
   `,
 ]);
 
 const BalanceCard = tw.div`
-  gap-8
+  flex flex-col flex-1 gap-8
 `;
 
 const BalanceImg = tw.img`
@@ -111,7 +126,7 @@ const BalanceImg = tw.img`
 `;
 
 const BalanceTextWrapper = tw.div`
-  flex flex-col gap-2
+  flex flex-col gap-2 
 `;
 
 const BalanceAmount = tw.div`

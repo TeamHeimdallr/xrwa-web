@@ -1,31 +1,26 @@
 import { css } from '@emotion/react';
+import { format, formatDistance } from 'date-fns';
+import { upperFirst } from 'lodash-es';
 import tw, { styled } from 'twin.macro';
+
+import { useGetActivitiesQuery } from '~/api/server/cbdc/users-get';
+import { useConnectWallet } from '~/api/xrpl/connect-wallet';
+import { formatNumber } from '~/utils/number';
+import { truncateAddress } from '~/utils/string';
+import { DATE_FORMATTER } from '~/utils/time';
 
 import { ButtonPrimary } from '../buttons/button-primary';
 
 const headers = ['Type', 'Amount', 'Status', 'Date', 'Exchange Rate', 'Transaction'];
 
-const rows = [
-  {
-    id: 1,
-    type: 'Withdraw',
-    amount: '50 USTB',
-    status: '8 days left',
-    date: '2021-08-20 12:00:00',
-    exchangeRate: '1.0201',
-    transaction: '72561528...',
-  },
-  {
-    id: 2,
-    type: 'Deposit',
-    amount: '50 USTB',
-    status: 'Locked',
-    date: '2021-08-20 12:00:00',
-    exchangeRate: '1.0201',
-    transaction: '72561528...',
-  },
-];
 export const Table = () => {
+  const { wallet } = useConnectWallet();
+
+  const { data } = useGetActivitiesQuery(
+    { account: wallet?.address ?? '' },
+    { enabled: !!wallet?.address }
+  );
+
   return (
     <Wrapper>
       <PositionLabel>Activity</PositionLabel>
@@ -36,7 +31,7 @@ export const Table = () => {
           ))}
         </OrderHeader>
         <Divider />
-        {rows.length == 0 && (
+        {data?.data?.length === 0 ? (
           <EmptyWrapper>
             <EmptyText>No transactions found!</EmptyText>
             <ButtonPrimary
@@ -46,17 +41,31 @@ export const Table = () => {
               style={{ width: '126px' }}
             />
           </EmptyWrapper>
+        ) : (
+          data?.data?.map(row => {
+            const status =
+              row.type === 'withdraw' && row.status === 'locked'
+                ? `${formatDistance(new Date(), new Date(row.unlockDate))} left`
+                : row.type === 'withdraw' && row.status === 'withdrawn'
+                ? 'Withdrawn'
+                : 'Locked';
+
+            return (
+              <OrderRow key={row.id}>
+                <RowType>{upperFirst(row.type)}</RowType>
+                <RowText>{`${formatNumber(row.amount)} ${row.currency}`}</RowText>
+                <RowText>{status}</RowText>
+                <RowText>{format(new Date(row.date), DATE_FORMATTER.yyyy_MM_dd_HHmmss)}</RowText>
+                <RowText>{formatNumber(row.exchangeRate)}</RowText>
+                <RowTransaction
+                  onClick={() => window.open(`https://testnet.xrpl.org/transactions/${row.tx}`)}
+                >
+                  {truncateAddress(row.tx, 8)}
+                </RowTransaction>
+              </OrderRow>
+            );
+          })
         )}
-        {rows.map(row => (
-          <OrderRow key={row.id}>
-            <RowType>{row.type}</RowType>
-            <RowText>{row.amount}</RowText>
-            <RowText>{row.status}</RowText>
-            <RowText>{row.date}</RowText>
-            <RowText>{row.exchangeRate}</RowText>
-            <RowTransaction>{row.transaction}</RowTransaction>
-          </OrderRow>
-        ))}
       </TableWrapper>
     </Wrapper>
   );
