@@ -28,6 +28,7 @@ import { convertCBDCToCurrency, getCurrencyPriceUSD, getExchangeRate } from '~/u
 import { formatNumber, weightedAverage } from '~/utils/number';
 
 import { ChangeCurrency } from './components/change-currency';
+import { PopupSuccess } from '~/components/popups/confirm-popup';
 
 const TradePage = () => {
   const { wallet } = useConnectWallet();
@@ -86,6 +87,12 @@ const TradePage = () => {
     close: _currencyClose,
   } = usePopup(POPUP_ID.CURRENCY);
 
+  const {
+    open: confirmOpen,
+    opened: confirmOpened,
+    close: _confirmClose,
+  } = usePopup(POPUP_ID.CONFIRM);
+
   const handleWithdraw = async () => {
     if (ustbAmount === 0) return;
 
@@ -101,6 +108,7 @@ const TradePage = () => {
         )
       ).toFixed(4)
     );
+    confirmOpen();
     setLoading(false);
   };
 
@@ -316,6 +324,7 @@ const TradePage = () => {
           contents={<ChangeCurrency />}
         />
       )}
+      {confirmOpened && <PopupSuccess id={POPUP_ID.CONFIRM} />}
     </>
   );
 };

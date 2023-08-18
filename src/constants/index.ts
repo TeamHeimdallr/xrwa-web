@@ -82,6 +82,7 @@ export const XRPL_WALLET_KEY = 'xrpl-wallet';
 export const POPUP_ID = {
   CONNECT: 'CONNECT',
   CURRENCY: 'CURRENCY',
+  CONFIRM: 'CONFIRM',
 };
 
 /**
