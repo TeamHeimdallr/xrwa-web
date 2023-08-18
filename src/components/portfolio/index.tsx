@@ -1,7 +1,11 @@
+/* eslint-disable react/no-unescaped-entities */
 import { css } from '@emotion/react';
+import { useRef } from 'react';
 import tw, { styled } from 'twin.macro';
+import { useHover } from 'usehooks-ts';
 
 import { ButtonPrimary } from '../buttons/button-primary';
+import { IconInfo } from '../icons';
 
 const rows = [
   {
@@ -42,6 +46,12 @@ const rows = [
   },
 ];
 export const Portfolio = () => {
+  const principalHoverRef = useRef(null);
+  const isPrincipalHover = useHover(principalHoverRef);
+
+  const marketValueHoverRef = useRef(null);
+  const isMarketValueHover = useHover(marketValueHoverRef);
+
   return (
     <Wrapper>
       <PositionLabel>Portfolio</PositionLabel>
@@ -51,8 +61,25 @@ export const Portfolio = () => {
           <HeaderCusip>CUSIP</HeaderCusip>
           <HeaderMaturity>Maturity Date</HeaderMaturity>
           <HeaderYtm>YTM</HeaderYtm>
-          <HeaderPrincipalAmount>Principal Amount</HeaderPrincipalAmount>
-          <HeaderMarketValue>Market Value</HeaderMarketValue>
+          <HeaderPrincipalAmount>
+            Principal Amount
+            <IconWrapper ref={principalHoverRef}>
+              <IconInfo />
+              <TooltipPrincipal isHovered={isPrincipalHover}>
+                Principal Amount is the redemption price repaid to the bondholder at maturity.
+              </TooltipPrincipal>
+            </IconWrapper>
+          </HeaderPrincipalAmount>
+          <HeaderMarketValue>
+            Market Value
+            <IconWrapper ref={marketValueHoverRef}>
+              <IconInfo />
+              <TooltipMarketValue isHovered={isMarketValueHover}>
+                All market values are estimated based on the "last price" provided by Swissquote
+                Bank as of their market close recorded at 18:00 UTC+2 of the previous business day.
+              </TooltipMarketValue>
+            </IconWrapper>
+          </HeaderMarketValue>
         </OrderHeader>
         <Divider />
         {rows.length == 0 && (
@@ -98,10 +125,6 @@ const OrderHeader = tw.div`
   w-full flex gap-8
 `;
 
-const HeaderText = tw.div`
-  font-r-14 w-145 text-gray4 text-center
-`;
-
 const HeaderIssuer = tw.div`
     font-r-14 w-230 text-gray4 text-center
 `;
@@ -115,11 +138,42 @@ const HeaderYtm = tw.div`
     font-r-14 w-80 text-gray4 text-center
 `;
 const HeaderPrincipalAmount = tw.div`
-    font-r-14 w-161 text-gray4 text-center
+    font-r-14 w-161 text-gray4 text-center flex-center gap-4
 `;
 const HeaderMarketValue = tw.div`
-    font-r-14 w-161 text-gray4 text-center
+    font-r-14 w-161 text-gray4 text-center flex-center gap-4
 `;
+
+const IconWrapper = tw.div`
+  flex-center clickable relative
+`;
+
+interface TooltipProps {
+  isHovered: boolean;
+}
+
+const TooltipPrincipal = styled.div<TooltipProps>(({ isHovered }) => [
+  tw`
+    w-268 absolute top-16 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-gray2
+    text-11 leading-16
+`,
+  css`
+    box-shadow: 0px 4px 16px 0px #00000033;
+  `,
+
+  !isHovered && tw`hidden`,
+]);
+
+const TooltipMarketValue = styled.div<TooltipProps>(({ isHovered }) => [
+  tw`
+      w-400 h-80 absolute top-16 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-gray2
+      text-11 leading-16
+  `,
+  css`
+    box-shadow: 0px 4px 16px 0px #00000033;
+  `,
+  !isHovered && tw`hidden`,
+]);
 
 const Divider = tw.div`
   w-full h-1 flex-shrink-0 bg-gray1
