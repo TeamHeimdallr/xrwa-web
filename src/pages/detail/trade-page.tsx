@@ -54,10 +54,14 @@ const TradePage = () => {
     if (price) {
       setUstbPrice(price);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallet, selected, currencySelected, loading]);
+
+  useEffect(() => {
     setCbdcAmount(0);
     setUstbAmount(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wallet, selected, currencySelected, loading]);
+  }, [wallet, selected, currencySelected]);
 
   const handleDeposit = async () => {
     if (cbdcAmount === 0) return;
