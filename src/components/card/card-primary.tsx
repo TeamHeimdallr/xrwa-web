@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import { HtmlHTMLAttributes } from 'react';
+import { HTMLAttributes } from 'react';
 import tw, { styled } from 'twin.macro';
 
 import { formatNumber } from '~/utils/number';
 
-interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   icon?: React.ReactNode;
   title: string;
   contents: number;
@@ -26,7 +26,7 @@ export const CardPrimary = ({ icon, title, contents, cardType, ...rest }: Props)
 };
 
 const Wrapper = styled.div(() => [
-  tw`flex flex-col w-full gap-20 px-24 py-20 bg-white rounded-20`,
+  tw`flex flex-col flex-grow flex-shrink-0 gap-20 px-24 py-20 bg-white rounded-20`,
 
   css`
     box-shadow: 0px 12px 32px 0px #3358ff14;

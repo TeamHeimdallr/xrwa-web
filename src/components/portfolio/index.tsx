@@ -61,7 +61,7 @@ export const Portfolio = () => {
         {portfolioData.map(row => (
           <OrderRow key={row.id}>
             <RowIssuer>{row.issuer}</RowIssuer>
-            <RowCusip>{row.cusip}</RowCusip>
+            <RowCusip onClick={() => window.open(row.link)}>{row.cusip}</RowCusip>
             <RowMaturity>{row.maturityDate}</RowMaturity>
             <RowYtm>{row.ytm}</RowYtm>
             <RowPrincipalAmount>{row.principalAmount}</RowPrincipalAmount>
@@ -118,10 +118,7 @@ interface TooltipProps {
 }
 
 const TooltipPrincipal = styled.div<TooltipProps>(({ isHovered }) => [
-  tw`
-    min-w-268 absolute top-24 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-white
-    text-start text-11 leading-16
-`,
+  tw`absolute gap-4 px-12 pt-12 pb-16 text-white min-w-268 top-24 bg-gray4 rounded-8 text-start text-11 leading-16`,
   css`
     box-shadow: 0px 4px 16px 0px #00000033;
   `,
@@ -130,10 +127,7 @@ const TooltipPrincipal = styled.div<TooltipProps>(({ isHovered }) => [
 ]);
 
 const TooltipMarketValue = styled.div<TooltipProps>(({ isHovered }) => [
-  tw`
-    min-w-268 absolute top-24 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-white
-    text-start text-11 leading-16
-  `,
+  tw`absolute gap-4 px-12 pt-12 pb-16 text-white min-w-268 top-24 bg-gray4 rounded-8 text-start text-11 leading-16`,
   css`
     box-shadow: 0px 4px 16px 0px #00000033;
   `,
@@ -141,9 +135,7 @@ const TooltipMarketValue = styled.div<TooltipProps>(({ isHovered }) => [
 ]);
 
 const BubblePolygon = styled.div(() => [
-  tw`
-    border-b-gray4
-    `,
+  tw` border-b-gray4`,
   css`
     content: '';
     position: absolute;
@@ -171,7 +163,7 @@ const RowIssuer = tw.div`
   font-b-14 w-230 text-black text-center
 `;
 const RowCusip = tw.div`
-  font-r-14 w-140 text-black text-center
+  font-r-14 w-140 text-black text-center clickable
 `;
 const RowMaturity = tw.div`
   font-r-14 w-100 text-black text-center

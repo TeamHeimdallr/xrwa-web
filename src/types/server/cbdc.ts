@@ -4,7 +4,7 @@ export type DepositWithdrawType = 'deposit' | 'withdraw';
 export interface DepositWithdraw {
   id: number;
 
-  type: DepositWithdrawStatus;
+  type: DepositWithdrawType;
 
   account: string;
   destination: string;
@@ -12,7 +12,7 @@ export interface DepositWithdraw {
   amount: string;
   currency: string;
 
-  status: DepositWithdrawType;
+  status: DepositWithdrawStatus;
 
   date: Date;
   unlockDate: Date;

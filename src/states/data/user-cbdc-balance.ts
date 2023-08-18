@@ -11,9 +11,11 @@ interface CBDCBalance {
 interface UserCBDCBalanceState {
   cbdcBalance: CBDCBalance;
   usdBalance: number;
+  ustBalance: number;
 
   setCBDCBalance: (cbdcBalance: CBDCBalance) => void;
   setUSDBalance: (useBalance: number) => void;
+  setUSTBalance: (ustBalance: number) => void;
   reset: () => void;
 }
 
@@ -27,9 +29,11 @@ export const useCBDCBalanceStore = create<UserCBDCBalanceState>()(
         KRW: 0,
       },
       usdBalance: 0,
+      ustBalance: 0,
 
       setCBDCBalance: (cbdcBalance: CBDCBalance) => set(() => ({ cbdcBalance })),
       setUSDBalance: (usdBalance: number) => set(() => ({ usdBalance })),
+      setUSTBalance: (ustBalance: number) => set(() => ({ ustBalance })),
 
       reset: () =>
         set(() => ({
