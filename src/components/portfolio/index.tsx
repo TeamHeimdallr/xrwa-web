@@ -64,7 +64,7 @@ export const Portfolio = () => {
           <HeaderPrincipalAmount>
             Principal Amount
             <IconWrapper ref={principalHoverRef}>
-              <IconInfo />
+              <IconInfo width={16} height={16} />
               <TooltipPrincipal isHovered={isPrincipalHover}>
                 Principal Amount is the redemption price repaid to the bondholder at maturity.
                 <BubblePolygon />
@@ -74,7 +74,7 @@ export const Portfolio = () => {
           <HeaderMarketValue>
             Market Value
             <IconWrapper ref={marketValueHoverRef}>
-              <IconInfo />
+              <IconInfo width={16} height={16} />
               <TooltipMarketValue isHovered={isMarketValueHover}>
                 All market values are estimated based on the "last price" provided by Swissquote
                 Bank as of their market close recorded at 18:00 UTC+2 of the previous business day.
