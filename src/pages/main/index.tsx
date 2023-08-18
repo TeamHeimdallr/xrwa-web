@@ -1,8 +1,5 @@
 import tw from 'twin.macro';
 
-import { useBalance } from '~/api/xrpl/balance';
-import { useFaucetCBDC } from '~/api/xrpl/cbdc-faucet';
-import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import LogoBitcoin from '~/assets/images/logo-bitcoin.png';
 import LogoUstb from '~/assets/images/logo-ustb.png';
 import { CardDeal } from '~/components/card/card-deal';
