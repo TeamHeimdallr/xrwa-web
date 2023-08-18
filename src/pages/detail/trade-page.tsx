@@ -32,12 +32,16 @@ const TradePage = () => {
   const [cbdcAmount, setCbdcAmount] = useState(0);
   const [ustbAmount, setUstbAmount] = useState(0);
   const [balances, setBalances] = useState<AccountLinesTrustline[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const { depositCBDC } = useDepositCBDC();
   const { depositUSTB } = useDepositUSTB();
   const { getBalance } = useBalance();
 
   const handleDeposit = async () => {
+    if (cbdcAmount === 0) return;
+
+    setLoading(true);
     await depositCBDC(currencySelected as TOKEN, cbdcAmount.toString());
     await depositUSTB(
       (
@@ -51,6 +55,7 @@ const TradePage = () => {
         ) / 10000
       ).toString()
     );
+    setLoading(false);
   };
 
   const {
@@ -66,7 +71,7 @@ const TradePage = () => {
         setBalances(lines);
       });
     }
-  }, [wallet, selected, currencySelected]);
+  }, [wallet, selected, currencySelected, loading]);
 
   return (
     <>
@@ -210,7 +215,7 @@ const TradePage = () => {
             <ButtonPrimary
               onClick={() => handleDeposit()}
               text="Deposit"
-              isLoading={false}
+              isLoading={loading}
               buttonType="large"
             />
           ) : (
