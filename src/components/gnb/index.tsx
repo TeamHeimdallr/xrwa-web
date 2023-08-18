@@ -10,6 +10,7 @@ import { useFaucetCBDC } from '~/api/xrpl/cbdc-faucet';
 import { useConnectWallet } from '~/api/xrpl/connect-wallet';
 import { COLOR } from '~/assets/colors';
 import textLogo from '~/assets/images/logo-text.png';
+import imgLogo from '~/assets/images/logo-img.png';
 import loading from '~/assets/lottie/loading-dot-black.json';
 import { POPUP_ID } from '~/constants';
 import { usePopup } from '~/hooks/pages/use-popup';
@@ -79,6 +80,7 @@ export const Gnb = () => {
     <>
       <Wrapper>
         <LogoWrapper onClick={() => navigate('/')}>
+          <ImgLogo src={imgLogo} alt="img-logo" />
           <TextLogo src={textLogo} alt="text-logo" />
         </LogoWrapper>
         <HeaderWrapper>
@@ -131,10 +133,13 @@ const Wrapper = tw.header`
   py-24 px-20
 `;
 const LogoWrapper = tw.div`
-  flex clickable
+  flex clickable items-center gap-12
 `;
 const TextLogo = tw.img`
   w-96 h-22
+`;
+const ImgLogo = tw.img`
+  w-40 h-40
 `;
 
 const HeaderWrapper = tw.div`
