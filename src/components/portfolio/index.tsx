@@ -67,6 +67,7 @@ export const Portfolio = () => {
               <IconInfo />
               <TooltipPrincipal isHovered={isPrincipalHover}>
                 Principal Amount is the redemption price repaid to the bondholder at maturity.
+                <BubblePolygon />
               </TooltipPrincipal>
             </IconWrapper>
           </HeaderPrincipalAmount>
@@ -77,6 +78,7 @@ export const Portfolio = () => {
               <TooltipMarketValue isHovered={isMarketValueHover}>
                 All market values are estimated based on the "last price" provided by Swissquote
                 Bank as of their market close recorded at 18:00 UTC+2 of the previous business day.
+                <BubblePolygon />
               </TooltipMarketValue>
             </IconWrapper>
           </HeaderMarketValue>
@@ -154,8 +156,8 @@ interface TooltipProps {
 
 const TooltipPrincipal = styled.div<TooltipProps>(({ isHovered }) => [
   tw`
-    min-w-268 absolute top-16 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-gray2
-    text-11 leading-16
+    min-w-268 absolute top-24 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-white
+    text-start text-11 leading-16
 `,
   css`
     box-shadow: 0px 4px 16px 0px #00000033;
@@ -166,13 +168,32 @@ const TooltipPrincipal = styled.div<TooltipProps>(({ isHovered }) => [
 
 const TooltipMarketValue = styled.div<TooltipProps>(({ isHovered }) => [
   tw`
-    min-w-268 absolute top-16 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-gray2
-      text-11 leading-16
+    min-w-268 absolute top-24 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-white
+    text-start text-11 leading-16
   `,
   css`
     box-shadow: 0px 4px 16px 0px #00000033;
   `,
   !isHovered && tw`hidden`,
+]);
+
+const BubblePolygon = styled.div(() => [
+  tw`
+    border-b-gray4 
+    `,
+  css`
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-bottom-color: #313d65;
+    border-top: 0;
+    margin-left: -8px;
+    margin-top: -8px;
+  `,
 ]);
 
 const Divider = tw.div`
