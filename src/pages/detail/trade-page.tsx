@@ -19,15 +19,19 @@ import { convertCBDCToCurrency, getExchangeRate } from '~/utils/currency';
 import { ChangeCurrency } from './components/change-currency';
 import { useState } from 'react';
 import { useDepositCBDC } from '~/api/xrpl/cbdc-deposit';
+import { useDepositUSTB } from '~/api/xrpl/ustb-deposit';
 
 const TradePage = () => {
   const { selected, select } = useTradeState();
   const { selected: currencySelected } = useSelectedTokenState();
   const [cbdcAmount, setCbdcAmount] = useState(0);
   const { depositCBDC } = useDepositCBDC();
+  const { depositUSTB } = useDepositUSTB();
+  const price = 0.9; // TODO: get price from API
 
   const handleDeposit = async () => {
     await depositCBDC(currencySelected as TOKEN, cbdcAmount.toString());
+    await depositUSTB((Math.floor(cbdcAmount * price) / 100).toString());
   };
 
   const {

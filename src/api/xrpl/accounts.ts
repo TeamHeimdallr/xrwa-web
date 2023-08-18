@@ -5,6 +5,7 @@ import {
   ENA_WALLET_SEED,
   KRW_WALLET_SEED,
   USTB_MASTER_WALLET_SEED,
+  USTB_MINTER_SEED,
 } from '~/constants';
 import { useXrplStore } from '~/states/data/xrpl';
 
@@ -13,6 +14,7 @@ export const useAccounts = () => {
   const enaWallet = xrpl.Wallet.fromSeed(ENA_WALLET_SEED);
   const krwWallet = xrpl.Wallet.fromSeed(KRW_WALLET_SEED);
   const ustbWallet = xrpl.Wallet.fromSeed(USTB_MASTER_WALLET_SEED);
+  const ustbMinterWallet = xrpl.Wallet.fromSeed(USTB_MINTER_SEED);
 
   const { client, isConnected } = useXrplStore();
 
@@ -66,6 +68,7 @@ export const useAccounts = () => {
     enaWallet,
     krwWallet,
     ustbWallet,
+    ustbMinterWallet,
     getAccountTx,
     getAccountInfo,
   };

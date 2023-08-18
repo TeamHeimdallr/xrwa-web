@@ -1,38 +1,46 @@
 import * as xrpl from 'xrpl';
 
 import { useXrplStore } from '~/states/data/xrpl';
+
 import { useAccounts } from './accounts';
+import { useConnectWallet } from './connect-wallet';
 
 /**
- * @description USTB 를 생성하는 hook. 단 한번만 호출하면 됨.
+ * @description USTB 를 user wallet 으로 transfer 하는 hook. (deposit 시에 사용)
  */
-export const useCreateUSTB = () => {
-  const { client } = useXrplStore();
+export const useDepositUSTB = () => {
+  const { client, isConnected } = useXrplStore();
+  const { wallet } = useConnectWallet();
   const { ustbWallet, ustbMinterWallet } = useAccounts();
 
-  const createUSTB = async (amount: string) => {
-    if (Number(amount) == 0) return;
+  const depositUSTB = async (amount: string) => {
+    if (!isConnected || !wallet) return;
 
-    const settingsTx: xrpl.AccountSet = {
-      TransactionType: 'AccountSet',
-      Account: ustbMinterWallet.address,
-      TransferRate: 0,
-      TickSize: 5,
-      Domain: '787261772E776F726C64', // xrwa.world
-      SetFlag: xrpl.AccountSetAsfFlags.asfDefaultRipple,
-      Flags: xrpl.AccountSetTfFlags.tfDisallowXRP | xrpl.AccountSetTfFlags.tfRequireDestTag,
-    };
+    //// user wallet prepare
+    const {
+      result: { account_data: accountData },
+    } = await client.request({ command: 'account_info', account: wallet.address });
 
-    const prepared = await client.autofill<xrpl.AccountSet>(settingsTx);
-    const signed = ustbMinterWallet.sign(prepared);
-    const result = await client.submitAndWait(signed.tx_blob);
+    if (accountData?.Flags === 0) {
+      const settingsTx: xrpl.AccountSet = {
+        TransactionType: 'AccountSet',
+        Account: wallet.address,
+        Domain: '787261772E776F726C64', // xrwa.world
+        SetFlag: xrpl.AccountSetAsfFlags.asfRequireAuth,
+        Flags: xrpl.AccountSetTfFlags.tfDisallowXRP | xrpl.AccountSetTfFlags.tfRequireDestTag,
+      };
 
-    const txMeta = result?.result?.meta;
-    if (typeof txMeta !== 'object' || txMeta?.TransactionResult !== 'tesSUCCESS') {
-      throw `Error sending transaction: ${result}`;
+      const prepared = await client.autofill<xrpl.AccountSet>(settingsTx);
+      const signed = wallet.sign(prepared);
+      console.log('sending AccountSet transaction...');
+      const result = await client.submitAndWait(signed.tx_blob);
+
+      const txMeta = result?.result?.meta;
+      if (typeof txMeta !== 'object' || txMeta?.TransactionResult !== 'tesSUCCESS') {
+        throw `Error sending transaction: ${result}`;
+      }
+      console.log(`AccountSet completed - https://testnet.xrpl.org/transactions/${signed.hash}`);
     }
-
-    console.log(`Transaction completed - https://testnet.xrpl.org/transactions/${signed.hash}`);
 
     //// ustb wallet prepare
     const {
@@ -63,29 +71,29 @@ export const useCreateUSTB = () => {
     //// trust line prepare
     const {
       result: { lines },
-    } = await client.request({ command: 'account_lines', account: ustbWallet.address });
+    } = await client.request({ command: 'account_lines', account: wallet.address });
 
     const trustline = lines.find(line => line.currency === 'UST');
-
     if (
       trustline === undefined ||
       Number(trustline?.limit) < Number(trustline?.balance) + Number(amount)
     ) {
       const trustSetTx: xrpl.TrustSet = {
         TransactionType: 'TrustSet',
-        Account: ustbWallet.address,
+        Account: wallet.address,
         LimitAmount: {
           currency: 'UST',
           issuer: ustbMinterWallet.address,
           value:
             trustline === undefined
               ? '100000000'
-              : (100 * (Number(trustline?.balance) + Number(amount))).toString(),
+              : (10 * (Number(trustline?.balance) + Number(amount))).toString(),
         },
+        Flags: xrpl.TrustSetFlags.tfSetNoRipple,
       };
 
       const tsPrepared = await client.autofill<xrpl.TrustSet>(trustSetTx);
-      const tsSigned = ustbWallet.sign(tsPrepared);
+      const tsSigned = wallet.sign(tsPrepared);
       console.log('Creating trust line from hot address to issuer...');
       const tsResult = await client.submitAndWait(tsSigned.tx_blob);
 
@@ -97,22 +105,21 @@ export const useCreateUSTB = () => {
     }
 
     //// send token
-    const issueQuantity = amount;
     const sendTokenTx: xrpl.Payment = {
       TransactionType: 'Payment',
-      Account: ustbMinterWallet.address,
+      Account: ustbWallet.address,
       Amount: {
         currency: 'UST',
-        value: issueQuantity,
+        value: amount,
         issuer: ustbMinterWallet.address,
       },
-      Destination: ustbWallet.address,
+      Destination: wallet.address,
       DestinationTag: 1,
     };
 
     const payPrepared = await client.autofill(sendTokenTx);
-    const paySigned = ustbMinterWallet.sign(payPrepared);
-    console.log(`Sending ${issueQuantity} UST to ${ustbWallet.address}...`);
+    const paySigned = ustbWallet.sign(payPrepared);
+    console.log(`Sending ${amount} UST to ${ustbWallet.address}...`);
     const payResult = await client.submitAndWait(paySigned.tx_blob);
 
     const payTxMeta = payResult?.result?.meta;
@@ -122,5 +129,5 @@ export const useCreateUSTB = () => {
     console.log(`Transaction completed - https://testnet.xrpl.org/transactions/${paySigned.hash}`);
   };
 
-  return { createUSTB };
+  return { depositUSTB };
 };
