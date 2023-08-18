@@ -102,5 +102,6 @@ export const ENA_WALLET_SEED = import.meta.env.VITE_ENA_WALLET_SEED;
 export const KRW_WALLET_SEED = import.meta.env.VITE_KRW_WALLET_SEED;
 
 export const USTB_MASTER_WALLET_SEED = import.meta.env.VITE_USTB_MASTER_WALLET_SEED;
+export const USTB_MINTER_SEED = import.meta.env.VITE_USTB_MINTER_SEED;
 
 export const TOKEN_LIST = ['BSD', 'ENA', 'KRW', 'USTB'];

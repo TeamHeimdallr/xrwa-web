@@ -68,24 +68,29 @@ export const useFaucetCBDC = () => {
     }
 
     //// wallet prepare
-    const settingsTx: xrpl.AccountSet = {
-      TransactionType: 'AccountSet',
-      Account: wallet.address,
-      Domain: '787261772E776F726C64', // xrwa.world
-      SetFlag: xrpl.AccountSetAsfFlags.asfRequireAuth,
-      Flags: xrpl.AccountSetTfFlags.tfDisallowXRP | xrpl.AccountSetTfFlags.tfRequireDestTag,
-    };
+    const {
+      result: { account_data: accountData },
+    } = await client.request({ command: 'account_info', account: wallet.address });
 
-    const prepared = await client.autofill<xrpl.AccountSet>(settingsTx);
-    const signed = wallet.sign(prepared);
-    console.log('sending AccountSet transaction...');
-    const result = await client.submitAndWait(signed.tx_blob);
+    if (accountData?.Flags === 0) {
+      const settingsTx: xrpl.AccountSet = {
+        TransactionType: 'AccountSet',
+        Account: wallet.address,
+        Domain: '787261772E776F726C64', // xrwa.world
+        Flags: xrpl.AccountSetTfFlags.tfDisallowXRP | xrpl.AccountSetTfFlags.tfRequireDestTag,
+      };
 
-    const txMeta = result?.result?.meta;
-    if (typeof txMeta !== 'object' || txMeta?.TransactionResult !== 'tesSUCCESS') {
-      throw `Error sending transaction: ${result}`;
+      const prepared = await client.autofill<xrpl.AccountSet>(settingsTx);
+      const signed = wallet.sign(prepared);
+      console.log('sending AccountSet transaction...');
+      const result = await client.submitAndWait(signed.tx_blob);
+
+      const txMeta = result?.result?.meta;
+      if (typeof txMeta !== 'object' || txMeta?.TransactionResult !== 'tesSUCCESS') {
+        throw `Error sending transaction: ${result}`;
+      }
+      console.log(`AccountSet completed - https://testnet.xrpl.org/transactions/${signed.hash}`);
     }
-    console.log(`AccountSet completed - https://testnet.xrpl.org/transactions/${signed.hash}`);
 
     //// trust line prepare
     const trustSetTx: xrpl.TrustSet = {
@@ -94,7 +99,7 @@ export const useFaucetCBDC = () => {
       LimitAmount: {
         currency: currencyCode,
         issuer: cbdcWallet.address,
-        value: '10000',
+        value: '10000000',
       },
     };
 
