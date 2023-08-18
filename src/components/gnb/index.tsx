@@ -157,7 +157,7 @@ interface ConnectedWrapperProps {
   dropdownOpended: boolean;
 }
 const ConnectedWrapper = styled.div<ConnectedWrapperProps>(({ dropdownOpended }) => [
-  tw`relative flex flex-col items-center gap-12 px-24 py-10 border-solid h-42 w-148 clickable rounded-8 border-1 border-blue text-blue bg-blue/5`,
+  tw`relative flex flex-col gap-12 px-24 py-10 border-solid flex-center h-42 w-148 clickable rounded-8 border-1 border-blue text-blue bg-blue/5`,
   dropdownOpended && tw`text-white bg-gray4 border-gray4 rounded-b-0`,
 ]);
 

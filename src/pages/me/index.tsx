@@ -8,8 +8,9 @@ import LogoBsd from '~/assets/images/logo-bahama.png';
 import LogoKrw from '~/assets/images/logo-krw.png';
 import LogoEna from '~/assets/images/logo-nigeria.png';
 import { CardPrimary } from '~/components/card/card-primary';
+import { CardPrimaryWide } from '~/components/card/card-primary-wide';
 import { Gnb } from '~/components/gnb';
-import { IconLocked, IconTotal, IconWithdraw } from '~/components/icons';
+import { IconTotal, IconUstb, IconWithdraw } from '~/components/icons';
 import Table from '~/components/table';
 import { useXrplStore } from '~/states/data/xrpl';
 import { getCurrencyPriceUSD } from '~/utils/currency';
@@ -18,7 +19,7 @@ import { formatNumberWithComma } from '~/utils/number';
 const MyPage = () => {
   const { isConnected } = useXrplStore();
   const { wallet } = useConnectWallet();
-  const { getCBDCBalance, cbdcBalance, usdBalance } = useBalance();
+  const { getCBDCBalance, getUstBalance, cbdcBalance, usdBalance, ustBalance } = useBalance();
 
   const { data } = useGetWithdrawBalancesQuery(
     { account: wallet?.address ?? '' },
@@ -30,16 +31,12 @@ const MyPage = () => {
       (acc, cur) => acc + getCurrencyPriceUSD(cur.currency) * cur.amount,
       0
     ) ?? 0;
-  const withdrawnsUsd =
-    data?.data.withdrawns?.reduce(
-      (acc, cur) => acc + getCurrencyPriceUSD(cur.currency) * cur.amount,
-      0
-    ) ?? 0;
 
   useEffect(() => {
     if (!isConnected || !wallet) return;
 
     getCBDCBalance();
+    getUstBalance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, wallet]);
 
@@ -80,22 +77,25 @@ const MyPage = () => {
           <DashBoardTitle>Portfolio</DashBoardTitle>
           <DashBoardCardWrapper>
             <CardPrimary
+              style={{ width: '304px' }}
               icon={<IconTotal />}
               title="Total Balance in USD"
               contents={usdBalance}
               cardType="value"
             />
-            <CardPrimary
-              icon={<IconLocked />}
-              title="Unlocked Balance in USD"
-              contents={withdrawnsUsd}
-              cardType="value"
-            />
-            <CardPrimary
-              icon={<IconWithdraw />}
-              title="Withdrawing Balance in USD"
-              contents={withdrawingsUsd}
-              cardType="value"
+            <CardPrimaryWide
+              data={[
+                {
+                  icon: <IconUstb width={20} height={20} />,
+                  title: 'Total Balance in UST',
+                  contents: ustBalance,
+                },
+                {
+                  icon: <IconWithdraw />,
+                  title: 'Withdrawing Balance in USD',
+                  contents: withdrawingsUsd,
+                },
+              ]}
             />
           </DashBoardCardWrapper>
         </DashBoardWrapper>

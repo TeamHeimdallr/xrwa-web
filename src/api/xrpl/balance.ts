@@ -13,7 +13,8 @@ export const useBalance = () => {
   const { ustbWallet } = useAccounts();
 
   const { wallet } = useConnectWallet();
-  const { cbdcBalance, usdBalance, setCBDCBalance, setUSDBalance } = useCBDCBalanceStore();
+  const { cbdcBalance, usdBalance, ustBalance, setCBDCBalance, setUSDBalance, setUSTBalance } =
+    useCBDCBalanceStore();
 
   const getBalance = async (address: string, hotWallet?: string[]) => {
     if (!isConnected) return;
@@ -33,6 +34,22 @@ export const useBalance = () => {
 
     const balances = await client.request(req);
     return balances;
+  };
+
+  const getUstBalance = async () => {
+    if (!isConnected || !wallet) return;
+
+    const res = (await getBalance(wallet.address)) as AccountLinesResponse;
+    if (!res) return;
+
+    const {
+      result: { lines },
+    } = res;
+
+    const ustBalance = Number(lines.find(line => line.currency === 'UST')?.balance ?? 0);
+    const price = getCurrencyPriceUSD('USTB');
+
+    setUSTBalance(ustBalance * price);
   };
 
   const getCBDCBalance = async () => {
@@ -91,7 +108,9 @@ export const useBalance = () => {
     getBalance,
     getCBDCBalance,
     getCBDCBalanceForUstbWallet,
+    getUstBalance,
     cbdcBalance,
     usdBalance,
+    ustBalance,
   };
 };
