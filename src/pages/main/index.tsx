@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import tw from 'twin.macro';
-import { useBalance } from '~/api/xrpl/balance';
 
+import { useBalance } from '~/api/xrpl/balance';
 import LogoBitcoin from '~/assets/images/logo-bitcoin.png';
 import LogoUstb from '~/assets/images/logo-ustb.png';
 import { CardDeal } from '~/components/card/card-deal';
@@ -17,6 +17,7 @@ const MainPage = () => {
 
   useEffect(() => {
     getCBDCBalanceForUstbWallet().then(res => setCbdcBalance(res ?? 0));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
