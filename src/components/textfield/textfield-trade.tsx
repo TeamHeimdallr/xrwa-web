@@ -25,6 +25,7 @@ export const TextFieldTrade = ({
   value,
   handleChange,
   handleClick,
+  disabled,
 }: Props) => {
   const CustomInput = useCallback(({ ...rest }: Props) => <Input {...rest} />, []);
 
@@ -32,6 +33,7 @@ export const TextFieldTrade = ({
     <Wrapper>
       <InputWrapper>
         <NumericFormat
+          disabled={disabled}
           allowLeadingZeros={false}
           allowNegative={false}
           placeholder={placeholder}
@@ -97,7 +99,7 @@ const CurrencyName = tw.div`
 `;
 
 const IconWrapper = tw.div`
-  w-24 h-24 flex-center 
+  w-24 h-24 flex-center
 `;
 
 const CaptionWrapper = tw.div`
