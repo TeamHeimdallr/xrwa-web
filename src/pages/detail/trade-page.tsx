@@ -17,21 +17,40 @@ import { TOKEN, TRADE_OPTIONS } from '~/types';
 import { convertCBDCToCurrency, getExchangeRate } from '~/utils/currency';
 
 import { ChangeCurrency } from './components/change-currency';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDepositCBDC } from '~/api/xrpl/cbdc-deposit';
 import { useDepositUSTB } from '~/api/xrpl/ustb-deposit';
+import { useBalance } from '~/api/xrpl/balance';
+import { useConnectWallet } from '~/api/xrpl/connect-wallet';
+import { AccountLinesResponse, AccountLinesTrustline } from 'xrpl';
+import { formatNumber } from '~/utils/number';
 
 const TradePage = () => {
+  const { wallet } = useConnectWallet();
   const { selected, select } = useTradeState();
   const { selected: currencySelected } = useSelectedTokenState();
   const [cbdcAmount, setCbdcAmount] = useState(0);
+  const [ustbAmount, setUstbAmount] = useState(0);
+  const [balances, setBalances] = useState<AccountLinesTrustline[]>([]);
+
   const { depositCBDC } = useDepositCBDC();
   const { depositUSTB } = useDepositUSTB();
-  const price = 0.9; // TODO: get price from API
+  const { getBalance } = useBalance();
 
   const handleDeposit = async () => {
     await depositCBDC(currencySelected as TOKEN, cbdcAmount.toString());
-    await depositUSTB((Math.floor(cbdcAmount * price) / 100).toString());
+    await depositUSTB(
+      (
+        Math.floor(
+          10000 *
+            cbdcAmount *
+            getExchangeRate(
+              { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
+              { currency: 'USTB', amount: 1 }
+            )
+        ) / 10000
+      ).toString()
+    );
   };
 
   const {
@@ -39,6 +58,15 @@ const TradePage = () => {
     opened: currencyOpened,
     close: _currencyClose,
   } = usePopup(POPUP_ID.CURRENCY);
+
+  useEffect(() => {
+    if (wallet) {
+      getBalance(wallet.address).then(res => {
+        const lines = (res as AccountLinesResponse)?.result.lines;
+        setBalances(lines);
+      });
+    }
+  }, [wallet, selected, currencySelected]);
 
   return (
     <>
@@ -92,7 +120,11 @@ const TradePage = () => {
               {selected === TRADE_OPTIONS.DEPOSIT ? (
                 <>
                   <TextFieldTrade
-                    amount="100000"
+                    amount={
+                      balances.length === 0
+                        ? '0'
+                        : balances.find(b => b.currency === currencySelected)?.balance ?? '0'
+                    }
                     placeholder="0.0"
                     currency={currencySelected}
                     selectable={true}
@@ -100,21 +132,48 @@ const TradePage = () => {
                     handleClick={currencyOpen}
                   />
                   <TextFieldTrade
-                    placeholder="0.0"
+                    amount={
+                      balances.length === 0
+                        ? '0'
+                        : balances.find(b => b.currency === 'UST')?.balance ?? '0'
+                    }
+                    placeholder={(
+                      cbdcAmount *
+                      getExchangeRate(
+                        { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
+                        { currency: 'USTB', amount: 1 }
+                      )
+                    ).toString()}
                     currency="USTB"
+                    disabled={true}
                     handleChange={e => console.log(e)}
                   />
                 </>
               ) : (
                 <>
                   <TextFieldTrade
+                    amount={
+                      balances.length === 0
+                        ? '0'
+                        : balances.find(b => b.currency === 'UST')?.balance ?? '0'
+                    }
                     placeholder="0.0"
                     currency="USTB"
-                    handleChange={e => console.log(e)}
+                    handleChange={e => setUstbAmount(e.floatValue ?? 0)}
                   />
                   <TextFieldTrade
-                    amount="100000"
-                    placeholder="0.0"
+                    amount={
+                      balances.length === 0
+                        ? '0'
+                        : balances.find(b => b.currency === currencySelected)?.balance ?? '0'
+                    }
+                    placeholder={(
+                      ustbAmount *
+                      getExchangeRate(
+                        { currency: 'USTB', amount: 1 },
+                        { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 }
+                      )
+                    ).toString()}
                     currency={currencySelected}
                     selectable={true}
                     handleChange={e => console.log(e)}
@@ -129,10 +188,21 @@ const TradePage = () => {
             <RateWrapper>
               <RateText>Rate</RateText>
               <RateValue>
-                {`1${currencySelected}= ${getExchangeRate(
-                  { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
-                  { currency: 'USTB', amount: 1 }
-                )}USTB`}
+                {selected === TRADE_OPTIONS.DEPOSIT
+                  ? `1USTB= ${formatNumber(
+                      getExchangeRate(
+                        { currency: 'USTB', amount: 1 },
+                        { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 }
+                      ),
+                      6
+                    )}${currencySelected}`
+                  : `1${currencySelected}= ${formatNumber(
+                      getExchangeRate(
+                        { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
+                        { currency: 'USTB', amount: 1 }
+                      ),
+                      6
+                    )}USTB`}
               </RateValue>
             </RateWrapper>
           </InputWrapper>

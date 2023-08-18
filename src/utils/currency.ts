@@ -1,8 +1,6 @@
 import { exchangeRate } from '~/data/exchange-rate';
 import { TOKEN } from '~/types';
 
-import { formatNumber } from './number';
-
 // 1 currency = ? USD
 export const getCurrencyPriceUSD = (currency: string) => {
   const currencyPrice = exchangeRate.conversion_rates[currency];
@@ -24,7 +22,7 @@ export const getExchangeRate = (currencyPrice1: CurrencyPrice, currencyPrice2: C
 
   if (totalUSD1 === 0 || totalUSD2 === 0) return 0;
 
-  return formatNumber(totalUSD1 / totalUSD2, 6);
+  return totalUSD1 / totalUSD2;
 };
 
 export const convertCBDCToCurrency = (cbdc: TOKEN) => {
