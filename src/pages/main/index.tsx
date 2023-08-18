@@ -78,8 +78,8 @@ const MainPage = () => {
             />
             <CardDeal
               image={LogoBitcoin}
-              title="U.S. Short-term Treasury Bill"
-              contents="The U.S. Short-term Treasury Bill ($USTB) is a token underpinned by a prospectus and backed by U.S. Treasury Bills."
+              title="BTC ETF"
+              contents="A Bitcoin ETF is and exchange-traded fund that invests primarily in assets related to the original cryptocurrency, Bitcoin."
               value={10584.61}
               estimatedYield={21.3}
               disabled={true}
