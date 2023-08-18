@@ -77,7 +77,10 @@ export const useDepositCBDC = () => {
     } = await client.request({ command: 'account_lines', account: ustbWallet.address });
 
     const trustline = lines.find(line => line.currency === type);
-    if (Number(trustline?.limit) < Number(trustline?.balance) + Number(amount)) {
+    if (
+      trustline === undefined ||
+      Number(trustline?.limit) < Number(trustline?.balance) + Number(amount)
+    ) {
       const currencyCode = type;
       const trustSetTx: xrpl.TrustSet = {
         TransactionType: 'TrustSet',
@@ -85,7 +88,10 @@ export const useDepositCBDC = () => {
         LimitAmount: {
           currency: currencyCode,
           issuer: cbdcWallet.address,
-          value: (10 * (Number(trustline?.balance) + Number(amount))).toString(),
+          value:
+            trustline === undefined
+              ? '100000000'
+              : (10 * (Number(trustline?.balance) + Number(amount))).toString(),
         },
         Flags: xrpl.TrustSetFlags.tfSetNoRipple,
       };
