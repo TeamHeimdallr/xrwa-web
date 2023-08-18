@@ -154,7 +154,7 @@ interface TooltipProps {
 
 const TooltipPrincipal = styled.div<TooltipProps>(({ isHovered }) => [
   tw`
-    w-268 absolute top-16 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-gray2
+    min-w-268 absolute top-16 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-gray2
     text-11 leading-16
 `,
   css`
@@ -166,7 +166,7 @@ const TooltipPrincipal = styled.div<TooltipProps>(({ isHovered }) => [
 
 const TooltipMarketValue = styled.div<TooltipProps>(({ isHovered }) => [
   tw`
-      w-400 h-80 absolute top-16 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-gray2
+    min-w-268 absolute top-16 bg-gray4 rounded-8 pt-12 px-12 pb-16 gap-4 text-gray2
       text-11 leading-16
   `,
   css`
