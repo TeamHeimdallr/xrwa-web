@@ -21,11 +21,13 @@ import { ButtonPrimary } from '../buttons/button-primary';
 import { IconLogOut, IconPlus } from '../icons';
 import { Popup } from '../popups';
 import { ConnectWallet } from './connect-wallet';
+import { useFaucetCBDC } from '~/api/xrpl/cbdc-faucet';
 
 export const Gnb = () => {
   const connectedRef = useRef<HTMLDivElement>(null);
   const lottieRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { faucetCBDC } = useFaucetCBDC();
 
   const { isConnected } = useXrplStore();
   const { faucetCBDC } = useFaucetCBDC();
@@ -96,7 +98,11 @@ export const Gnb = () => {
                 </ConnectedAddress>
 
                 <DropDownWrapper dropdownOpended={dropdownOpended}>
+<<<<<<< HEAD
                   <FaucetButton onClick={faucet}>
+=======
+                  <FaucetButton onClick={handleFaucet}>
+>>>>>>> a00572e (feat: cbdc deposit)
                     <IconPlus width={20} height={20} color={COLOR.GRAY2} />
                     Faucet
                   </FaucetButton>

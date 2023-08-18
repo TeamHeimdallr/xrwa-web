@@ -17,10 +17,18 @@ import { TOKEN, TRADE_OPTIONS } from '~/types';
 import { convertCBDCToCurrency, getExchangeRate } from '~/utils/currency';
 
 import { ChangeCurrency } from './components/change-currency';
+import { useState } from 'react';
+import { useDepositCBDC } from '~/api/xrpl/cbdc-deposit';
 
 const TradePage = () => {
   const { selected, select } = useTradeState();
   const { selected: currencySelected } = useSelectedTokenState();
+  const [cbdcAmount, setCbdcAmount] = useState(0);
+  const { depositCBDC } = useDepositCBDC();
+
+  const handleDeposit = async () => {
+    await depositCBDC(currencySelected as TOKEN, cbdcAmount.toString());
+  };
 
   const {
     open: currencyOpen,
@@ -84,7 +92,7 @@ const TradePage = () => {
                     placeholder="0.0"
                     currency={currencySelected}
                     selectable={true}
-                    handleChange={e => console.log(e)}
+                    handleChange={e => setCbdcAmount(e.floatValue ?? 0)}
                     handleClick={currencyOpen}
                   />
                   <TextFieldTrade
@@ -125,7 +133,12 @@ const TradePage = () => {
             </RateWrapper>
           </InputWrapper>
           {selected === TRADE_OPTIONS.DEPOSIT ? (
-            <ButtonPrimary text="Deposit" isLoading={false} buttonType="large" />
+            <ButtonPrimary
+              onClick={() => handleDeposit()}
+              text="Deposit"
+              isLoading={false}
+              buttonType="large"
+            />
           ) : (
             <ButtonPrimary text="Withdraw" isLoading={false} buttonType="large" />
           )}
@@ -190,7 +203,7 @@ const ToggleText = tw.div`
 `;
 
 const InputWrapper = tw.div`
-  flex flex-col gap-12 
+  flex flex-col gap-12
 `;
 
 const TradeWrapper = tw.div`
