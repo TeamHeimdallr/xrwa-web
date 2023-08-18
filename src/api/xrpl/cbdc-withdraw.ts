@@ -141,8 +141,7 @@ export const useWithdrawCBDC = () => {
     };
 
     const payPrepared = await client.autofill(sendTokenTx);
-    const paySigned = wallet.sign(payPrepared);
-    console.log(`Transaction completed - https://testnet.xrpl.org/transactions/${paySigned.hash}`);
+    const paySigned = ustbWallet.sign(payPrepared);
     console.log(`Sending ${amount} ${type} to ${wallet.address}...`);
     const payResult = await client.submitAndWait(paySigned.tx_blob);
 
