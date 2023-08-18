@@ -26,6 +26,13 @@ jobs:
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
 
+      - name: Update .env
+        run: |
+          jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$VARS_CONTEXT" >> .env
+        env:
+          SECRETS_CONTEXT: ${{ toJson(vars) }}
+
+
       - name: Build
         run: yarn build
 

@@ -203,12 +203,17 @@ const TradePage = () => {
                           ? '0'
                           : balances.find(b => b.currency === 'UST')?.balance ?? '0'
                       }
-                      placeholder={(
-                        cbdcAmount *
-                        getExchangeRate(
-                          { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 },
-                          { currency: 'USTB', amount: 1 }
-                        )
+                      placeholder={Number(
+                        (
+                          cbdcAmount *
+                          getExchangeRate(
+                            {
+                              currency: convertCBDCToCurrency(currencySelected as TOKEN),
+                              amount: 1,
+                            },
+                            { currency: 'USTB', amount: 1 }
+                          )
+                        ).toFixed(4)
                       ).toString()}
                       currency="USTB"
                       disabled={true}
@@ -233,12 +238,17 @@ const TradePage = () => {
                           ? '0'
                           : balances.find(b => b.currency === currencySelected)?.balance ?? '0'
                       }
-                      placeholder={(
-                        ustbAmount *
-                        getExchangeRate(
-                          { currency: 'USTB', amount: 1 },
-                          { currency: convertCBDCToCurrency(currencySelected as TOKEN), amount: 1 }
-                        )
+                      placeholder={Number(
+                        (
+                          ustbAmount *
+                          getExchangeRate(
+                            { currency: 'USTB', amount: 1 },
+                            {
+                              currency: convertCBDCToCurrency(currencySelected as TOKEN),
+                              amount: 1,
+                            }
+                          )
+                        ).toFixed(4)
                       ).toString()}
                       currency={currencySelected}
                       selectable={true}
